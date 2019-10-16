@@ -2,8 +2,9 @@
 
 class User extends CI_Model
 {
-
+    //referense https://codeigniter.com/user_guide/general/models.html
     protected $users = 'pegawai';
+    protected $cashflow = 'cash_flow';
     protected $date;
     public function __construct()
     {
@@ -13,11 +14,11 @@ class User extends CI_Model
     public function save()
     {
         $data = array(
-            "username" => $this->input->post("username"),
-            "password" => password_hash($this->input->post('password'), PASSWORD_DEFAULT),
-            "nama_lengkap" => $this->input->post("nama_lengkap"),
-            "no_telepon" => $this->input->post("no_telepon"),
-            "foto" => $this->input->post("foto"),
+            "username" => $_POST['username'],
+            "password" => password_hash($_POST['password'], PASSWORD_DEFAULT),
+            "nama_lengkap" => $_POST['nama_lengkap'],
+            "no_telepon" => $_POST['no_telepon'],
+            "foto" => $_POST['foto'],
             "create_at" => $this->date->getTimestamp()
 
         );
@@ -55,8 +56,8 @@ class User extends CI_Model
 
     public function is_valid()
     {
-        $username    = $this->input->post('username');
-        $password = $this->input->post('password');
+        $username    = $_POST['username'];
+        $password = $_POST['password'];
         //mendapatkan password dari username diatas
         $hash = $this->get('username', $username)->password;
         // echo "$hash";
@@ -97,5 +98,18 @@ class User extends CI_Model
     {
         $this->db->where('username', $username);
         return $this->db->count_all_results($this->users);
+    }
+
+    function get_status_last_cashflow (){
+
+        
+        $this->db->select('cash_flow.status');
+        $this->db->order_by('close', 'DESC');
+        $this->db->from('cash_flow');
+        $this->db->join('responsible', 'responsible.id = cash_flow.responsible_id');
+        $this->db->join('pegawai', 'pegawai.id = responsible.pegawai_id');
+        $this->db->where('pegawai.username',$this->input->post("username"));
+        $query =  $this->db->get();
+        return $query->row();
     }
 }

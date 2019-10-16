@@ -6,13 +6,20 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 $route['api/cashregister/open']['POST'] = '/api/CashRegisterController/open';
 $route['api/cashregister/close']['POST'] = '/api/CashRegisterController/close';
 
-// API CRUD USER
+// API CRUD USER 
 $route['api/user/(:num)']['GET'] = '/api/UserController/get/$1';
 $route['api/user/register']['POST'] = '/api/UserController/register';
 $route['api/user/update']['POST'] = '/api/UserController/update';
 // API AUTH USER
 $route['api/user/login']['POST'] = '/api/UserController/login';
 $route['api/user/logout']['POST'] = '/api/UserController/logout';
+
+//SINGLE API METODE PEMBAYARAN penamaaan inisiatif promrammer
+$route['sapi/metode_pembayaran']['GET'] = '/singleapi/MetodePembayaran/index';
+$route['sapi/metode_pembayaran/add']['POST'] = '/singleapi/MetodePembayaran/add';
+$route['sapi/metode_pembayaran/edit']['POST'] = '/singleapi/MetodePembayaran/edit';
+$route['sapi/metode_pembayaran/remove']['POST'] = '/singleapi/MetodePembayaran/remove';
+
 
 $route['default_controller'] = 'welcome';
 $route['404_override'] = '';

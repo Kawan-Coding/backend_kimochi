@@ -34,8 +34,10 @@ class UserController extends CI_Controller
 
     public function login()
     {
+        //return dibuat disini untuk antisipasi penambahan fitur pada login
 
         if (!$this->user->is_valid()) {
+
             return $this->response([
                 'error' => true,
                 'message' => 'username atau password salah',
@@ -45,7 +47,11 @@ class UserController extends CI_Controller
             return $this->response([
                 'error' => false,
                 'message' => 'login berhasil',
-                'data' => ''
+                'data' => [
+                    'cash_flow_status'=>$this->user->get_status_last_cashflow(),
+                    'login'=>'login',
+                    'responsible'=>'',
+                ]
             ]);
         }
     }
