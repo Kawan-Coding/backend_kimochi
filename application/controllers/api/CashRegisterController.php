@@ -65,7 +65,7 @@ class CashRegisterController     extends CI_Controller
                 'close_cash' => $this->input->post('close_cash'),
                 'status' => 'unvalidated',
             );
-            $run = $this->Master->update($this->tabel,$id,$params);
+            $run = $this->Master->update($this->tabel,array('id'=>$id),$params);
             if ($run['status']) {
                 $this->msg('data', '200',$run['data']);
             }else{
@@ -83,11 +83,11 @@ class CashRegisterController     extends CI_Controller
     function remove()
     {
         $id =  $this->input->post('id');
-        $metode_pembayaran = $this->Master->get($this->tabel, $id);
+        $metode_pembayaran = $this->Master->get($this->tabel,array('id'=>$id));
 
         // check if the metode_pembayaran exists before trying to delete it
         if (isset($metode_pembayaran['id'])) {
-            if ($this->Master->delete($this->tabel, $id)) {
+            if ($this->Master->delete($this->tabel, array('id'=>$id))) {
                 $this->msg('data', '200', '');
             };
         } else

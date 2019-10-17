@@ -27,6 +27,12 @@ class MetodePembayaran extends CI_Controller
         exit;
     }
 
+    function is_valid()
+    {
+        if (isset($_POST) && count($_POST) <= 0) {
+            $this->msg('', '400', '');
+        }
+    }
 
     public function get_all()
     {
@@ -35,13 +41,15 @@ class MetodePembayaran extends CI_Controller
 
     public function get()
     {
+        $this->is_valid();
         $id =  $this->input->post('id');
-        $metode_pembayaran = $this->Master->get($this->tabel, $id);
-        if (isset($metode_pembayaran['id'])) {
-            $this->msg('data', '204', $this->Master->get($this->tabel, $id));
+        $res = $this->Master->get($this->tabel, array('id' => $id));
+        if ($res['status']) {
+            $this->msg('data', '200', $res['data']);
         } else {
-            $this->msg('data', '204', $this->Master->get($this->tabel, $id));
-        }
+            $this->msg('data', '500', $res['data']);
+            // $this->msg('data', '500',$res);
+        };
     }
 
 
@@ -51,16 +59,17 @@ class MetodePembayaran extends CI_Controller
      */
     function add()
     {
-        if (isset($_POST) && count($_POST) > 0) {
-            $params = array(
-                'nama' => $this->input->post('nama'), 'nomor' => $this->input->post('nomor'), 'create_at' => date('Y-m-d H:i:s'),
-            );
-            if ($this->Master->add($this->tabel, $params)) {
-                $this->msg('data', '200', '');
-            };
+        $this->is_valid();
+        $params = array(
+            'nama' => $this->input->post('nama'), 'nomor' => $this->input->post('nomor'), 'create_at' => date('Y-m-d H:i:s'),
+        );
+        
+        $res = $this->Master->add($this->tabel, $params);
+        if ($res['status']) {
+            $this->msg('data', '200', $res['data']);
         } else {
-            $this->msg('data', '404', '');
-        }
+            $this->msg('data', '500', $res['data']);
+        };
     }
 
     /*
@@ -68,23 +77,19 @@ class MetodePembayaran extends CI_Controller
      */
     function edit()
     {
+        $this->is_valid();
         // check if the metode_pembayaran exists before trying to edit it
         $id =  $this->input->post('id');
-        $data['metode_pembayaran'] = $this->Master->get($this->tabel, $id);
-        if (isset($data['metode_pembayaran']['id'])) {
-            if (isset($_POST) && count($_POST) > 0) {
-                $params = array(
-                    'nama' => $this->input->post('nama'),
-                    'nomor' => $this->input->post('nomor'),
-                );
-                if ($this->Master->update($this->tabel, $id, $params)) {
-                    $this->msg('data', '200', '');
-                };
-            } else {
-                $this->msg('data', '400', '');
-            }
-        } else
-            $this->msg('data', '404', '');
+        $data = array(
+            'nama' => $this->input->post('nama'),
+            'nomor' => $this->input->post('nomor'),
+        );
+        $res = $this->Master->update($this->tabel,  array('id' => $id), $data);
+        if ($res['status']) {
+            $this->msg('data', '200', $res['data']);
+        } else {
+            $this->msg('data', '500', $res['data']);
+        };
     }
 
     /*
@@ -92,15 +97,14 @@ class MetodePembayaran extends CI_Controller
      */
     function remove()
     {
+        $this->is_valid();
         $id =  $this->input->post('id');
-        $metode_pembayaran = $this->Master->get($this->tabel, $id);
+        $res = $this->Master->delete($this->tabel, array('id' => $id));
 
-        // check if the metode_pembayaran exists before trying to delete it
-        if (isset($metode_pembayaran['id'])) {
-            if ($this->Master->delete($this->tabel, $id)) {
-                $this->msg('data', '200', '');
-            };
-        } else
-            $this->msg('data', '404', '');
+        if ($res['status']) {
+            $this->msg('data', '200', $res['data']);
+        } else {
+            $this->msg('data', '500', $res['data']);
+        };
     }
 }

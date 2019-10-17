@@ -35,10 +35,6 @@ class Msg
                 $msg_data['msg'] = $name . ' ' . 'not exist';
                 $msg_data['error'] = false;
                 break;
-            case '404':
-                $msg_data['msg'] = 'query gagal ' . $name . ' ' . 'not exist';
-                // $msg_data['error'] = false;
-                break;
             case '400':
                 $msg_data['msg'] = 'query gagal ' . $name . ' ' . 'belum ada masukan';
                 // $msg_data['error'] = false;
@@ -59,4 +55,6 @@ class Msg
         //     $msg_data
         // ]);
     }
+
+    
 }

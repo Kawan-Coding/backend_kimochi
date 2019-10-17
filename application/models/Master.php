@@ -14,9 +14,18 @@ class Master extends CI_Model
     /*
      * Get allowed_payment by id
      */
-    public function get($tabel,$id)
+    public function get($tabel,$where)
     {
-        return $this->db->get_where($tabel,array('id'=>$id))->row_array();
+        $run = $this->db->get_where($tabel,$where)->row_array();
+        $res = array();
+        if (!isset($run)) {
+            $res['data']='data not exist';
+            $res['status']=false;
+        } else {
+            $res['data']=$run;
+            $res['status']=true;
+        }
+        return $res;
     }
         
     /*
@@ -38,7 +47,7 @@ class Master extends CI_Model
             $res['data']=$this->db->error();
             $res['status']=false;
         }else{
-            $res['data']=$this->db->insert_id();
+            $res['data']=array('id'=>$this->db->insert_id());
             $res['status']=true;
         }
         return $res;
@@ -47,18 +56,25 @@ class Master extends CI_Model
     /*
      * public function untuk update allowed_payment
      */
-    public function update($tabel,$id,$data)
+    public function update($tabel,$where,$data)
     {
-        $this->db->where('id',$id);
-        $this->db->update($tabel,$data);
+        $count = $this->db->get_where($tabel,$where)->row_array();
         $res = array();
-        if($this->db->affected_rows() != 1){
-            $res['data']=$this->db->error();
-            $res['status']=false;
+        if (isset($count['id'])) {
+            $this->db->where($where);
+            $this->db->update($tabel,$data);
+            if($this->db->affected_rows() != 1){
+                $res['data']='tidak ada perubahan karena inputan sama';
+                $res['status']=true;
+            }else{
+                $res['data']=$this->db->insert_id();
+                $res['status']=true;
+            }
         }else{
-            $res['data']=$this->db->insert_id();
-            $res['status']=true;
+            $res['data']='data not exist';
+            $res['status']=false;
         }
+
         return $res;
 
     }
@@ -66,9 +82,25 @@ class Master extends CI_Model
     /*
      * public function untuk delete allowed_payment
      */
-    public function delete($tabel,$id)
+    public function delete($tabel,$where)
     {
-        return $this->db->delete($tabel,array('id'=>$id));
+        $count = $this->db->get_where($tabel,$where)->row_array();
+        $res = array();
+        if (isset($count['id'])) {
+            $this->db->delete($tabel,$where);
+            if($this->db->affected_rows() != 1){
+                $res['data']=$this->db->error();
+                $res['status']=false;
+            }else{
+                $res['data']=$this->db->insert_id();
+                $res['status']=true;
+            }
+        }else{
+            $res['data']='data not exist';
+            $res['status']=false;
+        }
+
+        return $res;
     }
     
     

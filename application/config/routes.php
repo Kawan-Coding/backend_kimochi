@@ -28,6 +28,8 @@ $route['sapi/admin_produk/create']['POST'] = '/singleapi/AdminProduk/add';
 $route['sapi/admin_produk/update']['POST'] = '/singleapi/AdminProduk/edit';
 $route['sapi/admin_produk/delete']['POST'] = '/singleapi/AdminProduk/remove';
 
+//API ADMIN
+
 $route['default_controller'] = 'welcome';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
