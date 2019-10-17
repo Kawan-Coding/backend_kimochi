@@ -4,7 +4,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 class Msg 
 {
 
-    public function response($data)
+    function response($data)
     {
 
         $this->output
@@ -14,12 +14,12 @@ class Msg
             ->_display();
         // exit;
     }
-    public function foo($data)
+    function foo($data)
     {
         echo "foo";
     }
 
-    public function get($name, $status, $data, $custom_msg = '')
+    function get($name, $status, $data, $custom_msg = '')
     {
         $msg_data = array(
             'error' => true,

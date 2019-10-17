@@ -39,12 +39,13 @@ class CashRegisterController     extends CI_Controller
                 'open' => date('Y-m-d H:i:s'),
                 'open_cash' => $this->input->post('open_cash'),
                 'data_pegawai' => $this->input->post('data_pegawai'),
+                'status' => 'progress',
             );
             $run = $this->Master->add($this->tabel, $params);
-            if ($run===true) {
-                $this->msg('data', '200','');
+            if ($run['status']) {
+                $this->msg('data', '200',$run['data']);
             }else{
-                $this->msg('data', '500','');
+                $this->msg('data', '500',$run['data']   );
                 // $this->msg('data', '500',$run);
             };
         } else {
@@ -62,13 +63,14 @@ class CashRegisterController     extends CI_Controller
             $params = array(
                 'close' => date('Y-m-d H:i:s'),
                 'close_cash' => $this->input->post('close_cash'),
+                'status' => 'unvalidated',
             );
             $run = $this->Master->update($this->tabel,$id,$params);
-            if ($run===true) {
-                $this->msg('data', '200','');
+            if ($run['status']) {
+                $this->msg('data', '200',$run['data']);
             }else{
-                $this->msg('data', '500','');
-                // $this->msg('data', '500',$run);
+                $this->msg('data', '500',$run['data']);
+
             };
         } else {
             $this->msg('data', '404', '');

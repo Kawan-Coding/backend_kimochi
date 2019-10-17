@@ -33,12 +33,15 @@ class Master extends CI_Model
     public function add($tabel,$data)
     {
         $this->db->insert($tabel,$data);
-        $this->db->insert_id();
+        $res = array();
         if($this->db->affected_rows() != 1){
-            return $this->db->error();
+            $res['data']=$this->db->error();
+            $res['status']=false;
         }else{
-            return true;
+            $res['data']=$this->db->insert_id();
+            $res['status']=true;
         }
+        return $res;
     }
     
     /*
@@ -47,7 +50,17 @@ class Master extends CI_Model
     public function update($tabel,$id,$data)
     {
         $this->db->where('id',$id);
-        return $this->db->update($tabel,$data);
+        $this->db->update($tabel,$data);
+        $res = array();
+        if($this->db->affected_rows() != 1){
+            $res['data']=$this->db->error();
+            $res['status']=false;
+        }else{
+            $res['data']=$this->db->insert_id();
+            $res['status']=true;
+        }
+        return $res;
+
     }
     
     /*
