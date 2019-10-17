@@ -15,7 +15,8 @@ $route['api/user/login']['POST'] = '/api/UserController/login';
 $route['api/user/logout']['POST'] = '/api/UserController/logout';
 
 //SINGLE API METODE PEMBAYARAN penamaaan inisiatif promrammer
-$route['sapi/metode_pembayaran']['GET'] = '/singleapi/MetodePembayaran/index';
+$route['sapi/metode_pembayaran/get_all']['GET'] = '/singleapi/MetodePembayaran/get_all';
+$route['sapi/metode_pembayaran/get']['POST'] = '/singleapi/MetodePembayaran/get';
 $route['sapi/metode_pembayaran/add']['POST'] = '/singleapi/MetodePembayaran/add';
 $route['sapi/metode_pembayaran/edit']['POST'] = '/singleapi/MetodePembayaran/edit';
 $route['sapi/metode_pembayaran/remove']['POST'] = '/singleapi/MetodePembayaran/remove';
