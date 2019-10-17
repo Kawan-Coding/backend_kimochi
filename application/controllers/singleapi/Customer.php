@@ -1,15 +1,15 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class AdminProduk extends CI_Controller
+class Customer extends CI_Controller
 {
     protected $date;
-    protected $tabel = 'produk';
+    protected $tabel = 'customer';
     public function __construct()
     {
         parent::__construct();
         // Your own constructor code
-        // $this->load->model('user');
+        // $this->load->model('Customer');
         $this->date = new DateTime();
         // $this->load->library('Msg');
         //==== ALLOWING CORS
@@ -61,15 +61,18 @@ class AdminProduk extends CI_Controller
     {
         $this->is_valid();
         $params = array(
-            'jenis_id' => $this->input->post('jenis_id'),
-            'kategori_id' => $this->input->post('kategori_id'),
-            'nama' => $this->input->post('nama'),
-            'harga' => $this->input->post('harga'),
+            'password' => password_hash($_POST['password'], PASSWORD_DEFAULT),
+            'username' => $this->input->post('username'),
+            'nama_lengkap' => $this->input->post('nama_lengkap'),
+            'no_telepon' => $this->input->post('no_telepon'),
+            'kendaraan' => $this->input->post('kendaraan'),
+            'plat_nomor' => $this->input->post('plat_nomor'),
+            'member' => $this->input->post('member'),
             'create_at' => date('Y-m-d H:i:s'),
-            'detail' => $this->input->post('detail'),
-            'foto' => $this->input->post('foto')
+            // 'update_at' => $this->input->post('update_at'),
+            'foto' => $this->input->post('foto'),
         );
-        
+
         $res = $this->Master->add($this->tabel, $params);
         if ($res['status']) {
             $this->msg('data', '200', $res['data']);
@@ -87,11 +90,14 @@ class AdminProduk extends CI_Controller
         // check if the produk exists before trying to edit it
         $id =  $this->input->post('id');
         $data = array(
-            'jenis_id' => $this->input->post('jenis_id'),
-            'kategori_id' => $this->input->post('kategori_id'),
-            'nama' => $this->input->post('nama'),
-            'harga' => $this->input->post('harga'),
-            'detail' => $this->input->post('detail'),
+            'password' => password_hash($_POST['password'], PASSWORD_DEFAULT),
+            'username' => $this->input->post('username'),
+            'nama_lengkap' => $this->input->post('nama_lengkap'),
+            'no_telepon' => $this->input->post('no_telepon'),
+            'kendaraan' => $this->input->post('kendaraan'),
+            'plat_nomor' => $this->input->post('plat_nomor'),
+            'member' => $this->input->post('member'),
+            // 'create_at' => date('Y-m-d H:i:s'),
             'foto' => $this->input->post('foto'),
         );
         $res = $this->Master->update($this->tabel,  array('id' => $id), $data);
@@ -111,6 +117,52 @@ class AdminProduk extends CI_Controller
         $id =  $this->input->post('id');
         $res = $this->Master->delete($this->tabel, array('id' => $id));
 
+        if ($res['status']) {
+            $this->msg('data', '200', $res['data']);
+        } else {
+            $this->msg('data', '500', $res['data']);
+        };
+    }
+
+    public function getByNumber()
+    {
+        $this->is_valid();
+        $no_telepon =  $this->input->post('no_telepon');
+        $res = $this->Master->get($this->tabel, array('no_telepon' => $no_telepon));
+        if ($res['status']) {
+            $this->msg('data', '200', $res['data']);
+        } else {
+            $this->msg('data', '500', $res['data']);
+            // $this->msg('data', '500',$res);
+        };
+    }
+
+    function updatePass()
+    {
+        $this->is_valid();
+        // check if the produk exists before trying to edit it
+        $id =  $this->input->post('id');
+        $data = array(
+            'password' => password_hash($_POST['password'], PASSWORD_DEFAULT),
+        );
+        $res = $this->Master->update($this->tabel,  array('id' => $id), $data);
+        if ($res['status']) {
+            $this->msg('data', '200', $res['data']);
+        } else {
+            $this->msg('data', '500', $res['data']);
+        };
+    }
+
+    public function updateUserPassByNoTelp()
+    {
+        $this->is_valid();
+        // check if the produk exists before trying to edit it
+        $no_telepon =  $this->input->post('no_telepon');
+        $data = array(
+            'username' => $this->input->post('username'),
+            'password' => password_hash($_POST['password'], PASSWORD_DEFAULT),
+        );
+        $res = $this->Master->update($this->tabel,  array('no_telepon' => $no_telepon), $data);
         if ($res['status']) {
             $this->msg('data', '200', $res['data']);
         } else {

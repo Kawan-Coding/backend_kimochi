@@ -55,7 +55,7 @@ class MetodePembayaran extends CI_Controller
 
 
     /*
-     * Adding a new metode_pembayaran
+     * Adding a new produk
      */
     function add()
     {
@@ -63,6 +63,7 @@ class MetodePembayaran extends CI_Controller
         $params = array(
             'nama' => $this->input->post('nama'), 'nomor' => $this->input->post('nomor'), 'create_at' => date('Y-m-d H:i:s'),
         );
+        
         
         $res = $this->Master->add($this->tabel, $params);
         if ($res['status']) {
@@ -73,16 +74,17 @@ class MetodePembayaran extends CI_Controller
     }
 
     /*
-     * Editing a metode_pembayaran
+     * Editing a produk
      */
     function edit()
     {
         $this->is_valid();
-        // check if the metode_pembayaran exists before trying to edit it
+        // check if the produk exists before trying to edit it
         $id =  $this->input->post('id');
         $data = array(
             'nama' => $this->input->post('nama'),
             'nomor' => $this->input->post('nomor'),
+
         );
         $res = $this->Master->update($this->tabel,  array('id' => $id), $data);
         if ($res['status']) {
@@ -93,7 +95,7 @@ class MetodePembayaran extends CI_Controller
     }
 
     /*
-     * Deleting metode_pembayaran
+     * Deleting produk
      */
     function remove()
     {

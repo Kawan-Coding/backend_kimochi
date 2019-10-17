@@ -66,8 +66,13 @@ class CashRegisterController     extends CI_Controller
                 'status' => 'unvalidated',
             );
             $run = $this->Master->update($this->tabel,array('id'=>$id),$params);
+            $is_progress =  $this->Master->get_select($this->tabel,array('status'),array('id'=>$id));
             if ($run['status']) {
-                $this->msg('data', '200',$run['data']);
+                if ($is_progress['data']['status']=='progress') {
+                    $this->msg('data', '200',$run['data']);
+                }else{
+                    $this->msg('data', '300','Anda tidak dapat melakukan close register. Anda harus open register terlebih dahulu'.$is_progress['data']['status']);
+                }
             }else{
                 $this->msg('data', '500',$run['data']);
 

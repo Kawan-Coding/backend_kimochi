@@ -35,6 +35,10 @@ class Msg
                 $msg_data['msg'] = $name . ' ' . 'not exist';
                 $msg_data['error'] = false;
                 break;
+            case '300':
+                $msg_data['msg'] = 'AUTH POLICY';
+                // $msg_data['error'] = true;
+                break;
             case '400':
                 $msg_data['msg'] = 'query gagal ' . $name . ' ' . 'belum ada masukan';
                 // $msg_data['error'] = false;

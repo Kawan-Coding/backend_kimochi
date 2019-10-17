@@ -27,6 +27,20 @@ class Master extends CI_Model
         }
         return $res;
     }
+    public function get_select($tabel,$select,$where)
+    {
+        $this->db->select($select);
+        $run = $this->db->get_where($tabel,$where)->row_array();
+        $res = array();
+        if (!isset($run)) {
+            $res['data']='data not exist';
+            $res['status']=false;
+        } else {
+            $res['data']=$run;
+            $res['status']=true;
+        }
+        return $res;
+    }
         
     /*
      * Get all allowed_payment
