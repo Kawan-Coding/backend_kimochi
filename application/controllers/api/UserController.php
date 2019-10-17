@@ -50,7 +50,10 @@ class UserController extends CI_Controller
                 'data' => [
                     'cash_flow_status'=>$this->user->get_status_last_cashflow(),
                     'login'=>'login',
-                    'responsible'=>'',
+                    'responsible'=>[
+                        'pegawai'=>$this->user->get('username',$_POST['username']),
+                        'cabang'=>$this->user->get_responsible()
+                    ],
                 ]
             ]);
         }

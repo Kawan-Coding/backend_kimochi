@@ -44,7 +44,7 @@ class Msg
                 // $msg_data['error'] = false;
                 break;
             case '500':
-                $msg_data['msg'] = $name . ' ' . 'not exist';
+                $msg_data['msg'] = 'internal server error';
                 // $msg_data['error'] = false;
                 break;
 

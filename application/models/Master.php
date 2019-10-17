@@ -33,7 +33,12 @@ class Master extends CI_Model
     public function add($tabel,$data)
     {
         $this->db->insert($tabel,$data);
-        return $this->db->insert_id();
+        $this->db->insert_id();
+        if($this->db->affected_rows() != 1){
+            return $this->db->error();
+        }else{
+            return true;
+        }
     }
     
     /*

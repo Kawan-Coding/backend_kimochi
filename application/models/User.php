@@ -101,13 +101,24 @@ class User extends CI_Model
     }
 
     function get_status_last_cashflow (){
-
-        
         $this->db->select('cash_flow.status');
         $this->db->order_by('close', 'DESC');
         $this->db->from('cash_flow');
         $this->db->join('responsible', 'responsible.id = cash_flow.responsible_id');
         $this->db->join('pegawai', 'pegawai.id = responsible.pegawai_id');
+        $this->db->where('pegawai.username',$this->input->post("username"));
+        $query =  $this->db->get();
+        return $query->row();
+    }
+
+    function get_responsible()
+    {
+        $this->db->select('cabang.id,cabang.nama,	cabang.alamat,cabang.latlong');
+        $this->db->order_by('close', 'DESC');
+        $this->db->from('cash_flow');
+        $this->db->join('responsible', 'responsible.id = cash_flow.responsible_id');
+        $this->db->join('pegawai', 'pegawai.id = responsible.pegawai_id');
+        $this->db->join('cabang', 'cabang.id = responsible.cabang_id');
         $this->db->where('pegawai.username',$this->input->post("username"));
         $query =  $this->db->get();
         return $query->row();
