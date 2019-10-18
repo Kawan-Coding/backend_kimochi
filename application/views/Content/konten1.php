@@ -1,10 +1,9 @@
 <style>
-input[readonly]{
-  background-color:transparent;
-  border: 0;
-  font-size: 1em;
-}
-
+    input[readonly] {
+        background-color: transparent;
+        border: 0;
+        font-size: 1em;
+    }
 </style>
 <section id="produk">
     <h4>Produk</h4>
@@ -58,23 +57,25 @@ input[readonly]{
                                         <input type="text" name="nomor" value="" class="form-control" id="nomor" />
                                     </div>
                                 </div>
-                                <div class="col-md-6">
-                                    <label for="create_at" class="control-label">Create At</label>
-                                    <div class="form-group">
-                                        <input type="text" name="create_at" value="" class="form-control" id="create_at" />
+                                <div id="createupdate" class="row col-md-12">
+                                    <div class="col-md-6">
+                                        <label for="create_at" class="control-label">Create At</label>
+                                        <div class="form-group">
+                                            <input type="text" name="create_at" value="" class="form-control" id="create_at" />
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <label for="update_at" class="control-label">Update At</label>
-                                    <div class="form-group">
-                                        <input type="text" name="update_at" value="" class="form-control" id="update_at" />
+                                    <div class="col-md-6">
+                                        <label for="update_at" class="control-label">Update At</label>
+                                        <div class="form-group">
+                                            <input type="text" name="update_at" value="" class="form-control" id="update_at" />
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div class="box-footer" style="float: right;" id="conf">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-                            <button type="button" class="btn btn-primary" id="submit">Simpan
+                            <button type="button" class="btn btn-primary" id="submit" style="color:white">Simpan
                                 Perubahan</button>
                         </div>
                     </form>
@@ -158,21 +159,23 @@ input[readonly]{
             success: function(r) {
                 // console.log(r);
                 if (r.error == false) {
-                    if(!edit){
-                        $('.modal-title').text("Read"+label);
-                        $( "#form :input" ).prop("readonly", true);
+                    if (!edit) {
+                        $('.modal-title').text("Read" + label);
+                        $("#form :input").prop("readonly", true);
                         $('#conf').hide();
-                        $( "#form :input" ).css("color", "black");
-                        
-                    }else{
-                        $('.modal-title').text("Update"+label);
-                        $( "#form :input" ).prop("readonly", false)
-                        $( "#form :input" ).css("color", "#464a4c");
+                        $("#form input").css("color", "black");
+                        $("#createupdate").show();
+
+                    } else {
+                        $('.modal-title').text("Update" + label);
+                        $("#form :input").prop("readonly", false)
+                        $("#form input").css("color", "#464a4c");
                         $('#conf').show();
+                        $("#createupdate").hide();
                     }
                     $('#nama').val(r.data.nama);
                     $('#nomor').val(r.data.nomor);
-                    $('#create_at').val(r.data);
+                    $('#create_at').val(r.data.update_at);
                     $('#update_at').val(r.data.update_at);
                     $('#edit').modal('show');
                 } else {
