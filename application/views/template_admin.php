@@ -26,6 +26,7 @@
     <link href="<?=$loc?>css/style.css" rel="stylesheet">
     <!-- You can change the theme colors from here -->
     <link href="<?=$loc?>css/colors/blue.css" id="theme" rel="stylesheet">
+    <script src="<?=$loc?>plugins/jquery/jquery.min.js"></script>
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -198,7 +199,7 @@
     <!-- ============================================================== -->
     <!-- All Jquery -->
     <!-- ============================================================== -->
-    <script src="<?=$loc?>plugins/jquery/jquery.min.js"></script>
+    
     <!-- Bootstrap tether Core JavaScript -->
     <script src="<?=$loc?>plugins/bootstrap/js/tether.min.js"></script>
     <script src="<?=$loc?>plugins/bootstrap/js/bootstrap.min.js"></script>
@@ -222,7 +223,7 @@
     <script src="<?=$loc?>plugins/d3/d3.min.js"></script>
     <script src="<?=$loc?>plugins/c3-master/c3.min.js"></script>
     <!-- Chart JS -->
-    <script src="<?=$loc?>js/dashboard1.js"></script>
+    <!-- <script src="<?=$loc?>js/dashboard1.js"></script> -->
 </body>
 
 </html>

@@ -79,6 +79,7 @@ class MetodePembayaran extends CI_Controller
     function edit()
     {
         $this->is_valid();
+        // $this->msg('data', '200', $this->input->post('nama'));
         // check if the produk exists before trying to edit it
         $id =  $this->input->post('id');
         $data = array(
