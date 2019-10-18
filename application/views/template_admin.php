@@ -222,6 +222,7 @@
     <!--c3 JavaScript -->
     <script src="<?=$loc?>plugins/d3/d3.min.js"></script>
     <script src="<?=$loc?>plugins/c3-master/c3.min.js"></script>
+    <!-- <script src="<?=$loc?>plugins/datatables/jquery.dataTables.min.js"></script> -->
     <!-- Chart JS -->
     <!-- <script src="<?=$loc?>js/dashboard1.js"></script> -->
 </body>

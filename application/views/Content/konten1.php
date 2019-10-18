@@ -1,3 +1,11 @@
+<style>
+input[readonly]{
+  background-color:transparent;
+  border: 0;
+  font-size: 1em;
+}
+
+</style>
 <section id="produk">
     <h4>Produk</h4>
     <hr>
@@ -19,7 +27,7 @@
                     <th width="15%">Actions</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody id="tbodyid">
 
             </tbody>
         </table>
@@ -30,8 +38,7 @@
     <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Edit Data</h5> <button type="button" class="close"
-                    data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">&times;</span> </button>
+                <h5 class="modal-title" id="exampleModalLabel">Edit Data</h5> <button type="button" class="close" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">&times;</span> </button>
             </div>
 
             <div class="modal-body row">
@@ -54,20 +61,18 @@
                                 <div class="col-md-6">
                                     <label for="create_at" class="control-label">Create At</label>
                                     <div class="form-group">
-                                        <input type="text" name="create_at" value="" class="form-control"
-                                            id="create_at" />
+                                        <input type="text" name="create_at" value="" class="form-control" id="create_at" />
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <label for="update_at" class="control-label">Update At</label>
                                     <div class="form-group">
-                                        <input type="text" name="update_at" value="" class="form-control"
-                                            id="update_at" />
+                                        <input type="text" name="update_at" value="" class="form-control" id="update_at" />
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="box-footer" style="float: right;;">
+                        <div class="box-footer" style="float: right;" id="conf">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
                             <button type="button" class="btn btn-primary" id="submit">Simpan
                                 Perubahan</button>
@@ -79,91 +84,95 @@
     </div>
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.js"></script>
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.js"></script> -->
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
-    integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
-    crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
 <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.ckeditor.com/ckeditor5/12.0.0/classic/ckeditor.js"></script>
 <script>
     let m_view = 'view';
     let bash_api = "<?php echo base_url('sapi/metode_pembayaran/') ?>";
     console.log(bash_api);
-    $(document).ready(function () {
-        render_tbody();
+    var number, is_update;
+    let label = " metode_pembayaran ";
+    $(document).ready(function() {
+        table.ajax.reload();
+        number = 0;
+        is_update = false;
     })
 
-    function render_tbody() {
-        var number = 0;
-        // console.log("<?php echo base_url('sapi/metode_pembayaran/get_all') ?>");
-        $('#table').DataTable({
-            "ajax": bash_api+"get_all",
-            "columns": [{
-                "render": function () {
-                    number++;
-                    return number;
-                }
-            }, {
-                "data": "nama"
-            }, {
-                "data": "nomor"
-            }, {
-                "data": "create_at"
-            }, {
-                "data": "update_at"
-            }, {
-                "render": function (data, type, JsonResultRow, meta) {
-                    return '<button class="btn btn-info edit_jenis"  style="width: 40px; margin-right : 5px;" onclick ="read(' + "'" + JsonResultRow.id + "'" + ')"><i class="fa fa-eye"></i></button>'
-                        + '<button class="btn btn-info edit_jenis" style="width: 40px;margin-right : 5px;" onclick ="update(' + "'" + JsonResultRow.id + "'" + ')"><i class="fa fa-pencil-square-o"></i></a>'
-                        + '<button class="btn btn-danger delete_jenis" style="width: 40px;" onclick ="delete(' + "'" + JsonResultRow.id + "'" + ')"><i class="fa fa-trash-o"></i></a>'
-                        ;
-                }
 
-            }]
-        });
+    function get_index() {
+        if (is_update) {
+            number = 1;
+            is_update = false;
+        } else {
+            number++;
+        }
+        return number;
     }
+    var table = $('#table').DataTable({
+        "ajax": bash_api + "get_all",
+        "columns": [{
+            "render": function() {
+                return get_index();
+            }
+        }, {
+            "data": "nama"
+        }, {
+            "data": "nomor"
+        }, {
+            "data": "create_at"
+        }, {
+            "data": "update_at"
+        }, {
+            "render": function(data, type, JsonResultRow, meta) {
+                return '<button class="btn btn-info edit_jenis"  style="width: 40px; margin-right : 5px;" onclick ="read(' + "'" + JsonResultRow.id + "'" + ')"><i class="fa fa-eye"></i></button>' +
+                    '<button class="btn btn-info edit_jenis" style="width: 40px;margin-right : 5px;" onclick ="update(' + "'" + JsonResultRow.id + "'" + ')"><i class="fa fa-pencil-square-o"></i></a>' +
+                    '<button class="btn btn-danger delete_jenis" style="width: 40px;" onclick ="del(' + "'" + JsonResultRow.id + "'" + ')"><i class="fa fa-trash-o"></i></a>';
+            }
+
+        }]
+    });
 
 
-    $('#modal_konten').on('hidden.bs.modal', function (e) {
+
+    $('#edit').on('hidden.bs.modal', function(e) {
         if (e.handled !== true) {
             e.handled = true;
             jenis_sub = null;
-
         }
+        console.log('modal hidden');
+        $('#modal_crop').unbind();
+        $('#submit').off('click');
+
     })
-    function read() {
-        console.log("edit" + edit);
-        $.ajax({
-            url: bash_api+"get_all",
-            // type: 'POST',
-            data: "id=" + ID,
-            success: function (r) {
-                // console.log(r);
-                if (r.error == false) {
-                    $('#nama').val(r.data.nama);
-                    $('#nomor').val(r.data.nomor);
-                    $('#create_at').val(r.data.create_at);
-                    $('#update_at').val(r.data.update_at);
-                    $('#edit').modal('show');
-                } else {
-                    swal('Gagal !', 'Gagal Mengambil Data Produk', 'error');
-                }
-            }
-        })
-    }
+
     function read(ID, edit = false) {
         console.log("edit" + edit);
         $.ajax({
             url: bash_api + 'read',
             type: 'POST',
             data: "id=" + ID,
-            success: function (r) {
+            success: function(r) {
                 // console.log(r);
                 if (r.error == false) {
+                    if(!edit){
+                        $('.modal-title').text("Read"+label);
+                        $( "#form :input" ).prop("readonly", true);
+                        $('#conf').hide();
+                        $( "#form :input" ).css("color", "black");
+                        
+                    }else{
+                        $('.modal-title').text("Update"+label);
+                        $( "#form :input" ).prop("readonly", false)
+                        $( "#form :input" ).css("color", "#464a4c");
+                        $('#conf').show();
+                    }
                     $('#nama').val(r.data.nama);
                     $('#nomor').val(r.data.nomor);
-                    $('#create_at').val(r.data.create_at);
+                    $('#create_at').val(r.data);
                     $('#update_at').val(r.data.update_at);
                     $('#edit').modal('show');
                 } else {
@@ -175,12 +184,11 @@
 
     function update(ID) {
         read(ID, true);
-
         $('.modal-title').text("update jenis pariwisata");
         // $('#form')[0].reset(); // reset form on modals
         $('.form-group').removeClass('has-error'); // clear error class
-        $(function () {
-            $('#submit').click(function (e) {
+        $(function() {
+            $('#submit').click(function(e) {
                 var mydata = new FormData(document.getElementById("form"));
                 mydata.append('id', ID);
                 $.ajax({
@@ -191,21 +199,50 @@
                     async: false,
                     processData: false,
                     contentType: false,
-                    beforeSend: function () {
-                    },
-                    success: function (dataObject) {
-                        if (dataObject.error == false) {
+                    beforeSend: function() {},
+                    success: function(r) {
+                        if (r.error == false) {
+                            is_update = true;
                             swal("Berhasil!", "Insert data berhasil!", "success");
-                            $('#edit').modal('toggle');
-                            render_tbody();
+                            table.ajax.reload();
                         } else {
-                            swal("Kesalahan!", dataObject.data, "error");
+                            swal("Kesalahan!", r.data, "error");
                         }
                     },
-                    complete: function () {
+                    complete: function() {
+                        $('#edit').modal('toggle');
                     }
                 });
             });
+        });
+    }
+
+    function del(ID) {
+        swal("Apakah kamu yakin menghapus data ?", {
+            icon: "info",
+            buttons: {
+                cancel: "Batal",
+                Yakin: true
+            },
+        }).then((value) => {
+            if (value == 'Yakin') {
+                $.ajax({
+                    url: bash_api + 'delete',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: "id=" + ID,
+                    success: function(r) {
+                        if (r.error === true) {
+                            swal('Gagal !', 'Hapus Gagal', 'error');
+                            table.ajax.reload();
+                        } else {
+                            is_update = true;
+                            swal('Berhasil !', 'Hapus berhasil', 'success');
+                            $('#table').dataTable().api().ajax.reload();
+                        }
+                    }
+                });
+            }
         });
     }
 </script>
