@@ -54,33 +54,33 @@
                                 <div class="col-md-6">
                                     <label for="jenis_id" class="control-label">Jenis Id</label>
                                     <div class="form-group">
-                                        <select type="text" name="jenis_id" value="" class="form-control" id="jenis_id" required/>
+                                        <select type="text" name="jenis_id" value="" class="form-control" id="jenis_id" required />
                                         </select>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <label for="kategori_id" class="control-label">Kategori Id</label>
                                     <div class="form-group">
-                                        <select name="kategori_id" value="" class="form-control" id="kategori_id" required/>
+                                        <select name="kategori_id" value="" class="form-control" id="kategori_id" required />
                                         </select>
                                     </div>
                                 </div>
                                 <div class="col-md-12">
                                     <label for="nama" class="control-label">Nama</label>
                                     <div class="form-group">
-                                        <input type="text" name="nama" value="" class="form-control" id="nama" required/>
+                                        <input type="text" name="nama" value="" class="form-control" id="nama" required />
                                     </div>
                                 </div>
                                 <div class="col-md-12">
                                     <label for="harga" class="control-label">Harga</label>
                                     <div class="form-group">
-                                        <input type="text" name="harga" value="" class="form-control" id="harga" required/>
+                                        <input type="text" name="harga" value="" class="form-control" id="harga" required />
                                     </div>
                                 </div>
                                 <div class="col-md-12">
                                     <label for="detail" class="control-label">Detail</label>
                                     <div class="form-group">
-                                        <textarea name="detail" class="form-control" id="detail"required></textarea>
+                                        <textarea name="detail" class="form-control" id="detail" required></textarea>
                                     </div>
                                 </div>
                                 <div class="col-md-12">
@@ -89,7 +89,7 @@
 
                                     </div>
                                     <div class="form-group">
-                                        <input type="file" name="foto" class="form-control" id="foto"required>
+                                        <input type="file" name="foto" class="form-control" id="foto">
                                     </div>
                                 </div>
                                 <div id="createupdate" class="row col-md-12">
@@ -197,6 +197,7 @@
         $('#modal_crop').unbind();
         $('#submit').off('click');
         $('#image_preview,#jenis_id,#kategori_id').empty();
+        $("#foto").prop("required", false);
 
 
     })
@@ -204,8 +205,8 @@
     function conf_state(state) {
         if (state == "read") {
             $('.modal-title').text("Read" + label);
-            $("#form :input,select").prop("readonly", true);
-            $('#conf,#foto').hide();
+            $("#form :input,select").prop("readonly", true); //change
+            $('#conf,#foto').hide(); //change
             $("#form input").css("color", "black");
             $("#createupdate").show();
 
@@ -250,6 +251,7 @@
     }
 
     function update(ID) {
+
         read(ID, "update");
         $('.modal-title').text("update jenis pariwisata");
         $('.form-group').removeClass('has-error'); // clear error class
@@ -294,9 +296,11 @@
 
 
     function create() {
+        $("#foto").prop("required", true);
         $("#image_preview").append('<div class="show-image"><img src="" class="rounded image_view p-1" alt="..." style="width:100%;" id="img_preview_src">');
         render_dropdown('#jenis_id', arr_jenis_all.data);
         render_dropdown('#kategori_id', arr_kategori_all.data);
+
         conf_state("create");
         $("#form input").val('');
         $('#edit').modal('show');
@@ -372,7 +376,7 @@
         console.log('cahne');
         readURL(this);
     });
-
+    //change
     function readURL(input) {
         if (input.files && input.files[0]) {
             var reader = new FileReader();
@@ -388,6 +392,7 @@
 </script>
 
 <script>
+    //change
     var arr_jenis_all = "";
 
     function get_jenis_all() {
