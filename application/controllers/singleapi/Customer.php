@@ -97,6 +97,7 @@ class Customer extends CI_Controller
             'kendaraan' => $this->input->post('kendaraan'),
             'plat_nomor' => $this->input->post('plat_nomor'),
             'member' => $this->input->post('member'),
+            'update_at' => date('Y-m-d H:i:s'),
             // 'create_at' => date('Y-m-d H:i:s'),
             'foto' => $this->input->post('foto'),
         );

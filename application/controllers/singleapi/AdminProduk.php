@@ -109,6 +109,7 @@ class AdminProduk extends CI_Controller
             'nama' => $this->input->post('nama'),
             'harga' => $this->input->post('harga'),
             'detail' => $this->input->post('detail'),
+            'update_at' => date('Y-m-d H:i:s'),
         );
         if (!empty($_FILES['foto']['name'])) {
             $file_foto = $this->upload_image();

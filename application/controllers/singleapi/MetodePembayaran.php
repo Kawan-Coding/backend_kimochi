@@ -85,6 +85,7 @@ class MetodePembayaran extends CI_Controller
         $data = array(
             'nama' => $this->input->post('nama'),
             'nomor' => $this->input->post('nomor'),
+            'update_at' => date('Y-m-d H:i:s'),
 
         );
         $res = $this->Master->update($this->tabel,  array('id' => $id), $data);
