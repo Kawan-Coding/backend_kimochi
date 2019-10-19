@@ -31,8 +31,9 @@ class Msg
                 $msg_data['msg'] = 'query berhasil';
                 $msg_data['error'] = false;
                 break;
-            case '204':
+                case '204':
                 $msg_data['msg'] = $name . ' ' . 'not exist';
+                $msg_data['error_msg'] = $custom_msg;
                 $msg_data['error'] = false;
                 break;
             case '300':
@@ -53,7 +54,7 @@ class Msg
                 // $msg_data['error'] = false;
                 break;
         }
-
+        $msg_data['custom_error_msg'] = $custom_msg;
         return $msg_data;
         // return $this->response([
         //     $msg_data

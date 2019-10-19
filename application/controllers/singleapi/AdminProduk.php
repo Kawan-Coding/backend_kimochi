@@ -53,13 +53,27 @@ class AdminProduk extends CI_Controller
     }
 
 
-
+    public function upload_image()
+    {
+        $config['upload_path'] = './uploads/';
+        $config['allowed_types'] = 'gif|jpg|png|JPG';
+        $config['encrypt_name'] = true;
+        // $config['max_size'] = 600;
+        // $config['max_width'] = 1024;
+        // $config['max_height'] = 768;
+        $this->load->library('upload', $config);
+        $is_upload_succces = $this->upload->do_upload('foto');
+        $file = $this->upload->data();
+        $error_upload = array('img' => $this->upload->display_errors());
+        return array('status' => $is_upload_succces, 'name' => $file['file_name'], 'error_msg' => $error_upload);
+    }
     /*
      * Adding a new produk
      */
     function add()
     {
         $this->is_valid();
+        $file_foto = $this->upload_image();
         $params = array(
             'jenis_id' => $this->input->post('jenis_id'),
             'kategori_id' => $this->input->post('kategori_id'),
@@ -67,15 +81,18 @@ class AdminProduk extends CI_Controller
             'harga' => $this->input->post('harga'),
             'create_at' => date('Y-m-d H:i:s'),
             'detail' => $this->input->post('detail'),
-            'foto' => $this->input->post('foto')
+            'foto' => $file_foto['name'],
         );
-        
-        $res = $this->Master->add($this->tabel, $params);
-        if ($res['status']) {
-            $this->msg('data', '200', $res['data']);
+        if ($file_foto['status']) {
+            $res = $this->Master->add($this->tabel, $params);
+            if ($res['status']) {
+                $this->msg('data', '200', $res['data']);
+            } else {
+                $this->msg('data', '500', $res['data']);
+            };
         } else {
-            $this->msg('data', '500', $res['data']);
-        };
+            $this->msg('data', '500', '', $file_foto['error_msg']);
+        }
     }
 
     /*
@@ -92,14 +109,29 @@ class AdminProduk extends CI_Controller
             'nama' => $this->input->post('nama'),
             'harga' => $this->input->post('harga'),
             'detail' => $this->input->post('detail'),
-            'foto' => $this->input->post('foto'),
         );
-        $res = $this->Master->update($this->tabel,  array('id' => $id), $data);
-        if ($res['status']) {
-            $this->msg('data', '200', $res['data']);
+        if (!empty($_FILES['foto']['name'])) {
+            $file_foto = $this->upload_image();
+            $data['foto'] = $file_foto['name'];
+            if ($file_foto['status']) {
+                $res = $this->Master->update($this->tabel,  array('id' => $id), $data);
+                if ($res['status']) {
+                    $this->msg('data', '200', $res['data']);
+                } else {
+                    $this->msg('data', '500', $res['data']);
+                };
+            } else {
+                $this->msg('data', '500', '', $file_foto['error_msg']);
+            }
         } else {
-            $this->msg('data', '500', $res['data']);
-        };
+            // unset($params['foto']);
+            $res = $this->Master->update($this->tabel,  array('id' => $id), $data);
+            if ($res['status']) {
+                $this->msg('data', '200', $res['data']);
+            } else {
+                $this->msg('data', '500', $res['data']);
+            };
+        }
     }
 
     /*

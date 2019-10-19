@@ -1,12 +1,12 @@
 <style>
-.was-validated .custom-select:valid {
-  background-image: none;
-}
+    .was-validated .custom-select:valid {
+        background-image: none;
+    }
 
 
-.was-validated .custom-select:invalid {
-  background-image: none;
-}
+    .was-validated .custom-select:invalid {
+        background-image: none;
+    }
 </style>
 <section id="produk">
     <h4>Produk</h4>
@@ -54,51 +54,42 @@
                                 <div class="col-md-6">
                                     <label for="jenis_id" class="control-label">Jenis Id</label>
                                     <div class="form-group">
-                                        <select type="text" name="jenis_id" value="" class="form-control" id="jenis_id" />
+                                        <select type="text" name="jenis_id" value="" class="form-control" id="jenis_id" required/>
                                         </select>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <label for="kategori_id" class="control-label">Kategori Id</label>
                                     <div class="form-group">
-                                        <select name="kategori_id" value="" class="form-control" id="kategori_id" />
+                                        <select name="kategori_id" value="" class="form-control" id="kategori_id" required/>
                                         </select>
                                     </div>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-12">
                                     <label for="nama" class="control-label">Nama</label>
                                     <div class="form-group">
-                                        <input type="text" name="nama" value="" class="form-control" id="nama" />
+                                        <input type="text" name="nama" value="" class="form-control" id="nama" required/>
                                     </div>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-12">
                                     <label for="harga" class="control-label">Harga</label>
                                     <div class="form-group">
-                                        <input type="text" name="harga" value="" class="form-control" id="harga" />
+                                        <input type="text" name="harga" value="" class="form-control" id="harga" required/>
                                     </div>
                                 </div>
-                                <div class="col-md-6">
-                                    <label for="create_at" class="control-label">Create At</label>
-                                    <div class="form-group">
-                                        <input type="text" name="create_at" value="" class="form-control" id="create_at" />
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <label for="update_at" class="control-label">Update At</label>
-                                    <div class="form-group">
-                                        <input type="text" name="update_at" value="" class="form-control" id="update_at" />
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
+                                <div class="col-md-12">
                                     <label for="detail" class="control-label">Detail</label>
                                     <div class="form-group">
-                                        <textarea name="detail" class="form-control" id="detail"></textarea>
+                                        <textarea name="detail" class="form-control" id="detail"required></textarea>
                                     </div>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-12">
                                     <label for="foto" class="control-label">Foto</label>
+                                    <div id="image_preview">
+
+                                    </div>
                                     <div class="form-group">
-                                        <textarea name="foto" class="form-control" id="foto"></textarea>
+                                        <input type="file" name="foto" class="form-control" id="foto"required>
                                     </div>
                                 </div>
                                 <div id="createupdate" class="row col-md-12">
@@ -181,7 +172,9 @@
             }, {
                 "data": "detail"
             }, {
-                "data": "foto"
+                "render": function(data, type, JsonResultRow, meta) {
+                    return '<img src="' + "<?php echo base_url('') ?>" + "/uploads/" + JsonResultRow.foto + '" alt="..." class="img-thumbnail style="width:200px;">'
+                }
             }, {
                 "render": function(data, type, JsonResultRow, meta) {
                     return '<button class="btn btn-info edit_jenis"  style="width: 40px; margin-right : 5px;" onclick ="read(' + "'" + JsonResultRow.id + "'" + ')"><i class="fa fa-eye"></i></button>' +
@@ -203,22 +196,24 @@
         console.log('modal hidden');
         $('#modal_crop').unbind();
         $('#submit').off('click');
+        $('#image_preview,#jenis_id,#kategori_id').empty();
+
 
     })
 
     function conf_state(state) {
         if (state == "read") {
             $('.modal-title').text("Read" + label);
-            $("#form :input").prop("readonly", true);
-            $('#conf').hide();
+            $("#form :input,select").prop("readonly", true);
+            $('#conf,#foto').hide();
             $("#form input").css("color", "black");
             $("#createupdate").show();
 
         } else if (state == "update" || state == "create") {
             $('.modal-title').text("Update" + label);
-            $("#form :input").prop("readonly", false)
+            $("#form :input,select").prop("readonly", false)
             $("#form input").css("color", "#464a4c");
-            $('#conf').show();
+            $('#conf,#foto').show();
             $("#createupdate").hide();
         }
     }
@@ -232,10 +227,19 @@
             success: function(r) {
                 // console.log(r);
                 if (r.error == false) {
+                    render_dropdown('#jenis_id', arr_jenis_all.data);
+                    render_dropdown('#kategori_id', arr_kategori_all.data);
                     conf_state(state);
+                    $("select[id='jenis_id'] option[value=" + r.data.jenis_id + "]").attr("selected", "selected");
+                    $("select[id='kategori_id'] option[value=" + r.data.kategori_id + "]").attr("selected", "selected");
+                    // $('#jenis_id').val(r.data.jenis_id);
+                    // $('#kategori_id').val(r.data.kategori_id);
                     $('#nama').val(r.data.nama);
-                    $('#nomor').val(r.data.nomor);
-                    $('#create_at').val(r.data.update_at);
+                    $('#detail').val(r.data.detail);
+                    $('#harga').val(r.data.harga);
+                    // $('#foto').val(r.data.foto);
+                    $("#image_preview").append('<div class="show-image"><img src="' + "<?php echo base_url('') ?>" + "/uploads/" + r.data.foto + '" class="rounded image_view p-1" alt="..." style="width:100%;" id="img_preview_src">');
+                    $('#create_at').val(r.data.create_at);
                     $('#update_at').val(r.data.update_at);
                     $('#edit').modal('show');
                 } else {
@@ -288,11 +292,15 @@
         });
     }
 
+
     function create() {
+        $("#image_preview").append('<div class="show-image"><img src="" class="rounded image_view p-1" alt="..." style="width:100%;" id="img_preview_src">');
+        render_dropdown('#jenis_id', arr_jenis_all.data);
+        render_dropdown('#kategori_id', arr_kategori_all.data);
         conf_state("create");
         $("#form input").val('');
         $('#edit').modal('show');
-        $('.modal-title').text("update jenis pariwisata");
+        $('.modal-title').text("tambah jenis pariwisata");
         $('.form-group').removeClass('has-error'); // clear error class
         $(function() {
             $('#submit').click(function(event) {
@@ -360,36 +368,21 @@
             }
         });
     }
+    $("#foto").change(function() {
+        console.log('cahne');
+        readURL(this);
+    });
 
-    function read(ID, state = "read") {
-        console.log("edit" + edit);
-        $.ajax({
-            url: bash_api + 'read',
-            type: 'POST',
-            data: "id=" + ID,
-            success: function(r) {
-                // console.log(r);
-                if (r.error == false) {
-                    render_dropdown('#jenis_id', arr_jenis_all.data);
-                    render_dropdown('#kategori_id', arr_kategori_all.data);
-                    conf_state(state);
-                    $("select[id='jenis_id'] option[value=" + r.data.jenis_id + "]").attr("selected", "selected");
-                    $("select[id='kategori_id'] option[value=" + r.data.kategori_id + "]").attr("selected", "selected");
-                    // $('#jenis_id').val(r.data.jenis_id);
-                    // $('#kategori_id').val(r.data.kategori_id);
-                    $('#nama').val(r.data.nama);
-                    $('#detail').val(r.data.detail);
-                    $('#harga').val(r.data.harga);
-                    $('#foto').val(r.data.foto);
-                    $('#create_at').val(r.data.create_at);
-                    $('#update_at').val(r.data.update_at);
-                    $('#edit').modal('show');
-                } else {
-                    swal('Gagal !', r.data, 'error');
-                }
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                $('#img_preview_src').attr('src', e.target.result);
             }
-        })
+            reader.readAsDataURL(input.files[0]);
+        }
     }
+
 
     // var arr_jenis_all; sebelumnya gini error
 </script>
