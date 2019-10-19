@@ -54,7 +54,7 @@ class Msg
                 // $msg_data['error'] = false;
                 break;
         }
-        $msg_data['custom_error_msg'] = $custom_msg;
+        // $msg_data['custom_error_msg'] = $custom_msg;
         return $msg_data;
         // return $this->response([
         //     $msg_data

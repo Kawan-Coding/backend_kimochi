@@ -1,15 +1,14 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class AdminProduk extends CI_Controller
+class Pegawai extends CI_Controller
 {
     protected $date;
-    protected $tabel = 'produk';
+    protected $tabel = 'pegawai';
     public function __construct()
     {
         parent::__construct();
         // Your own constructor code
-        $this->load->model('Produk');
         $this->date = new DateTime();
         // $this->load->library('Msg');
         //==== ALLOWING CORS
@@ -36,7 +35,7 @@ class AdminProduk extends CI_Controller
 
     public function get_all()
     {
-        $this->msg('data', '200', $this->Master->get_all($this->tabel));
+        $this->msg('data', '200', $this->Master->get_all($this->tabel,array("status !="=>"delete")));
     }
 
     public function get()
@@ -55,7 +54,7 @@ class AdminProduk extends CI_Controller
 
     public function upload_image()
     {
-        $config['upload_path'] = './uploads/';
+        $config['upload_path'] = './uploads/pegawai';
         $config['allowed_types'] = 'gif|jpg|png|JPG';
         $config['encrypt_name'] = true;
         // $config['max_size'] = 600;
@@ -75,12 +74,13 @@ class AdminProduk extends CI_Controller
         $this->is_valid();
         $file_foto = $this->upload_image();
         $params = array(
-            'jenis_id' => $this->input->post('jenis_id'),
-            'kategori_id' => $this->input->post('kategori_id'),
-            'nama' => $this->input->post('nama'),
-            'harga' => $this->input->post('harga'),
+            'password' => password_hash($_POST['password'], PASSWORD_DEFAULT),
+            'username' => $this->input->post('username'),
+            'nama_lengkap' => $this->input->post('nama_lengkap'),
+            'no_telepon' => $this->input->post('no_telepon'),
             'create_at' => date('Y-m-d H:i:s'),
-            'detail' => $this->input->post('detail'),
+            'update_at' => date('Y-m-d H:i:s'),
+            'status' => $this->input->post('status'),
             'foto' => $file_foto['name'],
         );
         if ($file_foto['status']) {
@@ -104,13 +104,18 @@ class AdminProduk extends CI_Controller
         // check if the produk exists before trying to edit it
         $id =  $this->input->post('id');
         $data = array(
-            'jenis_id' => $this->input->post('jenis_id'),
-            'kategori_id' => $this->input->post('kategori_id'),
-            'nama' => $this->input->post('nama'),
-            'harga' => $this->input->post('harga'),
-            'detail' => $this->input->post('detail'),
+            
+            'username' => $this->input->post('username'),
+            'nama_lengkap' => $this->input->post('nama_lengkap'),
+            'no_telepon' => $this->input->post('no_telepon'),
+            // 'create_at' => date('Y-m-d H:i:s'),
             'update_at' => date('Y-m-d H:i:s'),
+            'status' => $this->input->post('status'),
+            // 'foto' => $file_foto['name'],
         );
+        if (!empty($_POST['password'])) {
+            $data['password'] = password_hash($_POST['password'], PASSWORD_DEFAULT);
+        }
         if (!empty($_FILES['foto']['name'])) {
             $file_foto = $this->upload_image();
             $data['foto'] = $file_foto['name'];
@@ -142,12 +147,11 @@ class AdminProduk extends CI_Controller
     {
         $this->is_valid();
         $id =  $this->input->post('id');
-        $res = $this->Master->delete($this->tabel, array('id' => $id));
-
+        $res = $this->Master->update($this->tabel,  array('id' => $id), array('status'=>'delete'));
         if ($res['status']) {
             $this->msg('data', '200', $res['data']);
         } else {
-            $this->msg('data', '500', $res['data']);
+            $this->msg('data', '500', $res['data']['message']);
         };
     }
 }

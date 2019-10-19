@@ -23,4 +23,11 @@ class Admin extends CI_Controller
 		);
 		$this->load->view('template_admin', $data);
 	}
+	public function pegawai ()
+	{
+		$data = array(
+			'content' => 'content/konten3',
+		);
+		$this->load->view('template_admin', $data);
+	}
 }

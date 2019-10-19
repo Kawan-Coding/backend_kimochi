@@ -3,6 +3,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 $route['admin/metode_pembayaran']['get'] = '/admin/admin/metode_pembayaran';
 $route['admin/produk']['get'] = '/admin/admin/produk';
+$route['admin/pegawai']['get'] = '/admin/admin/pegawai';
 //=====ROUTE API
 // CASH REGISTER
 $route['api/cashregister/open']['POST'] = '/api/CashRegisterController/open';
@@ -50,6 +51,13 @@ $route['sapi/kategori/read']['POST'] = '/singleapi/kategori/get';
 $route['sapi/kategori/create']['POST'] = '/singleapi/kategori/add';
 $route['sapi/kategori/update']['POST'] = '/singleapi/kategori/edit';
 $route['sapi/kategori/delete']['POST'] = '/singleapi/kategori/remove';
+
+//SINGLE API PEGAWAI
+$route['sapi/pegawai/get_all']['GET'] = '/singleapi/pegawai/get_all';
+$route['sapi/pegawai/read']['POST'] = '/singleapi/pegawai/get';
+$route['sapi/pegawai/create']['POST'] = '/singleapi/pegawai/add';
+$route['sapi/pegawai/update']['POST'] = '/singleapi/pegawai/edit';
+$route['sapi/pegawai/delete']['POST'] = '/singleapi/pegawai/remove';
 
 $route['sapi/customer/createExUsrPass']['POST'] = '/singleapi/customer/createExUsrPass';
 $route['sapi/customer/updateUsrPass']['POST'] = '/singleapi/customer/updateUsrPass';

@@ -69,7 +69,7 @@ class MetodePembayaran extends CI_Controller
         if ($res['status']) {
             $this->msg('data', '200', $res['data']);
         } else {
-            $this->msg('data', '500', $res['data']);
+            $this->msg('data', '500', $res['data']['message']);
         };
     }
 
@@ -92,7 +92,7 @@ class MetodePembayaran extends CI_Controller
         if ($res['status']) {
             $this->msg('data', '200', $res['data']);
         } else {
-            $this->msg('data', '500', $res['data']);
+            $this->msg('data', '500', $res['data']['message']);
         };
     }
 
