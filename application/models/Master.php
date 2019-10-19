@@ -15,7 +15,7 @@ class Master extends CI_Model
      * Get allowed_payment by id
      */
     public function get($tabel,$where)
-    {
+    {   
         $run = $this->db->get_where($tabel,$where)->row_array();
         $res = array();
         if (!isset($run)) {

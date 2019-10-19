@@ -9,9 +9,8 @@
     <h4>Produk</h4>
     <hr>
     <div class="col-12 text-right">
-        <button class="btn btn-info " data-toggle="modal" data-target="#add" style="position: fixed; bottom: 36px;   right: 20px; padding: 18.5px;
-    z-index: 10;" onclick="create()">
-            <i class="fa fa-plus"></i>
+        <button class="btn pull-right" data-toggle="modal" data-target="#add">
+            <i class="fas fa-plus-circle fa-lg"></i> New Product
         </button>
     </div>
     <div class="col-12 card shadow mt-5 mb-5">
@@ -34,7 +33,7 @@
     </div>
 </section> <!-- Modal -->
 <!-- Modal -->
-<div class="modal fade col-sm-6 offset-md-3" id="edit">
+<div class="modal fade" id="edit">
     <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -43,22 +42,19 @@
 
             <div class="modal-body row">
                 <div class="col-sm-12">
-                    <form method="POST" id="form" class="form-horizontal was-validated" novalidate>
+                    <form method="POST" id="form" class="form-horizontal was-validated">
                         <div class="box-body">
                             <div class="row clearfix">
                                 <div class="col-md-12">
                                     <label for="nama" class="control-label">Nama</label>
                                     <div class="form-group">
-                                        <input type="text" name="nama" value="" class="form-control" id="nama" required />
+                                        <input type="text" name="nama" value="" class="form-control" id="nama" />
                                     </div>
                                 </div>
                                 <div class="col-md-12">
                                     <label for="nomor" class="control-label">Nomor</label>
                                     <div class="form-group">
-                                        <input type="text" name="nomor" value="" class="form-control" id="nomor" required />
-                                    </div>
-                                    <div class="invalid-feedback">
-                                        Please choose a username.
+                                        <input type="text" name="nomor" value="" class="form-control" id="nomor" />
                                     </div>
                                 </div>
                                 <div id="createupdate" class="row col-md-12">
@@ -105,7 +101,6 @@
         table.ajax.reload();
         number = 0;
         is_update = false;
-        // $.fx.speeds._default = 100;
     })
 
 
@@ -155,24 +150,7 @@
 
     })
 
-    function conf_state(state) {
-        if (state == "read") {
-            $('.modal-title').text("Read" + label);
-            $("#form :input").prop("readonly", true);
-            $('#conf').hide();
-            $("#form input").css("color", "black");
-            $("#createupdate").show();
-
-        } else if (state == "update" || state == "create") {
-            $('.modal-title').text("Update" + label);
-            $("#form :input").prop("readonly", false)
-            $("#form input").css("color", "#464a4c");
-            $('#conf').show();
-            $("#createupdate").hide();
-        }
-    }
-
-    function read(ID, state = "read") {
+    function read(ID, edit = false) {
         console.log("edit" + edit);
         $.ajax({
             url: bash_api + 'read',
@@ -181,102 +159,62 @@
             success: function(r) {
                 // console.log(r);
                 if (r.error == false) {
-                    conf_state(state);
+                    if (!edit) {
+                        $('.modal-title').text("Read" + label);
+                        $("#form :input").prop("readonly", true);
+                        $('#conf').hide();
+                        $("#form input").css("color", "black");
+                        $("#createupdate").show();
+
+                    } else {
+                        $('.modal-title').text("Update" + label);
+                        $("#form :input").prop("readonly", false)
+                        $("#form input").css("color", "#464a4c");
+                        $('#conf').show();
+                        $("#createupdate").hide();
+                    }
                     $('#nama').val(r.data.nama);
                     $('#nomor').val(r.data.nomor);
                     $('#create_at').val(r.data.update_at);
                     $('#update_at').val(r.data.update_at);
                     $('#edit').modal('show');
                 } else {
-                    swal('Gagal !', r.data, 'error');
+                    swal('Gagal !',  r.data, 'error');
                 }
             }
         })
     }
 
     function update(ID) {
-        read(ID, "update");
+        read(ID, true);
         $('.modal-title').text("update jenis pariwisata");
         $('.form-group').removeClass('has-error'); // clear error class
         $(function() {
-            $('#submit').click(function(event) {
-                event.preventDefault();
-                if ($('#form')[0].checkValidity() === false) {
-                    event.preventDefault();
-                    event.stopPropagation();
-                    swal("Update Gagal!", "form tidak valid", "error");
-                } else {
-                    var mydata = new FormData(document.getElementById("form"));
-                    mydata.append('id', ID);
-                    $.ajax({
-                        url: bash_api + 'update',
-                        type: "POST",
-                        dataType: "json",
-                        data: mydata,
-                        async: false,
-                        processData: false,
-                        contentType: false,
-                        beforeSend: function() {},
-                        success: function(r) {
-                            if (r.error == false) {
-                                is_update = true;
-                                swal("Update Berhasil!", '', "success");
-                                table.ajax.reload();
-                            } else {
-                                swal("Update Gagal!", r.data, "error");
-                            }
-                        },
-                        complete: function() {
-                            $('#edit').modal('toggle');
+            $('#submit').click(function(e) {
+                var mydata = new FormData(document.getElementById("form"));
+                mydata.append('id', ID);
+                $.ajax({
+                    url: bash_api + 'update',
+                    type: "POST",
+                    dataType: "json",
+                    data: mydata,
+                    async: false,
+                    processData: false,
+                    contentType: false,
+                    beforeSend: function() {},
+                    success: function(r) {
+                        if (r.error == false) {
+                            is_update = true;
+                            swal("Berhasil!", '', "success");
+                            table.ajax.reload();
+                        } else {
+                            swal("Update Gagal!",  r.data, "error");
                         }
-                    });
-                }
-                $('#form').addClass('was-validated');
-
-            });
-        });
-    }
-
-    function create() {
-        conf_state("create");
-        $("#form input").val('');
-        $('#edit').modal('show');
-        $('.modal-title').text("update jenis pariwisata");
-        $('.form-group').removeClass('has-error'); // clear error class
-        $(function() {
-            $('#submit').click(function(event) {
-                event.preventDefault();
-                if ($('#form')[0].checkValidity() === false) {
-                    event.preventDefault();
-                    event.stopPropagation();
-                    swal("Update Gagal!", "form tidak valid", "error");
-                } else {
-                    var mydata = new FormData(document.getElementById("form"));
-                    $.ajax({
-                        url: bash_api + 'create',
-                        type: "POST",
-                        dataType: "json",
-                        data: mydata,
-                        async: false,
-                        processData: false,
-                        contentType: false,
-                        beforeSend: function() {},
-                        success: function(r) {
-                            if (r.error == false) {
-                                is_update = true;
-                                swal("Update Berhasil!", '', "success");
-                                table.ajax.reload();
-                            } else {
-                                swal("Update Gagal!", r.data, "error");
-                            }
-                        },
-                        complete: function() {
-                            $('#edit').modal('toggle');
-                        }
-                    });
-                }
-                $('#form').addClass('was-validated');
-
+                    },
+                    complete: function() {
+                        $('#edit').modal('toggle');
+                    }
+                });
             });
         });
     }
@@ -301,7 +239,7 @@
                             table.ajax.reload();
                         } else {
                             is_update = true;
-                            swal('Hapus berhasil', '', 'success');
+                            swal('Hapus berhasil',  '', 'success');
                             $('#table').dataTable().api().ajax.reload();
                         }
                     }
@@ -309,8 +247,4 @@
             }
         });
     }
-</script>
-
-<script>
-
 </script>

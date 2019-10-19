@@ -1,7 +1,8 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-$route['admin']['get'] = '/admin/admin';
+$route['admin/metode_pembayaran']['get'] = '/admin/admin/metode_pembayaran';
+$route['admin/produk']['get'] = '/admin/admin/produk';
 //=====ROUTE API
 // CASH REGISTER
 $route['api/cashregister/open']['POST'] = '/api/CashRegisterController/open';
