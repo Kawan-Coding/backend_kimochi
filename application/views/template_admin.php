@@ -27,7 +27,10 @@
     <link href="<?=$loc?>css/style.css" rel="stylesheet">
     <!-- You can change the theme colors from here -->
     <link href="<?=$loc?>css/colors/blue.css" id="theme" rel="stylesheet">
-    <script src="<?=$loc?>plugins/jquery/jquery.min.js"></script>
+    <script
+  src="https://code.jquery.com/jquery-3.4.1.min.js"
+  integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+  crossorigin="anonymous"></script>
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>

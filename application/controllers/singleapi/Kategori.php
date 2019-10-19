@@ -1,15 +1,15 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class AdminProduk extends CI_Controller
+class Kategori extends CI_Controller
 {
     protected $date;
-    protected $tabel = 'produk';
+    protected $tabel = 'kategori';
     public function __construct()
     {
         parent::__construct();
         // Your own constructor code
-        $this->load->model('Produk');
+        // $this->load->model('Produk');
         $this->date = new DateTime();
         // $this->load->library('Msg');
         //==== ALLOWING CORS

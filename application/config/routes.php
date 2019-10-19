@@ -37,6 +37,20 @@ $route['sapi/customer/create']['POST'] = '/singleapi/customer/add';
 $route['sapi/customer/update']['POST'] = '/singleapi/customer/edit';
 $route['sapi/customer/delete']['POST'] = '/singleapi/customer/remove';
 
+//SINGLE API JENIS
+$route['sapi/jenis/get_all']['GET'] = '/singleapi/jenis/get_all';
+$route['sapi/jenis/read']['POST'] = '/singleapi/jenis/get';
+$route['sapi/jenis/create']['POST'] = '/singleapi/jenis/add';
+$route['sapi/jenis/update']['POST'] = '/singleapi/jenis/edit';
+$route['sapi/jenis/delete']['POST'] = '/singleapi/jenis/remove';
+
+//SINGLE API KATEGORI
+$route['sapi/kategori/get_all']['GET'] = '/singleapi/kategori/get_all';
+$route['sapi/kategori/read']['POST'] = '/singleapi/kategori/get';
+$route['sapi/kategori/create']['POST'] = '/singleapi/kategori/add';
+$route['sapi/kategori/update']['POST'] = '/singleapi/kategori/edit';
+$route['sapi/kategori/delete']['POST'] = '/singleapi/kategori/remove';
+
 $route['sapi/customer/createExUsrPass']['POST'] = '/singleapi/customer/createExUsrPass';
 $route['sapi/customer/updateUsrPass']['POST'] = '/singleapi/customer/updateUsrPass';
 $route['sapi/customer/getByNumber']['POST'] = '/singleapi/customer/getByNumber';
