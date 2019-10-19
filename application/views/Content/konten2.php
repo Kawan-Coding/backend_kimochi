@@ -1,11 +1,18 @@
 <style>
-    .was-validated .custom-select:valid {
-        background-image: none;
+    ::-webkit-scrollbar {
+        width: 0px;
     }
 
+    ::-webkit-scrollbar-track {
+        background: transparent;
+    }
 
-    .was-validated .custom-select:invalid {
-        background-image: none;
+    ::-webkit-scrollbar-thumb {
+        background: white;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+        background: #555;
     }
 </style>
 <section id="produk">
@@ -39,7 +46,7 @@
     </div>
 </section> <!-- Modal -->
 <!-- Modal -->
-<div class="modal fade col-sm-6 offset-md-3" id="edit">
+<div class="modal fade col-sm-6 offset-md-3" id="edit" style="overflow: auto;">
     <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -198,7 +205,7 @@
         $('#submit').off('click');
         $('#image_preview,#jenis_id,#kategori_id').empty();
         $("#foto").prop("required", false);
-
+        $("#form").removeClass("was-validated").addClass("needs-validation");
 
     })
 

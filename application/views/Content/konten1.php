@@ -152,6 +152,8 @@
         console.log('modal hidden');
         $('#modal_crop').unbind();
         $('#submit').off('click');
+        $( "#form" ).removeClass( "was-validated" ).addClass( "needs-validation" );
+
 
     })
 
