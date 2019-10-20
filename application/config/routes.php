@@ -4,6 +4,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 $route['admin/metode_pembayaran']['get'] = '/admin/admin/metode_pembayaran';
 $route['admin/produk']['get'] = '/admin/admin/produk';
 $route['admin/pegawai']['get'] = '/admin/admin/pegawai';
+$route['admin/cabang']['get'] = '/admin/admin/cabang';
 //=====ROUTE API
 // CASH REGISTER
 $route['api/cashregister/open']['POST'] = '/api/CashRegisterController/open';
@@ -59,11 +60,19 @@ $route['sapi/pegawai/create']['POST'] = '/singleapi/pegawai/add';
 $route['sapi/pegawai/update']['POST'] = '/singleapi/pegawai/edit';
 $route['sapi/pegawai/delete']['POST'] = '/singleapi/pegawai/remove';
 
+//SINGLE API CUSTOMER
 $route['sapi/customer/createExUsrPass']['POST'] = '/singleapi/customer/createExUsrPass';
 $route['sapi/customer/updateUsrPass']['POST'] = '/singleapi/customer/updateUsrPass';
 $route['sapi/customer/getByNumber']['POST'] = '/singleapi/customer/getByNumber';
 $route['sapi/customer/updatePass']['POST'] = '/singleapi/customer/updatePass';
 $route['sapi/customer/updateUserPassByNoTelp']['POST'] = '/singleapi/customer/updateUserPassByNoTelp';
+
+//SINGLE API CABANG
+$route['sapi/cabang/get_all']['GET'] = '/singleapi/cabang/get_all';
+$route['sapi/cabang/read']['POST'] = '/singleapi/cabang/get';
+$route['sapi/cabang/create']['POST'] = '/singleapi/cabang/add';
+$route['sapi/cabang/update']['POST'] = '/singleapi/cabang/edit';
+$route['sapi/cabang/delete']['POST'] = '/singleapi/cabang/remove';
 
 //API ADMIN
 

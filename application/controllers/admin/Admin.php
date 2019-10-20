@@ -12,21 +12,28 @@ class Admin extends CI_Controller
 	public function metode_pembayaran()
 	{
 		$data = array(
-			'content' => 'content/konten1',
+			'content' => 'content/Konten1',
 		);
 		$this->load->view('template_admin', $data);
 	}
 	public function produk ()
 	{
 		$data = array(
-			'content' => 'content/konten2',
+			'content' => 'content/Konten2',
 		);
 		$this->load->view('template_admin', $data);
 	}
 	public function pegawai ()
 	{
 		$data = array(
-			'content' => 'content/konten3',
+			'content' => 'content/Konten3',
+		);
+		$this->load->view('template_admin', $data);
+	}
+	public function cabang ()
+	{
+		$data = array(
+			'content' => 'content/Konten4',
 		);
 		$this->load->view('template_admin', $data);
 	}

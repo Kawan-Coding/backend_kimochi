@@ -15,6 +15,9 @@
         background: #555;
     }
 </style>
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.5.1/dist/leaflet.css" integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ==" crossorigin="" />
+<script src="https://unpkg.com/leaflet@1.5.1/dist/leaflet.js" integrity="sha512-GffPMF3RvMeYyc1LWMHtK8EbPv0iNZ8/oTtHPx9/cc2ILxQ+u905qIwdpULaqDkyBKgOaB57QTMg7ztg8Jm2Og==" crossorigin=""></script>
 <section id="produk">
     <h4>Produk</h4>
     <hr>
@@ -29,13 +32,12 @@
         <table id="table" class="table table-striped table-bordered">
             <thead>
                 <tr>
-                    <th>No</th>
-                    <th>Jenis</th>
-                    <th>Kategori</th>
+                    <th>ID</th>
                     <th>Nama</th>
-                    <th>Harga</th>
-                    <th>Detail</th>
-                    <th>Foto</th>
+                    <th>Alamat</th>
+                    <th>Latlong</th>
+                    <th>Create At</th>
+                    <th>Update At</th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -44,9 +46,10 @@
             </tbody>
         </table>
     </div>
+
 </section> <!-- Modal -->
 <!-- Modal -->
-<div class="modal fade col-sm-6 offset-md-3" id="edit" style="overflow: auto;">
+<div class="modal fade col-sm-8 offset-md-2" id="edit" style="overflow: auto;">
     <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -54,51 +57,56 @@
             </div>
 
             <div class="modal-body row">
+
                 <div class="col-sm-12">
                     <form method="POST" id="form" class="form-horizontal need-validate" novalidate>
                         <div class="box-body">
                             <div class="row clearfix">
-                                <div class="col-md-6">
-                                    <label for="jenis_id" class="control-label">Jenis Id</label>
-                                    <div class="form-group">
-                                        <select type="text" name="jenis_id" value="" class="form-control" id="jenis_id" required />
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <label for="kategori_id" class="control-label">Kategori Id</label>
-                                    <div class="form-group">
-                                        <select name="kategori_id" value="" class="form-control" id="kategori_id" required />
-                                        </select>
-                                    </div>
-                                </div>
+                                <!-- EDITED -->
                                 <div class="col-md-12">
                                     <label for="nama" class="control-label">Nama</label>
                                     <div class="form-group">
-                                        <input type="text" name="nama" value="" class="form-control" id="nama" required />
+                                        <input type="text" name="nama" value="" class="form-control" id="nama" />
                                     </div>
                                 </div>
-                                <div class="col-md-12">
-                                    <label for="harga" class="control-label">Harga</label>
-                                    <div class="form-group">
-                                        <input type="text" name="harga" value="" class="form-control" id="harga" required />
-                                    </div>
-                                </div>
-                                <div class="col-md-12">
-                                    <label for="detail" class="control-label">Detail</label>
-                                    <div class="form-group">
-                                        <textarea name="detail" class="form-control" id="detail" required></textarea>
-                                    </div>
-                                </div>
-                                <div class="col-md-12">
-                                    <label for="foto" class="control-label">Foto</label>
-                                    <div id="image_preview">
 
-                                    </div>
+                                <div class="col-md-12">
+                                    <label for="alamat" class="control-label">Alamat</label>
                                     <div class="form-group">
-                                        <input type="file" name="foto" class="form-control" id="foto">
+                                        <textarea name="alamat" class="form-control" id="alamat"></textarea>
                                     </div>
                                 </div>
+
+                                <!-- RENDER SEARCH IN MAP -->
+                                <!-- <div class="row  col-sm-12" id="map_container" style=""> -->
+                                <div class="form-group col-sm-9" id="search">
+                                    <input type="text" name="addr" value="" id="addr" class="form-control" />
+                                </div>
+                                <div class="form-group col-sm-3" id="search">
+                                    <button type="button" class="btn btn-primary" style="width:100%" onclick="addr_search();">Cari</button>
+                                </div>
+
+                                <div class="form-group col-sm-6" id="search">
+                                    <div id="map" style="width:100%;height: 360px;padding:0;margin:0;"></div>
+                                </div>
+                                <div class="row col-md-6">
+                                    <div class="col-sm-12" id="search">
+                                        <div id="results"></div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <label for="lat" class="control-label">Lat</label>
+                                        <div class="form-group">
+                                            <input type="text" name="lat" value="" class="form-control" id="lat" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <label for="latlong" class="control-label">Long</label>
+                                        <div class="form-group">
+                                            <input type="text" name="lon" value="" class="form-control" id="lon" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- </div> -->
                                 <div id="createupdate" class="row col-md-12">
                                     <div class="col-md-6">
                                         <label for="create_at" class="control-label">Create At</label>
@@ -121,10 +129,18 @@
                                 Perubahan</button>
                         </div>
                     </form>
+
+
+
+
+
                 </div>
+
             </div>
+
         </div>
     </div>
+</div>
 </div>
 
 <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.js"></script> -->
@@ -135,10 +151,10 @@
 <script src="https://cdn.ckeditor.com/ckeditor5/12.0.0/classic/ckeditor.js"></script>
 <script>
     let m_view = 'view';
-    let bash_api = "<?php echo base_url('sapi/admin_produk/') ?>";
+    let bash_api = "<?php echo base_url('sapi/cabang/') ?>";
     console.log(bash_api);
-    var number, is_update;
-    let label = " Produk ";
+    var number, is_update, latlong = '';
+    let label = " Cabang ";
     $(document).ready(function() {
         table.ajax.reload();
         number = 0;
@@ -165,23 +181,15 @@
                     return get_index();
                 }
             }, {
-                "render": function(data, type, JsonResultRow, meta) {
-                    return get_nama_jenis_byID(JsonResultRow.jenis_id);
-                }
-            }, {
-                "render": function(data, type, JsonResultRow, meta) {
-                    return get_nama_kategori_byID(JsonResultRow.kategori_id);
-                }
-            }, {
                 "data": "nama"
             }, {
-                "data": "harga"
+                "data": "alamat"
             }, {
-                "data": "detail"
+                "data": "latlong"
             }, {
-                "render": function(data, type, JsonResultRow, meta) {
-                    return '<img src="' + "<?php echo base_url('') ?>" + "/uploads/" + JsonResultRow.foto + '" alt="..." class="img-thumbnail style="width:200px;">'
-                }
+                "data": "create_at"
+            }, {
+                "data": "update_at"
             }, {
                 "render": function(data, type, JsonResultRow, meta) {
                     return '<button class="btn btn-info edit_jenis"  style="width: 40px; margin-right : 5px;" onclick ="read(' + "'" + JsonResultRow.id + "'" + ')"><i class="fa fa-eye"></i></button>' +
@@ -194,6 +202,16 @@
     });
 
 
+    $('#edit').on('show.bs.modal', function() {
+        console.log('modal show');
+        setTimeout(function() {
+            map.invalidateSize();
+
+        }, 400);
+        setTimeout(function() {
+            render_map(latlong['lat'], latlong['lon']);
+        }, 500);
+    });
 
     $('#edit').on('hidden.bs.modal', function(e) {
         if (e.handled !== true) {
@@ -236,18 +254,17 @@
             success: function(r) {
                 // console.log(r);
                 if (r.error == false) {
-                    render_dropdown('#jenis_id', arr_jenis_all.data);
-                    render_dropdown('#kategori_id', arr_kategori_all.data);
                     conf_state(state);
-                    $("select[id='jenis_id'] option[value=" + r.data.jenis_id + "]").attr("selected", "selected");
-                    $("select[id='kategori_id'] option[value=" + r.data.kategori_id + "]").attr("selected", "selected");
-                    // $('#jenis_id').val(r.data.jenis_id);
-                    // $('#kategori_id').val(r.data.kategori_id);
+                    // $('#password').val(r.data.password);
+                    if (r.data.latlong != "") {
+                        latlong = JSON.parse(r.data.latlong);
+                    }
+                    console.log(latlong);
+
+
                     $('#nama').val(r.data.nama);
-                    $('#detail').val(r.data.detail);
-                    $('#harga').val(r.data.harga);
-                    // $('#foto').val(r.data.foto);
-                    $("#image_preview").append('<div class="show-image"><img src="' + "<?php echo base_url('') ?>" + "/uploads/" + r.data.foto + '" class="rounded image_view p-1" alt="..." style="width:100%;" id="img_preview_src">');
+                    // $('#latlong').val(r.data.latlong);
+                    $('#alamat').val(r.data.alamat);
                     $('#create_at').val(r.data.create_at);
                     $('#update_at').val(r.data.update_at);
                     $('#edit').modal('show');
@@ -304,7 +321,7 @@
 
 
     function create() {
-        $("#foto").prop("required", true);
+        $("#foto,#password").prop("required", true);
         $("#image_preview").append('<div class="show-image"><img src="" class="rounded image_view p-1" alt="..." style="width:100%;" id="img_preview_src">');
         render_dropdown('#jenis_id', arr_jenis_all.data);
         render_dropdown('#kategori_id', arr_kategori_all.data);
@@ -470,5 +487,109 @@
         $.each(data, function(key, value) {
             $(id).append("<option value=" + value.id + ">" + value.nama + "</option>");
         });
+    }
+</script>
+
+<script type="text/javascript">
+    // New York
+    var startlon = 112.61396898;
+    var startlat = -7.95175380;
+
+    var options = {
+        center: [startlat, startlon],
+        zoom: 12
+    }
+    $('#lat').val(startlat);
+    $('#lon').val(startlon);
+
+    function render_map(lat, lon) {
+        if (lat != "" && lon != "") {
+            console.log('render map');
+            var newLatLng = new L.LatLng(lat, lon);
+            // map.panTo(new L.LatLng(lat, lon));
+            myMarker.setLatLng(newLatLng);
+            map.setView(myMarker.getLatLng(), 13);
+            $('#lat').val(lat);
+            $('#lon').val(lon);
+        }
+
+        // map.invalidateSize();
+    }
+
+    var map = L.map('map').setView([startlat, startlon], 12);
+    var nzoom = 12;
+
+    L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
+        maxZoom: 18,
+        attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
+            '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+            'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+        id: 'mapbox.streets'
+    }).addTo(map);
+
+    var myMarker = L.marker([startlat, startlon], {
+        title: "Coordinates",
+        alt: "Coordinates",
+        draggable: true
+    }).addTo(map).on('dragend', function() {
+        var lat = myMarker.getLatLng().lat.toFixed(8);
+        var lon = myMarker.getLatLng().lng.toFixed(8);
+        var czoom = map.getZoom();
+        if (czoom < 18) {
+            nzoom = czoom + 2;
+        }
+        if (nzoom > 18) {
+            nzoom = 18;
+        }
+        if (czoom != 18) {
+            map.setView([lat, lon], nzoom);
+        } else {
+            map.setView([lat, lon]);
+        }
+        document.getElementById('lat').value = lat;
+        document.getElementById('lon').value = lon;
+        myMarker.bindPopup("Lat " + lat + "<br />Lon " + lon).openPopup();
+    });
+
+    function chooseAddr(lat1, lng1) {
+        console.log("chooseAddr");
+        myMarker.closePopup();
+        map.setView([lat1, lng1], 18);
+        myMarker.setLatLng([lat1, lng1]);
+        lat = lat1.toFixed(8);
+        lon = lng1.toFixed(8);
+        document.getElementById('lat').value = lat;
+        document.getElementById('lon').value = lon;
+        myMarker.bindPopup("Lat " + lat + "<br />Lon " + lon).openPopup();
+    }
+
+    function myFunction(arr) {
+        console.log("myFunction");
+        var out = "<br />";
+        var i;
+
+        if (arr.length > 0) {
+            for (i = 0; i < arr.length; i++) {
+                out += "<div class='address' title='Show Location and Coordinates' onclick='chooseAddr(" + arr[i].lat + ", " + arr[i].lon + ");return false;'>" + arr[i].display_name + "</div>";
+            }
+            document.getElementById('results').innerHTML = out;
+        } else {
+            document.getElementById('results').innerHTML = "Sorry, no results...";
+        }
+
+    }
+
+    function addr_search() {
+        var inp = document.getElementById("addr");
+        var xmlhttp = new XMLHttpRequest();
+        var url = "https://nominatim.openstreetmap.org/search?format=json&limit=3&q=" + inp.value;
+        xmlhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                var myArr = JSON.parse(this.responseText);
+                myFunction(myArr);
+            }
+        };
+        xmlhttp.open("GET", url, true);
+        xmlhttp.send();
     }
 </script>

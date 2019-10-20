@@ -150,6 +150,7 @@
             jenis_sub = null;
         }
         console.log('modal hidden');
+        $("#form input").val('');
         $('#modal_crop').unbind();
         $('#submit').off('click');
         $( "#form" ).removeClass( "was-validated" ).addClass( "needs-validation" );

@@ -19,7 +19,7 @@ class Master extends CI_Model
         $run = $this->db->get_where($tabel, $where)->row_array();
         $res = array();
         if (!isset($run)) {
-            $res['data'] = 'data not exist';
+            $res['data']['message'] = 'data not exist';
             $res['status'] = false;
         } else {
             $res['data'] = $run;
@@ -33,7 +33,7 @@ class Master extends CI_Model
         $run = $this->db->get_where($tabel, $where)->row_array();
         $res = array();
         if (!isset($run)) {
-            $res['data'] = 'data not exist';
+            $res['data']['message'] = 'data not exist';
             $res['status'] = false;
         } else {
             $res['data'] = $run;
@@ -82,7 +82,7 @@ class Master extends CI_Model
             $this->db->where($where);
             $this->db->update($tabel, $data);
             if ($this->db->affected_rows() != 1) {
-                $res['data'] = 'tidak ada perubahan karena inputan sama';
+                $res['data'] = $this->db->error();
                 $res['status'] = true;
             } else {
                 $res['data'] = $this->db->insert_id();
@@ -113,7 +113,7 @@ class Master extends CI_Model
                 $res['status'] = true;
             }
         } else {
-            $res['data'] = 'data not exist';
+            $res['data']['message'] = 'data not exist';
             $res['status'] = false;
         }
 

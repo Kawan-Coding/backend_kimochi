@@ -1,15 +1,15 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class Jenis extends CI_Controller
+class Cabang extends CI_Controller
 {
     protected $date;
-    protected $tabel = 'jenis';
+    protected $tabel = 'cabang';
     public function __construct()
     {
         parent::__construct();
         // Your own constructor code
-        // $this->load->model('Produk');
+        // $this->load->model('user');
         $this->date = new DateTime();
         // $this->load->library('Msg');
         //==== ALLOWING CORS
@@ -36,7 +36,7 @@ class Jenis extends CI_Controller
 
     public function get_all()
     {
-        $this->msg('data', '200', $this->Master->get_all($this->tabel));
+        $this->msg('data', '200', $this->Master->get_all($this->tabel,array("status !="=>"delete")));
     }
 
     public function get()
@@ -60,21 +60,24 @@ class Jenis extends CI_Controller
     function add()
     {
         $this->is_valid();
-        $params = array(
-            'jenis_id' => $this->input->post('jenis_id'),
-            'kategori_id' => $this->input->post('kategori_id'),
-            'nama' => $this->input->post('nama'),
-            'harga' => $this->input->post('harga'),
-            'create_at' => date('Y-m-d H:i:s'),
-            'detail' => $this->input->post('detail'),
-            'foto' => $this->input->post('foto')
+        $tmp_latlong = array(
+            'lat' => $this->input->post('lat'),
+            'lon' => $this->input->post('lon'),
         );
-        
+        $params = array(
+            'nama' => $this->input->post('nama'),
+            'alamat' => $this->input->post('alamat'),
+            'latlong' =>json_encode($tmp_latlong) ,
+            'create_at' => date('Y-m-d H:i:s'),
+            'update_at' => date('Y-m-d H:i:s'),
+        );
+
+
         $res = $this->Master->add($this->tabel, $params);
         if ($res['status']) {
             $this->msg('data', '200', $res['data']);
         } else {
-            $this->msg('data', '500', $res['data']);
+            $this->msg('data', '500', $res['data']['message']);
         };
     }
 
@@ -84,15 +87,19 @@ class Jenis extends CI_Controller
     function edit()
     {
         $this->is_valid();
+        // $this->msg('data', '200', $this->input->post('nama'));
         // check if the produk exists before trying to edit it
+        $tmp_latlong = array(
+            'lat' => $this->input->post('lat'),
+            'lon' => $this->input->post('lon'),
+        );
         $id =  $this->input->post('id');
         $data = array(
-            'jenis_id' => $this->input->post('jenis_id'),
-            'kategori_id' => $this->input->post('kategori_id'),
             'nama' => $this->input->post('nama'),
-            'harga' => $this->input->post('harga'),
-            'detail' => $this->input->post('detail'),
-            'foto' => $this->input->post('foto'),
+            'alamat' => $this->input->post('alamat'),
+            'latlong' => json_encode($tmp_latlong),
+            // 'create_at' => date('Y-m-d H:i:s'),
+            'update_at' => date('Y-m-d H:i:s'),
         );
         $res = $this->Master->update($this->tabel,  array('id' => $id), $data);
         if ($res['status']) {
@@ -109,8 +116,7 @@ class Jenis extends CI_Controller
     {
         $this->is_valid();
         $id =  $this->input->post('id');
-        $res = $this->Master->delete($this->tabel, array('id' => $id));
-
+        $res = $this->Master->update($this->tabel,  array('id' => $id), array('status'=>'delete'));
         if ($res['status']) {
             $this->msg('data', '200', $res['data']);
         } else {
