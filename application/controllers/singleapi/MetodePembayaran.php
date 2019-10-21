@@ -30,7 +30,7 @@ class MetodePembayaran extends CI_Controller
     function is_valid()
     {
         if (isset($_POST) && count($_POST) <= 0) {
-            $this->msg('', '400', '');
+            $this->msg('', '400', '','tidak ada masukan');
         }
     }
 
@@ -47,8 +47,8 @@ class MetodePembayaran extends CI_Controller
         if ($res['status']) {
             $this->msg('data', '200', $res['data']);
         } else {
-            $this->msg('data', '500', $res['data']['message']);
-            // $this->msg('data', '500',$res);
+            $this->msg('data', '400', '', $res['data']['message']);
+            // $this->msg('data', '400',$res);
         };
     }
 
@@ -69,7 +69,7 @@ class MetodePembayaran extends CI_Controller
         if ($res['status']) {
             $this->msg('data', '200', $res['data']);
         } else {
-            $this->msg('data', '500', $res['data']['message']);
+            $this->msg('data', '400', '', $res['data']['message']);
         };
     }
 
@@ -92,7 +92,7 @@ class MetodePembayaran extends CI_Controller
         if ($res['status']) {
             $this->msg('data', '200', $res['data']);
         } else {
-            $this->msg('data', '500', $res['data']['message']);
+            $this->msg('data', '400', '', $res['data']['message']);
         };
     }
 
@@ -108,7 +108,7 @@ class MetodePembayaran extends CI_Controller
         if ($res['status']) {
             $this->msg('data', '200', $res['data']);
         } else {
-            $this->msg('data', '500', $res['data']['message']);
+            $this->msg('data', '400', '', $res['data']['message']);
         };
     }
 }

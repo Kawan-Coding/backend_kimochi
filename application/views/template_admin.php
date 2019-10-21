@@ -93,15 +93,15 @@
                 <!-- Sidebar navigation-->
                 <nav class="sidebar-nav">
                     <ul id="sidebarnav">
-                        <li> <a class="waves-effect waves-dark" href="index.html" aria-expanded="false"><i class="mdi mdi-gauge"></i><span class="hide-menu">Dashboard</span></a>
+                        <li> <a class="waves-effect waves-dark" href="<?php echo base_url('admin/metode_pembayaran') ?>" aria-expanded="false"><i class="mdi mdi-gauge"></i><span class="hide-menu">metode pembayaran</span></a>
                         </li>
-                        <li> <a class="waves-effect waves-dark" href="pages-profile.html" aria-expanded="false"><i class="mdi mdi-account-check"></i><span class="hide-menu">Profile</span></a>
+                        <li> <a class="waves-effect waves-dark" href="<?php echo base_url('admin/produk') ?>"  aria-expanded="false"><i class="mdi mdi-account-check"></i><span class="hide-menu">produk</span></a>
                         </li>
-                        <li> <a class="waves-effect waves-dark" href="table-basic.html" aria-expanded="false"><i class="mdi mdi-table"></i><span class="hide-menu">Basic Table</span></a>
+                        <li> <a class="waves-effect waves-dark" href="<?php echo base_url('admin/pegawai') ?>"  aria-expanded="false"><i class="mdi mdi-table"></i><span class="hide-menu">pegawai</span></a>
                         </li>
-                        <li> <a class="waves-effect waves-dark" href="icon-material.html" aria-expanded="false"><i class="mdi mdi-emoticon"></i><span class="hide-menu">Icons</span></a>
+                        <li> <a class="waves-effect waves-dark" href="<?php echo base_url('admin/cabang') ?>"  aria-expanded="false"><i class="mdi mdi-emoticon"></i><span class="hide-menu">cabang</span></a>
                         </li>
-                        <li> <a class="waves-effect waves-dark" href="map-google.html" aria-expanded="false"><i class="mdi mdi-earth"></i><span class="hide-menu">Google Map</span></a>
+                        <li> <a class="waves-effect waves-dark" href="<?php echo base_url('admin/responsible') ?>" aria-expanded="false"><i class="mdi mdi-earth"></i><span class="hide-menu">responsible</span></a>
                         </li>
                         <li> <a class="waves-effect waves-dark" href="pages-blank.html" aria-expanded="false"><i class="mdi mdi-book-open-variant"></i><span class="hide-menu">Blank Page</span></a>
                         </li>

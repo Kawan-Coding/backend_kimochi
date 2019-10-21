@@ -252,7 +252,7 @@
                     $('#update_at').val(r.data.update_at);
                     $('#edit').modal('show');
                 } else {
-                    swal('Gagal !', r.data, 'error');
+                    swal('Gagal !', r.msg, 'error');
                 }
             }
         })
@@ -288,7 +288,7 @@
                                 swal("Update Berhasil!", '', "success");
                                 table.ajax.reload();
                             } else {
-                                swal("Update Gagal!", r.data, "error");
+                                swal("Update Gagal!", r.msg, "error");
                             }
                         },
                         complete: function() {
@@ -338,7 +338,7 @@
                                 swal("Update Berhasil!", '', "success");
                                 table.ajax.reload();
                             } else {
-                                swal("Update Gagal!", r.data, "error");
+                                swal("Update Gagal!", r.msg, "error");
                             }
                         },
                         complete: function() {
@@ -368,7 +368,7 @@
                     data: "id=" + ID,
                     success: function(r) {
                         if (r.error === true) {
-                            swal('Hapus Gagal', r.data, 'error');
+                            swal('Hapus Gagal', r.msg, 'error');
                             table.ajax.reload();
                         } else {
                             is_update = true;
@@ -428,7 +428,11 @@
             return element.id == id;
         })
         // console.log(result[0].nama)  POIN kesalahana
-        return result[0].nama;
+        if (result == "") {
+            return '<p class="text-danger">DELETED</p>';
+        } else {
+            return result[0].nama;
+        }
     }
 </script>
 
@@ -460,7 +464,11 @@
             return element.id == id;
         })
         // console.log(result[0].nama)  POIN kesalahana
-        return result[0].nama;
+        if (result == "") {
+            return '<p class="text-danger">DELETED</p>';
+        } else {
+            return result[0].nama;
+        }
     }
 </script>
 

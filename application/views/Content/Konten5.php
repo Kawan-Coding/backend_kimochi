@@ -1,3 +1,6 @@
+<script>
+    console.log('start');
+</script>
 <style>
     ::-webkit-scrollbar {
         width: 0px;
@@ -32,12 +35,11 @@
         <table id="table" class="table table-striped table-bordered">
             <thead>
                 <tr>
-                    <th>ID</th>
-                    <th>Nama</th>
-                    <th>Alamat</th>
-                    <th>Latlong</th>
-                    <th>Create At</th>
-                    <th>Update At</th>
+                    <th>No</th>
+                    <th>Cabang</th>
+                    <th>Pegawai</th>
+                    <th>Role</th>
+                    <th>Status</th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -63,47 +65,35 @@
                         <div class="box-body">
                             <div class="row clearfix">
                                 <!-- EDITED -->
-                                <div class="col-md-12">
-                                    <label for="nama" class="control-label">Nama</label>
+                                <div class="col-md-6">
+                                    <label for="cabang_id" class="control-label">Cabang</label>
                                     <div class="form-group">
-                                        <input type="text" name="nama" value="" class="form-control" id="nama" />
+                                        <select type="text" name="cabang_id" value="" class="form-control" id="cabang_id"></select>
                                     </div>
                                 </div>
-
-                                <div class="col-md-12">
-                                    <label for="alamat" class="control-label">Alamat</label>
+                                <div class="col-md-6">
+                                    <label for="pegawai_id" class="control-label">Pegawai</label>
                                     <div class="form-group">
-                                        <textarea name="alamat" class="form-control" id="alamat"></textarea>
+                                        <select type="text" name="pegawai_id" value="" class="form-control" id="pegawai_id"></select>
                                     </div>
                                 </div>
-
-                                <!-- RENDER SEARCH IN MAP -->
-                                <!-- <div class="row  col-sm-12" id="map_container" style=""> -->
-                                <div class="form-group col-sm-9" id="search">
-                                    <input type="text" name="addr" value="" id="addr" class="form-control" />
-                                </div>
-                                <div class="form-group col-sm-3" id="search">
-                                    <button type="button" class="btn btn-primary" style="width:100%" onclick="addr_search();">Cari</button>
-                                </div>
-
-                                <div class="form-group col-sm-6" id="search">
-                                    <div id="map" style="width:100%;height: 360px;padding:0;margin:0;"></div>
-                                </div>
-                                <div class="row col-md-6">
-                                    <div class="col-sm-12" id="search">
-                                        <div id="results"></div>
+                                <div class="col-md-6">
+                                    <label for="role" class="control-label">Role</label>
+                                    <div class="form-group">
+                                        <select type="text" name="role" value="" class="form-control" id="role">
+                                            <option value="kepala cabang">kepala cabang</option>
+                                            <option value="kasir">kasir</option>
+                                        </select>
                                     </div>
-                                    <div class="col-md-12">
-                                        <label for="lat" class="control-label">Lat</label>
-                                        <div class="form-group">
-                                            <input type="text" name="lat" value="" class="form-control" id="lat" />
-                                        </div>
-                                    </div>
-                                    <div class="col-md-12">
-                                        <label for="latlong" class="control-label">Long</label>
-                                        <div class="form-group">
-                                            <input type="text" name="lon" value="" class="form-control" id="lon" />
-                                        </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="status" class="control-label">Status</label>
+                                    <div class="form-group">
+                                        <select type="text" name="status" value="" class="form-control" id="status">
+                                            <option value="not activated">not activated</option>
+                                            <option value="activated">activated</option>
+                                            <option value="delete">delete</option>
+                                        </select>
                                     </div>
                                 </div>
                                 <!-- </div> -->
@@ -151,10 +141,10 @@
 <script src="https://cdn.ckeditor.com/ckeditor5/12.0.0/classic/ckeditor.js"></script>
 <script>
     let m_view = 'view';
-    let bash_api = "<?php echo base_url('sapi/cabang/') ?>";
+    let bash_api = "<?php echo base_url('sapi/responsible/') ?>";
     console.log(bash_api);
     var number, is_update, latlong = '';
-    let label = " Cabang ";
+    let label = " Responsible ";
     $(document).ready(function() {
         table.ajax.reload();
         number = 0;
@@ -181,15 +171,17 @@
                     return get_index();
                 }
             }, {
-                "data": "nama"
+                "render": function(data, type, JsonResultRow, meta) {
+                    return get_nama_cabang_byID(JsonResultRow.cabang_id);
+                }
             }, {
-                "data": "alamat"
+                "render": function(data, type, JsonResultRow, meta) {
+                    return get_nama_pegawai_byID(JsonResultRow.pegawai_id);
+                }
             }, {
-                "data": "latlong"
+                "data": "role"
             }, {
-                "data": "create_at"
-            }, {
-                "data": "update_at"
+                "data": "status"
             }, {
                 "render": function(data, type, JsonResultRow, meta) {
                     return '<button class="btn btn-info edit_jenis"  style="width: 40px; margin-right : 5px;" onclick ="read(' + "'" + JsonResultRow.id + "'" + ')"><i class="fa fa-eye"></i></button>' +
@@ -204,13 +196,7 @@
 
     $('#edit').on('show.bs.modal', function() {
         console.log('modal show');
-        setTimeout(function() {
-            map.invalidateSize();
 
-        }, 400);
-        setTimeout(function() {
-            render_map(latlong['lat'], latlong['lon']);
-        }, 500);
     });
 
     $('#edit').on('hidden.bs.modal', function(e) {
@@ -222,7 +208,7 @@
         $("#form input").val('');
         $('#modal_crop').unbind();
         $('#submit').off('click');
-        $('#image_preview,#jenis_id,#kategori_id').empty();
+        $('#image_preview,#cabang_id,#pegawai_id').empty();
         $("#foto").prop("required", false);
         $("#form").removeClass("was-validated").addClass("needs-validation");
 
@@ -230,17 +216,17 @@
 
     function conf_state(state) {
         if (state == "read") {
+            $('#conf').hide();
             $('.modal-title').text("Read" + label);
             $("#form :input,select").prop("readonly", true); //change
-            $('#conf,#foto').hide(); //change
             $("#form input").css("color", "black");
             $("#createupdate").show();
 
         } else if (state == "update" || state == "create") {
+            $('#conf').show();
             $('.modal-title').text("Update" + label);
             $("#form :input,select").prop("readonly", false)
             $("#form input").css("color", "#464a4c");
-            $('#conf,#foto').show();
             $("#createupdate").hide();
         }
     }
@@ -254,12 +240,25 @@
             success: function(r) {
                 // console.log(r);
                 if (r.error == false) {
+                    render_dropdown('#cabang_id', arr_cabang_all.data);
+                    render_dropdown2('#pegawai_id', arr_pegawai_all.data);
                     conf_state(state);
-                    // $('#password').val(r.data.password);
-                    if (r.data.latlong != "") {
-                        latlong = JSON.parse(r.data.latlong);
+                    // console.log(arr_pegawai_all.data['id'].includes(r.data.pegawai_id));
+                    if (get_nama_pegawai_byID(r.data.pegawai_id) != '<p class="text-danger">DELETED</p>') {
+                        $("select[id='pegawai_id'] option[value=" + r.data.pegawai_id + "]").attr("selected", "selected");
+                    } else {
+                        $("select[id='pegawai_id']").append("<option value=" + r.data.pegawai_id + " selected >" + get_nama_pegawai_byID(r.data.pegawai_id) + "</option>");
                     }
-                    console.log(latlong);
+                    if (get_nama_pegawai_byID(r.data.cabang_id) != '<p class="text-danger">DELETED</p>') {
+                        $("select[id='cabang_id'] option[value=" + r.data.cabang_id + "]").attr("selected", "selected");
+                    } else {
+                        $("select[id='cabang_id']").append("<option value=" + r.data.cabang_id + " selected >" + get_nama_cabang_byID(r.data.cabang_id) + "</option>");
+                    }
+
+
+                    $("select[id='pegawai_id'] option[value=" + r.data.pegawai_id + "]").attr("selected", "selected");
+                    $("select[id='role'] option[value='" + r.data.role + "']").attr("selected", "selected");
+                    $("select[id='status'] option[value='" + r.data.status + "']").attr("selected", "selected");
 
 
                     $('#nama').val(r.data.nama);
@@ -323,8 +322,8 @@
     function create() {
         $("#foto,#password").prop("required", true);
         $("#image_preview").append('<div class="show-image"><img src="" class="rounded image_view p-1" alt="..." style="width:100%;" id="img_preview_src">');
-        render_dropdown('#jenis_id', arr_jenis_all.data);
-        render_dropdown('#kategori_id', arr_kategori_all.data);
+        render_dropdown('#cabang_id', arr_cabang_all.data);
+        render_dropdown2('#pegawai_id', arr_pegawai_all.data);
 
         conf_state("create");
         $("#form input").val('');
@@ -413,71 +412,80 @@
     }
 
 
-    // var arr_jenis_all; sebelumnya gini error
+    // var arr_cabang_all; sebelumnya gini error
 </script>
 
 <script>
     //change
-    var arr_jenis_all = "";
+    var arr_cabang_all = "";
 
     function get_jenis_all() {
         $.ajax({
-            url: "<?php echo base_url('sapi/jenis/') ?>" + "get_all",
+            url: "<?php echo base_url('sapi/cabang/') ?>" + "get_all",
             async: false,
             type: 'GET',
             success: function(r) {
                 if (r.error == false) {
-                    arr_jenis_all = r;
+                    arr_cabang_all = r;
                 } else {
                     swal('Gagal !', r.data, 'error');
                 }
             }
         })
-        return arr_jenis_all;
+        console.log(arr_cabang_all);
+        return arr_cabang_all;
     }
 
-    function get_nama_jenis_byID(id) {
-        if (arr_jenis_all == "") {
-            arr_jenis_all = get_jenis_all();
+    function get_nama_cabang_byID(id) {
+        if (arr_cabang_all == "") {
+            arr_cabang_all = get_jenis_all();
         }
-        console.log(arr_jenis_all.data)
-        var result = arr_jenis_all.data.filter(function(element) {
+        console.log(arr_cabang_all.data);
+        console.log(id);
+        var result = arr_cabang_all.data.filter(function(element) {
             return element.id == id;
         })
-        // console.log(result[0].nama)  POIN kesalahana
-        return result[0].nama;
+        if (result == "") {
+            return '<p class="text-danger">DELETED</p>';
+        } else {
+            return result[0].nama;
+        }
     }
 </script>
 
 <script>
-    var arr_kategori_all = "";
+    var arr_pegawai_all = "";
 
     function get_kategori_all() {
         $.ajax({
-            url: "<?php echo base_url('sapi/kategori/') ?>" + "get_all",
+            url: "<?php echo base_url('sapi/pegawai/') ?>" + "get_all",
             async: false,
             type: 'GET',
             success: function(r) {
                 if (r.error == false) {
-                    arr_kategori_all = r;
+                    arr_pegawai_all = r;
                 } else {
                     swal('Gagal !', r.data, 'error');
                 }
             }
         })
-        return arr_kategori_all;
+        return arr_pegawai_all;
     }
 
-    function get_nama_kategori_byID(id) {
-        if (arr_kategori_all == "") {
-            arr_kategori_all = get_kategori_all();
+    function get_nama_pegawai_byID(id) {
+        if (arr_pegawai_all == "") {
+            arr_pegawai_all = get_kategori_all();
         }
-        console.log(arr_kategori_all.data)
-        var result = arr_kategori_all.data.filter(function(element) {
+        console.log(arr_pegawai_all.data)
+        var result = arr_pegawai_all.data.filter(function(element) {
             return element.id == id;
         })
         // console.log(result[0].nama)  POIN kesalahana
-        return result[0].nama;
+        if (result == "") {
+            return '<p class="text-danger">DELETED</p>';
+        } else {
+            return result[0].nama_lengkap;
+        }
     }
 </script>
 
@@ -488,108 +496,11 @@
             $(id).append("<option value=" + value.id + ">" + value.nama + "</option>");
         });
     }
-</script>
 
-<script type="text/javascript">
-    // New York
-    var startlon = 112.61396898;
-    var startlat = -7.95175380;
-
-    var options = {
-        center: [startlat, startlon],
-        zoom: 12
-    }
-    $('#lat').val(startlat);
-    $('#lon').val(startlon);
-
-    function render_map(lat, lon) {
-        if (lat != "" && lon != "") {
-            console.log('render map');
-            var newLatLng = new L.LatLng(lat, lon);
-            // map.panTo(new L.LatLng(lat, lon));
-            myMarker.setLatLng(newLatLng);
-            map.setView(myMarker.getLatLng(), 13);
-            $('#lat').val(lat);
-            $('#lon').val(lon);
-        }
-
-        // map.invalidateSize();
-    }
-
-    var map = L.map('map').setView([startlat, startlon], 12);
-    var nzoom = 12;
-
-    L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
-        maxZoom: 18,
-        attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
-            '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
-            'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-        id: 'mapbox.streets'
-    }).addTo(map);
-
-    var myMarker = L.marker([startlat, startlon], {
-        title: "Coordinates",
-        alt: "Coordinates",
-        draggable: true
-    }).addTo(map).on('dragend', function() {
-        var lat = myMarker.getLatLng().lat.toFixed(8);
-        var lon = myMarker.getLatLng().lng.toFixed(8);
-        var czoom = map.getZoom();
-        if (czoom < 18) {
-            nzoom = czoom + 2;
-        }
-        if (nzoom > 18) {
-            nzoom = 18;
-        }
-        if (czoom != 18) {
-            map.setView([lat, lon], nzoom);
-        } else {
-            map.setView([lat, lon]);
-        }
-        document.getElementById('lat').value = lat;
-        document.getElementById('lon').value = lon;
-        myMarker.bindPopup("Lat " + lat + "<br />Lon " + lon).openPopup();
-    });
-
-    function chooseAddr(lat1, lng1) {
-        console.log("chooseAddr");
-        myMarker.closePopup();
-        map.setView([lat1, lng1], 18);
-        myMarker.setLatLng([lat1, lng1]);
-        lat = lat1.toFixed(8);
-        lon = lng1.toFixed(8);
-        document.getElementById('lat').value = lat;
-        document.getElementById('lon').value = lon;
-        myMarker.bindPopup("Lat " + lat + "<br />Lon " + lon).openPopup();
-    }
-
-    function myFunction(arr) {
-        console.log("myFunction");
-        var out = "<br />";
-        var i;
-
-        if (arr.length > 0) {
-            for (i = 0; i < arr.length; i++) {
-                out += "<div class='address' title='Show Location and Coordinates' onclick='chooseAddr(" + arr[i].lat + ", " + arr[i].lon + ");return false;'>" + arr[i].display_name + "</div>";
-            }
-            document.getElementById('results').innerHTML = out;
-        } else {
-            document.getElementById('results').innerHTML = "Sorry, no results...";
-        }
-
-    }
-
-    function addr_search() {
-        var inp = document.getElementById("addr");
-        var xmlhttp = new XMLHttpRequest();
-        var url = "https://nominatim.openstreetmap.org/search?format=json&limit=3&q=" + inp.value;
-        xmlhttp.onreadystatechange = function() {
-            if (this.readyState == 4 && this.status == 200) {
-                var myArr = JSON.parse(this.responseText);
-                myFunction(myArr);
-            }
-        };
-        xmlhttp.open("GET", url, true);
-        xmlhttp.send();
+    function render_dropdown2(id, data) {
+        console.log(data);
+        $.each(data, function(key, value) {
+            $(id).append("<option value=" + value.id + ">" + value.nama_lengkap + "</option>");
+        });
     }
 </script>

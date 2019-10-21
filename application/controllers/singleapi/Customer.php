@@ -30,8 +30,7 @@ class Customer extends CI_Controller
     function is_valid()
     {
         if (isset($_POST) && count($_POST) <= 0) {
-            $this->msg('', '400', '');
-        }
+            $this->msg('', '400', '','tidak ada masukan');        }
     }
 
     public function get_all()
@@ -47,8 +46,8 @@ class Customer extends CI_Controller
         if ($res['status']) {
             $this->msg('data', '200', $res['data']);
         } else {
-            $this->msg('data', '500', $res['data']);
-            // $this->msg('data', '500',$res);
+            $this->msg('data', '400','', $res['data']['message']);
+            // $this->msg('data', '400',$res);
         };
     }
 
@@ -61,7 +60,7 @@ class Customer extends CI_Controller
     {
         $this->is_valid();
         $params = array(
-            'password' => password_hash($_POST['password'], PASSWORD_DEFAULT),
+            'password' => password_hash($this->input->post['password'], PASSWORD_DEFAULT),
             'username' => $this->input->post('username'),
             'nama_lengkap' => $this->input->post('nama_lengkap'),
             'no_telepon' => $this->input->post('no_telepon'),
@@ -77,7 +76,7 @@ class Customer extends CI_Controller
         if ($res['status']) {
             $this->msg('data', '200', $res['data']);
         } else {
-            $this->msg('data', '500', $res['data']);
+            $this->msg('data', '400','', $res['data']['message']);
         };
     }
 
@@ -105,7 +104,7 @@ class Customer extends CI_Controller
         if ($res['status']) {
             $this->msg('data', '200', $res['data']);
         } else {
-            $this->msg('data', '500', $res['data']);
+            $this->msg('data', '400','', $res['data']['message']);
         };
     }
 
@@ -121,7 +120,7 @@ class Customer extends CI_Controller
         if ($res['status']) {
             $this->msg('data', '200', $res['data']);
         } else {
-            $this->msg('data', '500', $res['data']);
+            $this->msg('data', '400', '', $res['data']['message']);
         };
     }
 
@@ -133,8 +132,8 @@ class Customer extends CI_Controller
         if ($res['status']) {
             $this->msg('data', '200', $res['data']);
         } else {
-            $this->msg('data', '500', $res['data']);
-            // $this->msg('data', '500',$res);
+            $this->msg('data', '400', '', $res['data']['message']);
+            // $this->msg('data', '400',$res);
         };
     }
 
@@ -150,7 +149,7 @@ class Customer extends CI_Controller
         if ($res['status']) {
             $this->msg('data', '200', $res['data']);
         } else {
-            $this->msg('data', '500', $res['data']);
+            $this->msg('data', '400','', $res['data']['message']);
         };
     }
 
@@ -167,7 +166,7 @@ class Customer extends CI_Controller
         if ($res['status']) {
             $this->msg('data', '200', $res['data']);
         } else {
-            $this->msg('data', '500', $res['data']);
+            $this->msg('data', '400', '', $res['data']['message']);
         };
     }
 }

@@ -16,24 +16,31 @@ class Admin extends CI_Controller
 		);
 		$this->load->view('template_admin', $data);
 	}
-	public function produk ()
+	public function produk()
 	{
 		$data = array(
 			'content' => 'content/Konten2',
 		);
 		$this->load->view('template_admin', $data);
 	}
-	public function pegawai ()
+	public function pegawai()
 	{
 		$data = array(
 			'content' => 'content/Konten3',
 		);
 		$this->load->view('template_admin', $data);
 	}
-	public function cabang ()
+	public function cabang()
 	{
 		$data = array(
 			'content' => 'content/Konten4',
+		);
+		$this->load->view('template_admin', $data);
+	}
+	public function responsible()
+	{
+		$data = array(
+			'content' => 'content/Konten5',
 		);
 		$this->load->view('template_admin', $data);
 	}

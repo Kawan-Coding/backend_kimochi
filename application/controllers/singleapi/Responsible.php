@@ -1,10 +1,10 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class Cabang extends CI_Controller
+class Responsible extends CI_Controller
 {
     protected $date;
-    protected $tabel = 'cabang';
+    protected $tabel = 'responsible';
     public function __construct()
     {
         parent::__construct();
@@ -30,12 +30,13 @@ class Cabang extends CI_Controller
     function is_valid()
     {
         if (isset($_POST) && count($_POST) <= 0) {
-            $this->msg('', '400', '','tidak ada masukan');        }
+            $this->msg('', '400', '', 'tidak ada masukan');
+        }
     }
 
     public function get_all()
     {
-        $this->msg('data', '200', $this->Master->get_all($this->tabel,array("status !="=>"delete")));
+        $this->msg('data', '200', $this->Master->get_all($this->tabel));
     }
 
     public function get()
@@ -46,7 +47,7 @@ class Cabang extends CI_Controller
         if ($res['status']) {
             $this->msg('data', '200', $res['data']);
         } else {
-            $this->msg('data', '400', '',$res['data']['message']);
+            $this->msg('data', '400', '', $res['data']['message']);
             // $this->msg('data', '400',$res);
         };
     }
@@ -59,14 +60,11 @@ class Cabang extends CI_Controller
     function add()
     {
         $this->is_valid();
-        $tmp_latlong = array(
-            'lat' => $this->input->post('lat'),
-            'lon' => $this->input->post('lon'),
-        );
         $params = array(
-            'nama' => $this->input->post('nama'),
-            'alamat' => $this->input->post('alamat'),
-            'latlong' =>json_encode($tmp_latlong) ,
+            'cabang_id' => $this->input->post('cabang_id'),
+            'pegawai_id' => $this->input->post('pegawai_id'),
+            'role' => $this->input->post('role'),
+            'status' => $this->input->post('status'),
             'create_at' => date('Y-m-d H:i:s'),
             'update_at' => date('Y-m-d H:i:s'),
         );
@@ -76,7 +74,7 @@ class Cabang extends CI_Controller
         if ($res['status']) {
             $this->msg('data', '200', $res['data']);
         } else {
-            $this->msg('data', '400', '',$res['data']['message']);
+            $this->msg('data', '400', '', $res['data']['message']);
         };
     }
 
@@ -88,23 +86,21 @@ class Cabang extends CI_Controller
         $this->is_valid();
         // $this->msg('data', '200', $this->input->post('nama'));
         // check if the produk exists before trying to edit it
-        $tmp_latlong = array(
-            'lat' => $this->input->post('lat'),
-            'lon' => $this->input->post('lon'),
-        );
         $id =  $this->input->post('id');
         $data = array(
-            'nama' => $this->input->post('nama'),
-            'alamat' => $this->input->post('alamat'),
-            'latlong' => json_encode($tmp_latlong),
+            'cabang_id' => $this->input->post('cabang_id'),
+            'pegawai_id' => $this->input->post('pegawai_id'),
+            'role' => $this->input->post('role'),
+            'status' => $this->input->post('status'),
             // 'create_at' => date('Y-m-d H:i:s'),
             'update_at' => date('Y-m-d H:i:s'),
+
         );
         $res = $this->Master->update($this->tabel,  array('id' => $id), $data);
         if ($res['status']) {
             $this->msg('data', '200', $res['data']);
         } else {
-            $this->msg('data', '400', '',$res['data']['message']);
+            $this->msg('data', '400', '', $res['data']['message']);
         };
     }
 
@@ -115,11 +111,12 @@ class Cabang extends CI_Controller
     {
         $this->is_valid();
         $id =  $this->input->post('id');
-        $res = $this->Master->update($this->tabel,  array('id' => $id), array('status'=>'delete'));
+        $res = $this->Master->delete($this->tabel, array('id' => $id));
+
         if ($res['status']) {
             $this->msg('data', '200', $res['data']);
         } else {
-            $this->msg('data', '400', '',$res['data']['message']);
+            $this->msg('data', '400', '', $res['data']['message']);
         };
     }
 }

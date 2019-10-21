@@ -5,6 +5,7 @@ $route['admin/metode_pembayaran']['get'] = '/admin/admin/metode_pembayaran';
 $route['admin/produk']['get'] = '/admin/admin/produk';
 $route['admin/pegawai']['get'] = '/admin/admin/pegawai';
 $route['admin/cabang']['get'] = '/admin/admin/cabang';
+$route['admin/responsible']['get'] = '/admin/admin/responsible';
 //=====ROUTE API
 // CASH REGISTER
 $route['api/cashregister/open']['POST'] = '/api/CashRegisterController/open';
@@ -74,6 +75,12 @@ $route['sapi/cabang/create']['POST'] = '/singleapi/cabang/add';
 $route['sapi/cabang/update']['POST'] = '/singleapi/cabang/edit';
 $route['sapi/cabang/delete']['POST'] = '/singleapi/cabang/remove';
 
+//SINGLE RESPONSIBLE
+$route['sapi/responsible/get_all']['GET'] = '/singleapi/responsible/get_all';
+$route['sapi/responsible/read']['POST'] = '/singleapi/responsible/get';
+$route['sapi/responsible/create']['POST'] = '/singleapi/responsible/add';
+$route['sapi/responsible/update']['POST'] = '/singleapi/responsible/edit';
+$route['sapi/responsible/delete']['POST'] = '/singleapi/responsible/remove';
 //API ADMIN
 
 $route['default_controller'] = 'welcome';

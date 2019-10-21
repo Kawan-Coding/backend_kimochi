@@ -85,11 +85,11 @@ class Master extends CI_Model
                 $res['data'] = $this->db->error();
                 $res['status'] = true;
             } else {
-                $res['data'] = $this->db->insert_id();
+                $res['data'] = '';
                 $res['status'] = true;
             }
         } else {
-            $res['data'] = 'data not exist';
+            $res['data']['message']= 'data not exist';
             $res['status'] = false;
         }
 

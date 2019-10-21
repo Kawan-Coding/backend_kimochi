@@ -191,7 +191,7 @@
                     $('#update_at').val(r.data.update_at);
                     $('#edit').modal('show');
                 } else {
-                    swal('Gagal !', r.data, 'error');
+                    swal('Gagal !', r.msg, 'error');
                 }
             }
         })
@@ -226,7 +226,7 @@
                                 swal("Update Berhasil!", '', "success");
                                 table.ajax.reload();
                             } else {
-                                swal("Update Gagal!", r.data, "error");
+                                swal("Update Gagal!", r.msg, "error");
                             }
                         },
                         complete: function() {
@@ -270,7 +270,7 @@
                                 swal("Update Berhasil!", '', "success");
                                 table.ajax.reload();
                             } else {
-                                swal("Update Gagal!", r.data, "error");
+                                swal("Update Gagal!", r.msg, "error");
                             }
                         },
                         complete: function() {
@@ -300,7 +300,7 @@
                     data: "id=" + ID,
                     success: function(r) {
                         if (r.error === true) {
-                            swal('Hapus Gagal', r.data, 'error');
+                            swal('Hapus Gagal', r.msg, 'error');
                             table.ajax.reload();
                         } else {
                             is_update = true;
