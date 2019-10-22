@@ -6,6 +6,8 @@ $route['admin/produk']['get'] = '/admin/admin/produk';
 $route['admin/pegawai']['get'] = '/admin/admin/pegawai';
 $route['admin/cabang']['get'] = '/admin/admin/cabang';
 $route['admin/responsible']['get'] = '/admin/admin/responsible';
+$route['admin/jenis']['get'] = '/admin/admin/jenis';
+$route['admin/kategori']['get'] = '/admin/admin/kategori';
 //=====ROUTE API
 // CASH REGISTER
 $route['api/cashregister/open']['POST'] = '/api/CashRegisterController/open';

@@ -60,13 +60,9 @@ class Jenis extends CI_Controller
     {
         $this->is_valid();
         $params = array(
-            'jenis_id' => $this->input->post('jenis_id'),
-            'kategori_id' => $this->input->post('kategori_id'),
-            'nama' => $this->input->post('nama'),
-            'harga' => $this->input->post('harga'),
             'create_at' => date('Y-m-d H:i:s'),
-            'detail' => $this->input->post('detail'),
-            'foto' => $this->input->post('foto')
+            'update_at' => date('Y-m-d H:i:s'),
+            'nama' => $this->input->post('nama'),
         );
         
         $res = $this->Master->add($this->tabel, $params);
@@ -86,12 +82,9 @@ class Jenis extends CI_Controller
         // check if the produk exists before trying to edit it
         $id =  $this->input->post('id');
         $data = array(
-            'jenis_id' => $this->input->post('jenis_id'),
-            'kategori_id' => $this->input->post('kategori_id'),
+            // 'create_at' => date('Y-m-d H:i:s'),
+            'update_at' => date('Y-m-d H:i:s'),
             'nama' => $this->input->post('nama'),
-            'harga' => $this->input->post('harga'),
-            'detail' => $this->input->post('detail'),
-            'foto' => $this->input->post('foto'),
         );
         $res = $this->Master->update($this->tabel,  array('id' => $id), $data);
         if ($res['status']) {
@@ -108,8 +101,7 @@ class Jenis extends CI_Controller
     {
         $this->is_valid();
         $id =  $this->input->post('id');
-        $res = $this->Master->delete($this->tabel, array('id' => $id));
-
+        $res = $this->Master->update($this->tabel,  array('id' => $id), array('status'=>'delete'));
         if ($res['status']) {
             $this->msg('data', '200', $res['data']);
         } else {
