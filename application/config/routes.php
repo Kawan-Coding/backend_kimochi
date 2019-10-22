@@ -8,10 +8,20 @@ $route['admin/cabang']['get'] = '/admin/admin/cabang';
 $route['admin/responsible']['get'] = '/admin/admin/responsible';
 $route['admin/jenis']['get'] = '/admin/admin/jenis';
 $route['admin/kategori']['get'] = '/admin/admin/kategori';
+$route['admin/status_tranksaksi']['get'] = '/admin/admin/status_tranksaksi';
+$route['admin/barang']['get'] = '/admin/admin/barang';
 //=====ROUTE API
 // CASH REGISTER
 $route['api/cashregister/open']['POST'] = '/api/CashRegisterController/open';
 $route['api/cashregister/close']['POST'] = '/api/CashRegisterController/close';
+
+//API_GET
+$route['api/api_get/get_data_booking']['GET'] = '/api/api_get/get_data_booking_where_status_booking';
+$route['api/api_get/get_data_barang']['GET'] = '/api/api_get/get_data_barang';
+$route['api/api_get/get_detail_aksesoris']['POST'] = '/api/api_get/get_detail_aksesoris';
+
+//API_GET TRANSAKSI
+$route['api/api_get/get_transaksi']['GET'] = '/api/api_get/get_transaksi';
 
 // API CRUD USER 
 $route['api/user/(:num)']['GET'] = '/api/UserController/get/$1';
@@ -83,6 +93,22 @@ $route['sapi/responsible/read']['POST'] = '/singleapi/responsible/get';
 $route['sapi/responsible/create']['POST'] = '/singleapi/responsible/add';
 $route['sapi/responsible/update']['POST'] = '/singleapi/responsible/edit';
 $route['sapi/responsible/delete']['POST'] = '/singleapi/responsible/remove';
+
+//SINGLE status_transaksi
+$route['sapi/status_transaksi/get_all']['GET'] = '/singleapi/StatusTransaksi/get_all';
+$route['sapi/status_transaksi/read']['POST'] = '/singleapi/StatusTransaksi/get';
+$route['sapi/status_transaksi/create']['POST'] = '/singleapi/StatusTransaksi/add';
+$route['sapi/status_transaksi/update']['POST'] = '/singleapi/StatusTransaksi/edit';
+$route['sapi/status_transaksi/delete']['POST'] = '/singleapi/StatusTransaksi/remove';
+
+//SINGLE BARANG
+$route['sapi/barang/get_all']['GET'] = '/singleapi/Barang/get_all';
+$route['sapi/barang/read']['POST'] = '/singleapi/Barang/get';
+$route['sapi/barang/create']['POST'] = '/singleapi/Barang/add';
+$route['sapi/barang/update']['POST'] = '/singleapi/Barang/edit';
+$route['sapi/barang/delete']['POST'] = '/singleapi/Barang/remove';
+
+
 //API ADMIN
 
 $route['default_controller'] = 'welcome';

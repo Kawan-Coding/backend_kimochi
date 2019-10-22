@@ -63,6 +63,7 @@ class Jenis extends CI_Controller
             'create_at' => date('Y-m-d H:i:s'),
             'update_at' => date('Y-m-d H:i:s'),
             'nama' => $this->input->post('nama'),
+            'status' => 'active',
         );
         
         $res = $this->Master->add($this->tabel, $params);

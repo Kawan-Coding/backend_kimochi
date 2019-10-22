@@ -47,14 +47,28 @@ class Admin extends CI_Controller
 	public function jenis()
 	{
 		$data = array(
-			'content' => 'content/konten6',
+			'content' => 'content/Konten6',
 		);
 		$this->load->view('template_admin', $data);
 	}
 	public function kategori()
 	{
 		$data = array(
-			'content' => 'content/konten7',
+			'content' => 'content/Konten7',
+		);
+		$this->load->view('template_admin', $data);
+	}
+	public function status_tranksaksi()
+	{
+		$data = array(
+			'content' => 'content/Konten8',
+		);
+		$this->load->view('template_admin', $data);
+	}
+	public function barang()
+	{
+		$data = array(
+			'content' => 'content/Konten9',
 		);
 		$this->load->view('template_admin', $data);
 	}

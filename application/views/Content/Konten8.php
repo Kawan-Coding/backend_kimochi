@@ -1,6 +1,3 @@
-<script>
-    console.log('start');
-</script>
 <style>
     ::-webkit-scrollbar {
         width: 0px;
@@ -18,11 +15,8 @@
         background: #555;
     }
 </style>
-
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.5.1/dist/leaflet.css" integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ==" crossorigin="" />
-<script src="https://unpkg.com/leaflet@1.5.1/dist/leaflet.js" integrity="sha512-GffPMF3RvMeYyc1LWMHtK8EbPv0iNZ8/oTtHPx9/cc2ILxQ+u905qIwdpULaqDkyBKgOaB57QTMg7ztg8Jm2Og==" crossorigin=""></script>
 <section id="produk">
-    <h4>Produk</h4>
+    <h4>status transaksi</h4>
     <hr>
     <div class="col-12 text-right">
         <button class="btn btn-info " data-toggle="modal" data-target="#add" style="position: fixed; bottom: 36px;   right: 20px; padding: 18.5px;
@@ -31,15 +25,15 @@
         </button>
     </div>
     <div class="col-12 card shadow mt-5 mb-5">
-        <h4 class="my-3">Data Produk</h4>
+        <h4 class="my-3">Data status transaksi</h4>
         <table id="table" class="table table-striped table-bordered">
             <thead>
                 <tr>
                     <th>No</th>
-                    <th>Cabang</th>
-                    <th>Pegawai</th>
-                    <th>Role</th>
-                    <th>Status</th>
+                    <th>Jenis</th>
+                    <th>nama</th>
+                    <th>create_at</th>
+                    <th>update_at</th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -48,10 +42,9 @@
             </tbody>
         </table>
     </div>
-
 </section> <!-- Modal -->
 <!-- Modal -->
-<div class="modal fade col-sm-8 offset-md-2" id="edit" style="overflow: auto;">
+<div class="modal fade col-sm-6 offset-md-3" id="edit" style="overflow: auto;">
     <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -59,44 +52,23 @@
             </div>
 
             <div class="modal-body row">
-
                 <div class="col-sm-12">
                     <form method="POST" id="form" class="form-horizontal need-validate" novalidate>
                         <div class="box-body">
                             <div class="row clearfix">
-                                <!-- EDITED -->
                                 <div class="col-md-6">
-                                    <label for="cabang_id" class="control-label">Cabang</label>
+                                    <label for="jenis_id" class="control-label">Jenis Id</label>
                                     <div class="form-group">
-                                        <select type="text" name="cabang_id" value="" class="form-control" id="cabang_id"></select>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <label for="pegawai_id" class="control-label">Pegawai</label>
-                                    <div class="form-group">
-                                        <select type="text" name="pegawai_id" value="" class="form-control" id="pegawai_id"></select>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <label for="role" class="control-label">Role</label>
-                                    <div class="form-group">
-                                        <select type="text" name="role" value="" class="form-control" id="role">
-                                            <option value="kepala cabang">kepala cabang</option>
-                                            <option value="kasir">kasir</option>
+                                        <select type="text" name="jenis_id" value="" class="form-control" id="jenis_id" required />
                                         </select>
                                     </div>
                                 </div>
-                                <div class="col-md-6">
-                                    <label for="status" class="control-label">Status</label>
+                                <div class="col-md-12">
+                                    <label for="nama" class="control-label">Nama</label>
                                     <div class="form-group">
-                                        <select type="text" name="status" value="" class="form-control" id="status">
-                                            <option value="not activated">not activated</option>
-                                            <option value="activated">activated</option>
-                                            <option value="delete">delete</option>
-                                        </select>
+                                        <input type="text" name="nama" value="" class="form-control" id="nama" required />
                                     </div>
                                 </div>
-                                <!-- </div> -->
                                 <div id="createupdate" class="row col-md-12">
                                     <div class="col-md-6">
                                         <label for="create_at" class="control-label">Create At</label>
@@ -119,18 +91,10 @@
                                 Perubahan</button>
                         </div>
                     </form>
-
-
-
-
-
                 </div>
-
             </div>
-
         </div>
     </div>
-</div>
 </div>
 
 <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.js"></script> -->
@@ -141,10 +105,10 @@
 <script src="https://cdn.ckeditor.com/ckeditor5/12.0.0/classic/ckeditor.js"></script>
 <script>
     let m_view = 'view';
-    let bash_api = "<?php echo base_url('sapi/responsible/') ?>";
+    let bash_api = "<?php echo base_url('sapi/status_transaksi/') ?>";
     console.log(bash_api);
-    var number, is_update, latlong = '';
-    let label = " Responsible ";
+    var number, is_update;
+    let label = " status transaksi ";
     $(document).ready(function() {
         table.ajax.reload();
         number = 0;
@@ -172,16 +136,14 @@
                 }
             }, {
                 "render": function(data, type, JsonResultRow, meta) {
-                    return get_nama_cabang_byID(JsonResultRow.cabang_id);
+                    return get_nama_jenis_byID(JsonResultRow.jenis_id);
                 }
             }, {
-                "render": function(data, type, JsonResultRow, meta) {
-                    return get_nama_pegawai_byID(JsonResultRow.pegawai_id);
-                }
+                "data": "nama"
             }, {
-                "data": "role"
+                "data": "create_at"
             }, {
-                "data": "status"
+                "data": "update_at"
             }, {
                 "render": function(data, type, JsonResultRow, meta) {
                     return '<button class="btn btn-info edit_jenis"  style="width: 40px; margin-right : 5px;" onclick ="read(' + "'" + JsonResultRow.id + "'" + ')"><i class="fa fa-eye"></i></button>' +
@@ -194,10 +156,6 @@
     });
 
 
-    $('#edit').on('show.bs.modal', function() {
-        console.log('modal show');
-
-    });
 
     $('#edit').on('hidden.bs.modal', function(e) {
         if (e.handled !== true) {
@@ -208,7 +166,7 @@
         $("#form input").val('');
         $('#modal_crop').unbind();
         $('#submit').off('click');
-        $('#image_preview,#cabang_id,#pegawai_id').empty();
+        $('#image_preview,#jenis_id,#kategori_id').empty();
         $("#foto").prop("required", false);
         $("#form").removeClass("was-validated").addClass("needs-validation");
 
@@ -216,17 +174,17 @@
 
     function conf_state(state) {
         if (state == "read") {
-            $('#conf').hide();
             $('.modal-title').text("Read" + label);
             $("#form :input,select").prop("readonly", true); //change
+            $('#conf').hide(); //change
             $("#form input").css("color", "black");
             $("#createupdate").show();
 
         } else if (state == "update" || state == "create") {
-            $('#conf').show();
             $('.modal-title').text("Update" + label);
             $("#form :input,select").prop("readonly", false)
             $("#form input").css("color", "#464a4c");
+            $('#conf').show();
             $("#createupdate").hide();
         }
     }
@@ -240,30 +198,10 @@
             success: function(r) {
                 // console.log(r);
                 if (r.error == false) {
-                    render_dropdown('#cabang_id', arr_cabang_all.data);
-                    render_dropdown2('#pegawai_id', arr_pegawai_all.data);
+                    render_dropdown('#jenis_id', arr_jenis_all.data);
                     conf_state(state);
-                    // console.log(arr_pegawai_all.data['id'].includes(r.data.pegawai_id));
-                    // if (get_nama_pegawai_byID(r.data.pegawai_id) != '<p class="text-danger">DELETED</p>') {
-                        $("select[id='pegawai_id'] option[value=" + r.data.pegawai_id + "]").attr("selected", "selected");
-                    // } else {
-                    //     $("select[id='pegawai_id']").append("<option value=" + r.data.pegawai_id + " selected >" + get_nama_pegawai_byID(r.data.pegawai_id) + "</option>");
-                    // }
-                    // if (get_nama_pegawai_byID(r.data.cabang_id) != '<p class="text-danger">DELETED</p>') {
-                        $("select[id='cabang_id'] option[value=" + r.data.cabang_id + "]").attr("selected", "selected");
-                    // } else {
-                    //     $("select[id='cabang_id']").append("<option value=" + r.data.cabang_id + " selected >" + get_nama_cabang_byID(r.data.cabang_id) + "</option>");
-                    // }
-
-
-                    $("select[id='pegawai_id'] option[value=" + r.data.pegawai_id + "]").attr("selected", "selected");
-                    $("select[id='role'] option[value='" + r.data.role + "']").attr("selected", "selected");
-                    $("select[id='status'] option[value='" + r.data.status + "']").attr("selected", "selected");
-
-
+                    $("select[id='jenis_id'] option[value=" + r.data.jenis_id + "]").attr("selected", "selected");
                     $('#nama').val(r.data.nama);
-                    // $('#latlong').val(r.data.latlong);
-                    $('#alamat').val(r.data.alamat);
                     $('#create_at').val(r.data.create_at);
                     $('#update_at').val(r.data.update_at);
                     $('#edit').modal('show');
@@ -320,10 +258,10 @@
 
 
     function create() {
-        $("#foto,#password").prop("required", true);
+        $("#foto").prop("required", true);
         $("#image_preview").append('<div class="show-image"><img src="" class="rounded image_view p-1" alt="..." style="width:100%;" id="img_preview_src">');
-        render_dropdown('#cabang_id', arr_cabang_all.data);
-        render_dropdown2('#pegawai_id', arr_pegawai_all.data);
+        render_dropdown('#jenis_id', arr_jenis_all.data);
+        render_dropdown('#kategori_id', arr_kategori_all.data);
 
         conf_state("create");
         $("#form input").val('');
@@ -412,39 +350,38 @@
     }
 
 
-    // var arr_cabang_all; sebelumnya gini error
+    // var arr_jenis_all; sebelumnya gini error
 </script>
 
 <script>
     //change
-    var arr_cabang_all = "";
+    var arr_jenis_all = "";
 
     function get_jenis_all() {
         $.ajax({
-            url: "<?php echo base_url('sapi/cabang/') ?>" + "get_all",
+            url: "<?php echo base_url('sapi/jenis/') ?>" + "get_all",
             async: false,
             type: 'GET',
             success: function(r) {
                 if (r.error == false) {
-                    arr_cabang_all = r;
+                    arr_jenis_all = r;
                 } else {
                     swal('Gagal !', r.data, 'error');
                 }
             }
         })
-        console.log(arr_cabang_all);
-        return arr_cabang_all;
+        return arr_jenis_all;
     }
 
-    function get_nama_cabang_byID(id) {
-        if (arr_cabang_all == "") {
-            arr_cabang_all = get_jenis_all();
+    function get_nama_jenis_byID(id) {
+        if (arr_jenis_all == "") {
+            arr_jenis_all = get_jenis_all();
         }
-        console.log(arr_cabang_all.data);
-        console.log(id);
-        var result = arr_cabang_all.data.filter(function(element) {
+        console.log(arr_jenis_all.data)
+        var result = arr_jenis_all.data.filter(function(element) {
             return element.id == id;
         })
+        // console.log(result[0].nama)  POIN kesalahana
         if (result == "") {
             return '<p class="text-danger">DELETED</p>';
         } else {
@@ -454,37 +391,37 @@
 </script>
 
 <script>
-    var arr_pegawai_all = "";
+    var arr_kategori_all = "";
 
     function get_kategori_all() {
         $.ajax({
-            url: "<?php echo base_url('sapi/pegawai/') ?>" + "get_all",
+            url: "<?php echo base_url('sapi/kategori/') ?>" + "get_all",
             async: false,
             type: 'GET',
             success: function(r) {
                 if (r.error == false) {
-                    arr_pegawai_all = r;
+                    arr_kategori_all = r;
                 } else {
                     swal('Gagal !', r.data, 'error');
                 }
             }
         })
-        return arr_pegawai_all;
+        return arr_kategori_all;
     }
 
-    function get_nama_pegawai_byID(id) {
-        if (arr_pegawai_all == "") {
-            arr_pegawai_all = get_kategori_all();
+    function get_nama_kategori_byID(id) {
+        if (arr_kategori_all == "") {
+            arr_kategori_all = get_kategori_all();
         }
-        console.log(arr_pegawai_all.data)
-        var result = arr_pegawai_all.data.filter(function(element) {
+        console.log(arr_kategori_all.data)
+        var result = arr_kategori_all.data.filter(function(element) {
             return element.id == id;
         })
         // console.log(result[0].nama)  POIN kesalahana
         if (result == "") {
             return '<p class="text-danger">DELETED</p>';
         } else {
-            return result[0].nama_lengkap;
+            return result[0].nama;
         }
     }
 </script>
@@ -494,13 +431,6 @@
         console.log(data);
         $.each(data, function(key, value) {
             $(id).append("<option value=" + value.id + ">" + value.nama + "</option>");
-        });
-    }
-
-    function render_dropdown2(id, data) {
-        console.log(data);
-        $.each(data, function(key, value) {
-            $(id).append("<option value=" + value.id + ">" + value.nama_lengkap + "</option>");
         });
     }
 </script>

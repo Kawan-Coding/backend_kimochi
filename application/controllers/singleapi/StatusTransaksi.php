@@ -1,15 +1,15 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class Kategori extends CI_Controller
+class StatusTransaksi extends CI_Controller
 {
     protected $date;
-    protected $tabel = 'kategori';
+    protected $tabel = 'status_transaksi';
     public function __construct()
     {
         parent::__construct();
         // Your own constructor code
-        // $this->load->model('Produk');
+        // $this->load->model('user');
         $this->date = new DateTime();
         // $this->load->library('Msg');
         //==== ALLOWING CORS
@@ -30,12 +30,13 @@ class Kategori extends CI_Controller
     function is_valid()
     {
         if (isset($_POST) && count($_POST) <= 0) {
-            $this->msg('', '400', '','tidak ada masukan');        }
+            $this->msg('', '400', '', 'tidak ada masukan');
+        }
     }
 
     public function get_all()
     {
-        $this->msg('data', '200', $this->Master->get_all($this->tabel,array("status !="=>"delete")));
+        $this->msg('data', '200', $this->Master->get_all($this->tabel));
     }
 
     public function get()
@@ -60,17 +61,18 @@ class Kategori extends CI_Controller
     {
         $this->is_valid();
         $params = array(
+            'jenis_id' => $this->input->post('jenis_id'),
+            'nama' => $this->input->post('nama'),
             'create_at' => date('Y-m-d H:i:s'),
             'update_at' => date('Y-m-d H:i:s'),
-            'nama' => $this->input->post('nama'),
-            'status' => 'active',
         );
-        
+
+
         $res = $this->Master->add($this->tabel, $params);
         if ($res['status']) {
             $this->msg('data', '200', $res['data']);
         } else {
-            $this->msg('data', '400','', $res['data']['message']);
+            $this->msg('data', '400', '', $res['data']['message']);
         };
     }
 
@@ -80,12 +82,15 @@ class Kategori extends CI_Controller
     function edit()
     {
         $this->is_valid();
+        // $this->msg('data', '200', $this->input->post('nama'));
         // check if the produk exists before trying to edit it
         $id =  $this->input->post('id');
         $data = array(
+            'jenis_id' => $this->input->post('jenis_id'),
+            'nama' => $this->input->post('nama'),
             // 'create_at' => date('Y-m-d H:i:s'),
             'update_at' => date('Y-m-d H:i:s'),
-            'nama' => $this->input->post('nama'),
+
         );
         $res = $this->Master->update($this->tabel,  array('id' => $id), $data);
         if ($res['status']) {
@@ -102,7 +107,8 @@ class Kategori extends CI_Controller
     {
         $this->is_valid();
         $id =  $this->input->post('id');
-        $res = $this->Master->update($this->tabel,  array('id' => $id), array('status'=>'delete'));
+        $res = $this->Master->delete($this->tabel, array('id' => $id));
+
         if ($res['status']) {
             $this->msg('data', '200', $res['data']);
         } else {
