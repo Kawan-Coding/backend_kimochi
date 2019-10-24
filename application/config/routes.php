@@ -10,6 +10,7 @@ $route['admin/jenis']['get'] = '/admin/admin/jenis';
 $route['admin/kategori']['get'] = '/admin/admin/kategori';
 $route['admin/status_tranksaksi']['get'] = '/admin/admin/status_tranksaksi';
 $route['admin/barang']['get'] = '/admin/admin/barang';
+$route['admin/allowed_payment']['get'] = '/admin/admin/allowed_payment';
 //=====ROUTE API
 // CASH REGISTER
 $route['api/cashregister/open']['POST'] = '/api/CashRegisterController/open';
@@ -107,6 +108,18 @@ $route['sapi/barang/read']['POST'] = '/singleapi/Barang/get';
 $route['sapi/barang/create']['POST'] = '/singleapi/Barang/add';
 $route['sapi/barang/update']['POST'] = '/singleapi/Barang/edit';
 $route['sapi/barang/delete']['POST'] = '/singleapi/Barang/remove';
+
+//SINGLE ALLOWED PAYMENT
+$route['sapi/allowed_payment/get_all']['GET'] = '/singleapi/allowed_payment/get_all';
+$route['sapi/allowed_payment/read']['POST'] = '/singleapi/allowed_payment/get';
+$route['sapi/allowed_payment/create']['POST'] = '/singleapi/allowed_payment/add';
+$route['sapi/allowed_payment/update']['POST'] = '/singleapi/allowed_payment/edit';
+$route['sapi/allowed_payment/delete']['POST'] = '/singleapi/allowed_payment/remove';
+
+//SINGLE TAKING ORDER
+$route['api/ato/set_booking']['POST'] = '/api/Api_Taking_Order/set_taking_order_booking';
+$route['api/ato/set_order']['POST'] = '/api/Api_Taking_Order/set_taking_order_order';
+
 
 
 //API ADMIN

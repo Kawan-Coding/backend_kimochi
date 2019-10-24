@@ -24,7 +24,7 @@ date_default_timezone_set('Asia/jakarta');
 |
 */
 $config['base_url'] = 'http://localhost/job/km/';
-
+// $config['base_url'] = '';
 /*
 |--------------------------------------------------------------------------
 | Index File

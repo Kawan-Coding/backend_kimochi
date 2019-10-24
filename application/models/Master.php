@@ -19,7 +19,7 @@ class Master extends CI_Model
         $run = $this->db->get_where($tabel, $where)->row_array();
         $res = array();
         if (!isset($run)) {
-            $res['data']['message'] = 'data not exist';
+            $res['data']['message'] = 'data not exist ->tabel_'.$tabel;
             $res['status'] = false;
         } else {
             $res['data'] = $run;
@@ -27,6 +27,7 @@ class Master extends CI_Model
         }
         return $res;
     }
+    
     public function get_select($tabel, $select, $where)
     {
         $this->db->select($select);

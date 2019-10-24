@@ -114,6 +114,7 @@ class User extends CI_Model
     function get_responsible()
     {
         $this->db->select('cabang.id,cabang.nama,	cabang.alamat,cabang.latlong');
+        $this->db->select('responsible.id as id_responsible,responsible.role');
         $this->db->order_by('close', 'DESC');
         $this->db->from('cash_flow');
         $this->db->join('responsible', 'responsible.id = cash_flow.responsible_id');

@@ -72,4 +72,11 @@ class Admin extends CI_Controller
 		);
 		$this->load->view('template_admin', $data);
 	}
+	public function allowed_payment()
+	{
+		$data = array(
+			'content' => 'content/Konten10',
+		);
+		$this->load->view('template_admin', $data);
+	}
 }

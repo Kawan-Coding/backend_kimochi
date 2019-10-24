@@ -25,17 +25,30 @@ class UserController extends CI_Controller
             ->_display();
         exit;
     }
+    public function msg($name, $status, $data, $custom_msg = '')
+    {
+        $this->output
+            ->set_content_type('application/json')
+            ->set_status_header(200)
+            ->set_output(json_encode($this->msg->get($name, $status, $data, $custom_msg), JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES))
+            ->_display();
+        exit;
+    }
 
     public function register()
     {
         return $this->response($this->user->save());
     }
-
+    function is_valid()
+    {
+        if (isset($_POST) && count($_POST) <= 0) {
+            $this->msg('', '400', '','tidak ada masukan');        }
+    }
 
     public function login()
     {
         //return dibuat disini untuk antisipasi penambahan fitur pada login
-
+        $this->is_valid();
         if (!$this->user->is_valid()) {
 
             return $this->response([

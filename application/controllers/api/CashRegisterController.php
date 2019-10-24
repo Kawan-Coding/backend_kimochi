@@ -8,6 +8,7 @@ class CashRegisterController     extends CI_Controller
     public function __construct()
     {
         parent::__construct();
+        // $this->load->library('../controllers/instructor');
         // Your own constructor code
         // $this->load->model('user');
         // $this->date = new DateTime();
@@ -33,12 +34,13 @@ class CashRegisterController     extends CI_Controller
      */
     function open()
     {
+        $id_pegawai = $this->input->post('id_pegawai');
         if (isset($_POST) && count($_POST) > 0) {
             $params = array(
                 'responsible_id' => $this->input->post('responsible_id'),
                 'open' => date('Y-m-d H:i:s'),
                 'open_cash' => $this->input->post('open_cash'),
-                'data_pegawai' => $this->input->post('data_pegawai'),
+                'data_pegawai' => json_encode($this->Master->get('pegawai', array('id' =>$id_pegawai))),
                 'status' => 'progress',
             );
             $run = $this->Master->add($this->tabel, $params);
