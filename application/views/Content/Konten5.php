@@ -22,7 +22,7 @@
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.5.1/dist/leaflet.css" integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ==" crossorigin="" />
 <script src="https://unpkg.com/leaflet@1.5.1/dist/leaflet.js" integrity="sha512-GffPMF3RvMeYyc1LWMHtK8EbPv0iNZ8/oTtHPx9/cc2ILxQ+u905qIwdpULaqDkyBKgOaB57QTMg7ztg8Jm2Og==" crossorigin=""></script>
 <section id="produk">
-    <h4>Produk</h4>
+    <h4>Responsible</h4>
     <hr>
     <div class="col-12 text-right">
         <button class="btn btn-info " data-toggle="modal" data-target="#add" style="position: fixed; bottom: 36px;   right: 20px; padding: 18.5px;
@@ -31,7 +31,7 @@
         </button>
     </div>
     <div class="col-12 card shadow mt-5 mb-5">
-        <h4 class="my-3">Data Produk</h4>
+        <h4 class="my-3">Data Responsible</h4>
         <table id="table" class="table table-striped table-bordered">
             <thead>
                 <tr>
@@ -86,13 +86,12 @@
                                         </select>
                                     </div>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-6" id="status_group">
                                     <label for="status" class="control-label">Status</label>
                                     <div class="form-group">
                                         <select type="text" name="status" value="" class="form-control" id="status">
                                             <option value="not activated">not activated</option>
                                             <option value="activated">activated</option>
-                                            <option value="delete">delete</option>
                                         </select>
                                     </div>
                                 </div>
@@ -217,14 +216,14 @@
     function conf_state(state) {
         if (state == "read") {
             $('#conf').hide();
-            $('.modal-title').text("Read" + label);
+            $('.modal-title').text(state + label);
             $("#form :input,select").prop("readonly", true); //change
             $("#form input").css("color", "black");
             $("#createupdate").show();
 
         } else if (state == "update" || state == "create") {
             $('#conf').show();
-            $('.modal-title').text("Update" + label);
+            $('.modal-title').text(state + label);
             $("#form :input,select").prop("readonly", false)
             $("#form input").css("color", "#464a4c");
             $("#createupdate").hide();
@@ -232,6 +231,7 @@
     }
 
     function read(ID, state = "read") {
+        $("#status_group").show();
         console.log("edit" + edit);
         $.ajax({
             url: bash_api + 'read',
@@ -275,9 +275,9 @@
     }
 
     function update(ID) {
-
+       
         read(ID, "update");
-        $('.modal-title').text("update jenis pariwisata");
+        // $('.modal-title').text("update jenis pariwisata");
         $('.form-group').removeClass('has-error'); // clear error class
         $(function() {
             $('#submit').click(function(event) {
@@ -320,6 +320,7 @@
 
 
     function create() {
+        $("#status_group").hide();
         $("#foto,#password").prop("required", true);
         $("#image_preview").append('<div class="show-image"><img src="" class="rounded image_view p-1" alt="..." style="width:100%;" id="img_preview_src">');
         render_dropdown('#cabang_id', arr_cabang_all.data);
@@ -328,7 +329,7 @@
         conf_state("create");
         $("#form input").val('');
         $('#edit').modal('show');
-        $('.modal-title').text("tambah jenis pariwisata");
+        // $('.modal-title').text("tambah jenis pariwisata");
         $('.form-group').removeClass('has-error'); // clear error class
         $(function() {
             $('#submit').click(function(event) {

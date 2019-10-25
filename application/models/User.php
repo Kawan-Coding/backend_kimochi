@@ -58,15 +58,23 @@ class User extends CI_Model
     {
         $username    = $_POST['username'];
         $password = $_POST['password'];
+        $count = $this->db->get_where($this->users, array('username' => $username))->row_array();
         //mendapatkan password dari username diatas
-        $hash = $this->get('username', $username)->password;
+        if (isset($count['id'])) {
+            $hash = $this->get('username', $username)->password;
+            if (password_verify($password, $hash)) {
+                return true;
+            } else {
+                return  false;
+            }
+        }else{
+            return false;
+        }
+
+
         // echo "$hash";
 
-        if (password_verify($password, $hash)){
-            return true;
-        }else{
-            return  false;
-        }
+
 
     }
 
@@ -100,13 +108,14 @@ class User extends CI_Model
         return $this->db->count_all_results($this->users);
     }
 
-    function get_status_last_cashflow (){
+    function get_status_last_cashflow()
+    {
         $this->db->select('cash_flow.status');
         $this->db->order_by('close', 'DESC');
         $this->db->from('cash_flow');
         $this->db->join('responsible', 'responsible.id = cash_flow.responsible_id');
         $this->db->join('pegawai', 'pegawai.id = responsible.pegawai_id');
-        $this->db->where('pegawai.username',$this->input->post("username"));
+        $this->db->where('pegawai.username', $this->input->post("username"));
         $query =  $this->db->get();
         return $query->row();
     }
@@ -120,7 +129,7 @@ class User extends CI_Model
         $this->db->join('responsible', 'responsible.id = cash_flow.responsible_id');
         $this->db->join('pegawai', 'pegawai.id = responsible.pegawai_id');
         $this->db->join('cabang', 'cabang.id = responsible.cabang_id');
-        $this->db->where('pegawai.username',$this->input->post("username"));
+        $this->db->where('pegawai.username', $this->input->post("username"));
         $query =  $this->db->get();
         return $query->row();
     }

@@ -67,11 +67,11 @@ class Api_Get extends CI_Controller
     public function get_transaksi()
     {
         $el = $this->Master->get_all('taking_order', '',array('tr_id','DESC'));
-        foreach ($el as $res) {
-            $res['data_customer']=json_decode($res['data_customer']);
-            // $res['data_customer']['barang']['kondisi']=json_decode($res['data_customer']['barang']['kondisi']);
-            $res['data_barang']=json_decode($res['data_barang']);
-        }
-        $this->msg('data', '200', $res);
+        // foreach ($el as $res) {
+        //     $res['data_customer']=json_decode($res['data_customer']);
+        //     $res['data_customer']['barang']['kondisi']=json_decode($res['data_customer']['barang']['kondisi']);
+        //     $res['data_barang']=json_decode($res['data_barang']);
+        // }
+        $this->msg('data', '200', $el);
     }
 }

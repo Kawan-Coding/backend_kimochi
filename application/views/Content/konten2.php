@@ -28,16 +28,16 @@
         <h4 class="my-3">Data Produk</h4>
         <table id="table" class="table table-striped table-bordered">
             <thead>
-                <tr>
-                    <th>No</th>
-                    <th>Jenis</th>
-                    <th>Kategori</th>
-                    <th>Nama</th>
-                    <th>Harga</th>
-                    <th>Detail</th>
-                    <th>Foto</th>
-                    <th>Actions</th>
-                </tr>
+            <tr>
+                <th>No</th>
+                <th>Jenis</th>
+                <th>Kategori</th>
+                <th>Nama</th>
+                <th>Harga</th>
+                <th>Detail</th>
+                <th>Foto</th>
+                <th>Actions</th>
+            </tr>
             </thead>
             <tbody id="tbodyid">
 
@@ -50,7 +50,9 @@
     <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Edit Data</h5> <button type="button" class="close" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">&times;</span> </button>
+                <h5 class="modal-title" id="exampleModalLabel">Edit Data</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                </button>
             </div>
 
             <div class="modal-body row">
@@ -59,29 +61,33 @@
                         <div class="box-body">
                             <div class="row clearfix">
                                 <div class="col-md-6">
-                                    <label for="jenis_id" class="control-label">Jenis Id</label>
+                                    <label for="jenis_id" class="control-label">Jenis</label>
                                     <div class="form-group">
-                                        <select type="text" name="jenis_id" value="" class="form-control" id="jenis_id" required />
+                                        <select type="text" name="jenis_id" value="" class="form-control" id="jenis_id"
+                                                required '/>
                                         </select>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
-                                    <label for="kategori_id" class="control-label">Kategori Id</label>
+                                    <label for="kategori_id" class="control-label">Kategori</label>
                                     <div class="form-group">
-                                        <select name="kategori_id" value="" class="form-control" id="kategori_id" required />
+                                        <select name="kategori_id" value="" class="form-control" id="kategori_id"
+                                                required/>
                                         </select>
                                     </div>
                                 </div>
                                 <div class="col-md-12">
                                     <label for="nama" class="control-label">Nama</label>
                                     <div class="form-group">
-                                        <input type="text" name="nama" value="" class="form-control" id="nama" required />
+                                        <input type="text" name="nama" value="" class="form-control" id="nama"
+                                               required/>
                                     </div>
                                 </div>
                                 <div class="col-md-12">
                                     <label for="harga" class="control-label">Harga</label>
                                     <div class="form-group">
-                                        <input type="text" name="harga" value="" class="form-control" id="harga" required />
+                                        <input type="text" name="harga" value="" class="form-control" id="harga"
+                                               required/>
                                     </div>
                                 </div>
                                 <div class="col-md-12">
@@ -98,18 +104,21 @@
                                     <div class="form-group">
                                         <input type="file" name="foto" class="form-control" id="foto">
                                     </div>
+                                    <small  class="form-text text-muted">foto harus berbentuk square dengan aspect ratio 1:1</small>
                                 </div>
                                 <div id="createupdate" class="row col-md-12">
                                     <div class="col-md-6">
                                         <label for="create_at" class="control-label">Create At</label>
                                         <div class="form-group">
-                                            <input type="text" name="create_at" value="" class="form-control" id="create_at" />
+                                            <input type="text" name="create_at" value="" class="form-control"
+                                                   id="create_at"/>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <label for="update_at" class="control-label">Update At</label>
                                         <div class="form-group">
-                                            <input type="text" name="update_at" value="" class="form-control" id="update_at" />
+                                            <input type="text" name="update_at" value="" class="form-control"
+                                                   id="update_at"/>
                                         </div>
                                     </div>
                                 </div>
@@ -118,7 +127,8 @@
                         <div class="box-footer" style="float: right;" id="conf">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
                             <button type="button" class="btn btn-primary" id="submit" style="color:white">Simpan
-                                Perubahan</button>
+                                Perubahan
+                            </button>
                         </div>
                     </form>
                 </div>
@@ -129,7 +139,9 @@
 
 <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.js"></script> -->
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
 
 <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.ckeditor.com/ckeditor5/12.0.0/classic/ckeditor.js"></script>
@@ -139,7 +151,7 @@
     console.log(bash_api);
     var number, is_update;
     let label = " Produk ";
-    $(document).ready(function() {
+    $(document).ready(function () {
         table.ajax.reload();
         number = 0;
         is_update = false;
@@ -155,47 +167,60 @@
         }
         return number;
     }
+
     var table = $('#table').DataTable({
         "ajax": {
             url: bash_api + 'get_all',
             dataSrc: 'data'
         },
         "columns": [{
-                "render": function() {
-                    return get_index();
-                }
-            }, {
-                "render": function(data, type, JsonResultRow, meta) {
-                    return get_nama_jenis_byID(JsonResultRow.jenis_id);
-                }
-            }, {
-                "render": function(data, type, JsonResultRow, meta) {
-                    return get_nama_kategori_byID(JsonResultRow.kategori_id);
-                }
-            }, {
-                "data": "nama"
-            }, {
-                "data": "harga"
-            }, {
-                "data": "detail"
-            }, {
-                "render": function(data, type, JsonResultRow, meta) {
-                    return '<img src="' + "<?php echo base_url('') ?>" + "/uploads/" + JsonResultRow.foto + '" alt="..." class="img-thumbnail style="width:200px;">'
-                }
-            }, {
-                "render": function(data, type, JsonResultRow, meta) {
-                    return '<button class="btn btn-info edit_jenis"  style="width: 40px; margin-right : 5px;" onclick ="read(' + "'" + JsonResultRow.id + "'" + ')"><i class="fa fa-eye"></i></button>' +
-                        '<button class="btn btn-info edit_jenis" style="width: 40px;margin-right : 5px;" onclick ="update(' + "'" + JsonResultRow.id + "'" + ')"><i class="fa fa-pencil-square-o"></i></a>' +
-                        '<button class="btn btn-danger delete_jenis" style="width: 40px;" onclick ="del(' + "'" + JsonResultRow.id + "'" + ')"><i class="fa fa-trash-o"></i></a>';
-                }
+            "render": function () {
+                return get_index();
             }
+        }, {
+            "render": function (data, type, JsonResultRow, meta) {
+                return get_nama_jenis_byID(JsonResultRow.jenis_id);
+            }
+        }, {
+            "render": function (data, type, JsonResultRow, meta) {
+                return get_nama_kategori_byID(JsonResultRow.kategori_id);
+            }
+        }, {
+            "data": "nama"
+        }, {
+            "render": function (data, type, JsonResultRow, meta) {
+                return "Rp. "+addCommas(JsonResultRow.harga);
+            }
+        }, {
+            "data": "detail"
+        }, {
+            "render": function (data, type, JsonResultRow, meta) {
+                return '<img src="' + "<?php echo base_url('') ?>" + "/uploads/" + JsonResultRow.foto + '" alt="..." class="img-thumbnail style="width:200px;">'
+            }
+        }, {
+            "render": function (data, type, JsonResultRow, meta) {
+                return '<button class="btn btn-info edit_jenis"  style="width: 40px; margin-right : 5px;" onclick ="read(' + "'" + JsonResultRow.id + "'" + ')"><i class="fa fa-eye"></i></button>' +
+                    '<button class="btn btn-info edit_jenis" style="width: 40px;margin-right : 5px;" onclick ="update(' + "'" + JsonResultRow.id + "'" + ')"><i class="fa fa-pencil-square-o"></i></a>' +
+                    '<button class="btn btn-danger delete_jenis" style="width: 40px;" onclick ="del(' + "'" + JsonResultRow.id + "'" + ')"><i class="fa fa-trash-o"></i></a>';
+            }
+        }
 
         ]
     });
 
+    function addCommas(nStr) {
+        nStr += '';
+        x = nStr.split('.');
+        x1 = x[0];
+        x2 = x.length > 1 ? '.' + x[1] : '';
+        var rgx = /(\d+)(\d{3})/;
+        while (rgx.test(x1)) {
+            x1 = x1.replace(rgx, '$1' + ',' + '$2');
+        }
+        return x1 + x2;
+    }
 
-
-    $('#edit').on('hidden.bs.modal', function(e) {
+    $('#edit').on('hidden.bs.modal', function (e) {
         if (e.handled !== true) {
             e.handled = true;
             jenis_sub = null;
@@ -213,12 +238,15 @@
     function conf_state(state) {
         if (state == "read") {
             $('.modal-title').text("Read" + label);
-            $("#form :input,select").prop("readonly", true); //change
+            $("#form :input").prop("readonly", true); //change
+            $("#form select").prop("disabled", 'disabled'); //change
             $('#conf,#foto').hide(); //change
             $("#form input").css("color", "black");
             $("#createupdate").show();
 
+
         } else if (state == "update" || state == "create") {
+            $("#form select").prop("disabled", false);
             $('.modal-title').text("Update" + label);
             $("#form :input,select").prop("readonly", false)
             $("#form input").css("color", "#464a4c");
@@ -233,7 +261,7 @@
             url: bash_api + 'read',
             type: 'POST',
             data: "id=" + ID,
-            success: function(r) {
+            success: function (r) {
                 // console.log(r);
                 if (r.error == false) {
                     render_dropdown('#jenis_id', arr_jenis_all.data);
@@ -261,10 +289,10 @@
     function update(ID) {
 
         read(ID, "update");
-        $('.modal-title').text("update jenis pariwisata");
+        $('.modal-title').text("update Produk");
         $('.form-group').removeClass('has-error'); // clear error class
-        $(function() {
-            $('#submit').click(function(event) {
+        $(function () {
+            $('#submit').click(function (event) {
                 event.preventDefault();
                 if ($('#form')[0].checkValidity() === false) {
                     event.preventDefault();
@@ -281,8 +309,9 @@
                         async: false,
                         processData: false,
                         contentType: false,
-                        beforeSend: function() {},
-                        success: function(r) {
+                        beforeSend: function () {
+                        },
+                        success: function (r) {
                             if (r.error == false) {
                                 is_update = true;
                                 swal("Update Berhasil!", '', "success");
@@ -291,7 +320,7 @@
                                 swal("Update Gagal!", r.msg, "error");
                             }
                         },
-                        complete: function() {
+                        complete: function () {
                             $('#edit').modal('toggle');
                         }
                     });
@@ -312,15 +341,15 @@
         conf_state("create");
         $("#form input").val('');
         $('#edit').modal('show');
-        $('.modal-title').text("tambah jenis pariwisata");
+        $('.modal-title').text("tambah Produk");
         $('.form-group').removeClass('has-error'); // clear error class
-        $(function() {
-            $('#submit').click(function(event) {
+        $(function () {
+            $('#submit').click(function (event) {
                 event.preventDefault();
                 if ($('#form')[0].checkValidity() === false) {
                     event.preventDefault();
                     event.stopPropagation();
-                    swal("Update Gagal!", "form tidak valid", "error");
+                    swal("Insert Gagal!", "form tidak valid", "error");
                 } else {
                     var mydata = new FormData(document.getElementById("form"));
                     $.ajax({
@@ -331,17 +360,18 @@
                         async: false,
                         processData: false,
                         contentType: false,
-                        beforeSend: function() {},
-                        success: function(r) {
+                        beforeSend: function () {
+                        },
+                        success: function (r) {
                             if (r.error == false) {
                                 is_update = true;
-                                swal("Update Berhasil!", '', "success");
+                                swal("Insert Berhasil!", '', "success");
                                 table.ajax.reload();
                             } else {
-                                swal("Update Gagal!", r.msg, "error");
+                                swal("Insert Gagal!", r.msg, "error");
                             }
                         },
-                        complete: function() {
+                        complete: function () {
                             $('#edit').modal('toggle');
                         }
                     });
@@ -366,7 +396,7 @@
                     type: 'POST',
                     dataType: 'json',
                     data: "id=" + ID,
-                    success: function(r) {
+                    success: function (r) {
                         if (r.error === true) {
                             swal('Hapus Gagal', r.msg, 'error');
                             table.ajax.reload();
@@ -380,15 +410,17 @@
             }
         });
     }
-    $("#foto").change(function() {
+
+    $("#foto").change(function () {
         console.log('cahne');
         readURL(this);
     });
+
     //change
     function readURL(input) {
         if (input.files && input.files[0]) {
             var reader = new FileReader();
-            reader.onload = function(e) {
+            reader.onload = function (e) {
                 $('#img_preview_src').attr('src', e.target.result);
             }
             reader.readAsDataURL(input.files[0]);
@@ -408,7 +440,7 @@
             url: "<?php echo base_url('sapi/jenis/') ?>" + "get_all",
             async: false,
             type: 'GET',
-            success: function(r) {
+            success: function (r) {
                 if (r.error == false) {
                     arr_jenis_all = r;
                 } else {
@@ -424,7 +456,7 @@
             arr_jenis_all = get_jenis_all();
         }
         console.log(arr_jenis_all.data)
-        var result = arr_jenis_all.data.filter(function(element) {
+        var result = arr_jenis_all.data.filter(function (element) {
             return element.id == id;
         })
         // console.log(result[0].nama)  POIN kesalahana
@@ -444,7 +476,7 @@
             url: "<?php echo base_url('sapi/kategori/') ?>" + "get_all",
             async: false,
             type: 'GET',
-            success: function(r) {
+            success: function (r) {
                 if (r.error == false) {
                     arr_kategori_all = r;
                 } else {
@@ -460,7 +492,7 @@
             arr_kategori_all = get_kategori_all();
         }
         console.log(arr_kategori_all.data)
-        var result = arr_kategori_all.data.filter(function(element) {
+        var result = arr_kategori_all.data.filter(function (element) {
             return element.id == id;
         })
         // console.log(result[0].nama)  POIN kesalahana
@@ -475,7 +507,7 @@
 <script>
     function render_dropdown(id, data) {
         console.log(data);
-        $.each(data, function(key, value) {
+        $.each(data, function (key, value) {
             $(id).append("<option value=" + value.id + ">" + value.nama + "</option>");
         });
     }

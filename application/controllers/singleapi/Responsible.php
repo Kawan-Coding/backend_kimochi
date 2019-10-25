@@ -64,7 +64,7 @@ class Responsible extends CI_Controller
             'cabang_id' => $this->input->post('cabang_id'),
             'pegawai_id' => $this->input->post('pegawai_id'),
             'role' => $this->input->post('role'),
-            'status' => $this->input->post('status'),
+            'status' => 'activated',
             'create_at' => date('Y-m-d H:i:s'),
             'update_at' => date('Y-m-d H:i:s'),
         );

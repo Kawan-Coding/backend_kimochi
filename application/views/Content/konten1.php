@@ -6,7 +6,7 @@
     }
 </style>
 <section id="produk">
-    <h4>Produk</h4>
+    <h4>Metode Pembayaran</h4>
     <hr>
     <div class="col-12 text-right">
         <button class="btn btn-info " data-toggle="modal" data-target="#add" style="position: fixed; bottom: 36px;   right: 20px; padding: 18.5px;
@@ -15,7 +15,7 @@
         </button>
     </div>
     <div class="col-12 card shadow mt-5 mb-5">
-        <h4 class="my-3">Data Produk</h4>
+        <h4 class="my-3">Data Metode Pembayaran</h4>
         <table id="table" class="table table-striped table-bordered">
             <thead>
                 <tr>
@@ -100,7 +100,7 @@
     let bash_api = "<?php echo base_url('sapi/metode_pembayaran/') ?>";
     console.log(bash_api);
     var number, is_update;
-    let label = " metode_pembayaran ";
+    let label = " Metode Pembayaran ";
     $(document).ready(function() {
         table.ajax.reload();
         number = 0;
@@ -199,7 +199,7 @@
 
     function update(ID) {
         read(ID, "update");
-        $('.modal-title').text("update jenis pariwisata");
+        $('.modal-title').text("update "+label);
         $('.form-group').removeClass('has-error'); // clear error class
         $(function() {
             $('#submit').click(function(event) {
@@ -244,7 +244,7 @@
         conf_state("create");
         $("#form input").val('');
         $('#edit').modal('show');
-        $('.modal-title').text("update jenis pariwisata");
+        $('.modal-title').text("insert Metode Pembayaran");
         $('.form-group').removeClass('has-error'); // clear error class
         $(function() {
             $('#submit').click(function(event) {
@@ -252,7 +252,7 @@
                 if ($('#form')[0].checkValidity() === false) {
                     event.preventDefault();
                     event.stopPropagation();
-                    swal("Update Gagal!", "form tidak valid", "error");
+                    swal("Insert Gagal!", "form tidak valid", "error");
                 } else {
                     var mydata = new FormData(document.getElementById("form"));
                     $.ajax({
@@ -267,10 +267,10 @@
                         success: function(r) {
                             if (r.error == false) {
                                 is_update = true;
-                                swal("Update Berhasil!", '', "success");
+                                swal("Insert Berhasil!", '', "success");
                                 table.ajax.reload();
                             } else {
-                                swal("Update Gagal!", r.msg, "error");
+                                swal("Insert Gagal!", r.msg, "error");
                             }
                         },
                         complete: function() {

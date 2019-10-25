@@ -80,7 +80,7 @@ class Pegawai extends CI_Controller
             'no_telepon' => $this->input->post('no_telepon'),
             'create_at' => date('Y-m-d H:i:s'),
             'update_at' => date('Y-m-d H:i:s'),
-            'status' => $this->input->post('status'),
+            'status' => 'active',
             'foto' => $file_foto['name'],
         );
         if ($file_foto['status']) {

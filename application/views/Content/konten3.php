@@ -85,13 +85,12 @@
                                         <input type="text" name="no_telepon" value="" class="form-control" id="no_telepon" required />
                                     </div>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-6" id="status_groub">
                                     <label for="status" class="control-label">Status</label>
-                                    <div class="form-group">
+                                    <div class="form-group" >
                                         <select type="text" name="status" value="" class="form-control" id="status" required />
                                         <option value="suspend">suspend</option>
                                         <option value="active">active</option>
-                                        <option value="delete">delete</option>
                                         </select>
                                     </div>
                                 </div>
@@ -216,8 +215,10 @@
             $('#conf,#foto').hide(); //change
             $("#form input").css("color", "black");
             $("#createupdate").show();
+            $("#form select").prop("disabled", 'disabled');
 
         } else if (state == "update" || state == "create") {
+            $("#form select").prop("disabled", false);
             $('.modal-title').text("Update" + label);
             $("#form :input,select").prop("readonly", false)
             $("#form input").css("color", "#464a4c");
@@ -227,6 +228,7 @@
     }
 
     function read(ID, state = "read") {
+        $("#status_groub").show();
         console.log("edit" + edit);
         $.ajax({
             url: bash_api + 'read',
@@ -257,7 +259,7 @@
     }
 
     function update(ID) {
-
+        $("#foto,#password").prop("required", false);
         read(ID, "update");
         $('.modal-title').text("update jenis pariwisata");
         $('.form-group').removeClass('has-error'); // clear error class
@@ -303,10 +305,10 @@
 
     function create() {
         $("#foto,#password").prop("required", true);
+        $("#status_groub").hide();
         $("#image_preview").append('<div class="show-image"><img src="" class="rounded image_view p-1" alt="..." style="width:100%;" id="img_preview_src">');
         render_dropdown('#jenis_id', arr_jenis_all.data);
         render_dropdown('#kategori_id', arr_kategori_all.data);
-
         conf_state("create");
         $("#form input").val('');
         $('#edit').modal('show');

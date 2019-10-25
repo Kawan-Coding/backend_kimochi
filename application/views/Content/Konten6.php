@@ -160,14 +160,14 @@
 
     function conf_state(state) {
         if (state == "read") {
-            $('.modal-title').text("Read" + label);
+            $('.modal-title').text(state + label);
             $("#form :input").prop("readonly", true);
             $('#conf').hide();
             $("#form input").css("color", "black");
             $("#createupdate").show();
 
         } else if (state == "update" || state == "create") {
-            $('.modal-title').text("Update" + label);
+            $('.modal-title').text(state + label);
             $("#form :input").prop("readonly", false)
             $("#form input").css("color", "#464a4c");
             $('#conf').show();
@@ -199,7 +199,7 @@
 
     function update(ID) {
         read(ID, "update");
-        $('.modal-title').text("update jenis pariwisata");
+        // $('.modal-title').text("Update Jenis");
         $('.form-group').removeClass('has-error'); // clear error class
         $(function() {
             $('#submit').click(function(event) {
@@ -244,7 +244,7 @@
         conf_state("create");
         $("#form input").val('');
         $('#edit').modal('show');
-        $('.modal-title').text("update jenis pariwisata");
+        // $('.modal-title').text("update jenis pariwisata");
         $('.form-group').removeClass('has-error'); // clear error class
         $(function() {
             $('#submit').click(function(event) {
@@ -252,7 +252,7 @@
                 if ($('#form')[0].checkValidity() === false) {
                     event.preventDefault();
                     event.stopPropagation();
-                    swal("Update Gagal!", "form tidak valid", "error");
+                    swal("Insert Gagal!", "form tidak valid", "error");
                 } else {
                     var mydata = new FormData(document.getElementById("form"));
                     $.ajax({
@@ -267,10 +267,10 @@
                         success: function(r) {
                             if (r.error == false) {
                                 is_update = true;
-                                swal("Update Berhasil!", '', "success");
+                                swal("Insert Berhasil!", '', "success");
                                 table.ajax.reload();
                             } else {
-                                swal("Update Gagal!", r.msg, "error");
+                                swal("Insert Gagal!", r.msg, "error");
                             }
                         },
                         complete: function() {

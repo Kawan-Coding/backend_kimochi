@@ -19,7 +19,7 @@
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.5.1/dist/leaflet.css" integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ==" crossorigin="" />
 <script src="https://unpkg.com/leaflet@1.5.1/dist/leaflet.js" integrity="sha512-GffPMF3RvMeYyc1LWMHtK8EbPv0iNZ8/oTtHPx9/cc2ILxQ+u905qIwdpULaqDkyBKgOaB57QTMg7ztg8Jm2Og==" crossorigin=""></script>
 <section id="produk">
-    <h4>Produk</h4>
+    <h4>Cabang</h4>
     <hr>
     <div class="col-12 text-right">
         <button class="btn btn-info " data-toggle="modal" data-target="#add" style="position: fixed; bottom: 36px;   right: 20px; padding: 18.5px;
@@ -28,7 +28,7 @@
         </button>
     </div>
     <div class="col-12 card shadow mt-5 mb-5">
-        <h4 class="my-3">Data Produk</h4>
+        <h4 class="my-3">Data Cabang</h4>
         <table id="table" class="table table-striped table-bordered">
             <thead>
                 <tr>
@@ -79,14 +79,14 @@
 
                                 <!-- RENDER SEARCH IN MAP -->
                                 <!-- <div class="row  col-sm-12" id="map_container" style=""> -->
-                                <div class="form-group col-sm-9" id="search">
-                                    <input type="text" name="addr" value="" id="addr" class="form-control" />
+                                <div class="form-group col-sm-9" >
+                                    <input type="text" name="addr" value="" id="addr" class="form-control" placeholder="Cari Lokasi Disini" />
                                 </div>
                                 <div class="form-group col-sm-3" id="search">
                                     <button type="button" class="btn btn-primary" style="width:100%" onclick="addr_search();">Cari</button>
                                 </div>
 
-                                <div class="form-group col-sm-6" id="search">
+                                <div class="form-group col-sm-6" >
                                     <div id="map" style="width:100%;height: 360px;padding:0;margin:0;"></div>
                                 </div>
                                 <div class="row col-md-6">
@@ -230,14 +230,14 @@
 
     function conf_state(state) {
         if (state == "read") {
-            $('.modal-title').text("Read" + label);
+            $('.modal-title').text(state + label);
             $("#form :input,select").prop("readonly", true); //change
             $('#conf,#foto').hide(); //change
             $("#form input").css("color", "black");
             $("#createupdate").show();
 
         } else if (state == "update" || state == "create") {
-            $('.modal-title').text("Update" + label);
+            $('.modal-title').text(state + label);
             $("#form :input,select").prop("readonly", false)
             $("#form input").css("color", "#464a4c");
             $('#conf,#foto').show();
@@ -276,9 +276,9 @@
     }
 
     function update(ID) {
-
+        $("#alamat,#nama,#lon,#lat").prop("required", true);
         read(ID, "update");
-        $('.modal-title').text("update jenis pariwisata");
+        // $('.modal-title').text("update jenis pariwisata");
         $('.form-group').removeClass('has-error'); // clear error class
         $(function() {
             $('#submit').click(function(event) {
@@ -321,15 +321,15 @@
 
 
     function create() {
-        $("#foto,#password").prop("required", true);
+        $("#alamat,#nama,#lon,#lat").prop("required", true);
         $("#image_preview").append('<div class="show-image"><img src="" class="rounded image_view p-1" alt="..." style="width:100%;" id="img_preview_src">');
         render_dropdown('#jenis_id', arr_jenis_all.data);
         render_dropdown('#kategori_id', arr_kategori_all.data);
 
         conf_state("create");
-        $("#form input").val('');
+        $("#form input,textarea").val('');
         $('#edit').modal('show');
-        $('.modal-title').text("tambah jenis pariwisata");
+        // $('.modal-title').text("tambah jenis pariwisata");
         $('.form-group').removeClass('has-error'); // clear error class
         $(function() {
             $('#submit').click(function(event) {
@@ -337,7 +337,7 @@
                 if ($('#form')[0].checkValidity() === false) {
                     event.preventDefault();
                     event.stopPropagation();
-                    swal("Update Gagal!", "form tidak valid", "error");
+                    swal("Insert Gagal!", "form tidak valid", "error");
                 } else {
                     var mydata = new FormData(document.getElementById("form"));
                     $.ajax({
@@ -352,10 +352,10 @@
                         success: function(r) {
                             if (r.error == false) {
                                 is_update = true;
-                                swal("Update Berhasil!", '', "success");
+                                swal("Insert Berhasil!", '', "success");
                                 table.ajax.reload();
                             } else {
-                                swal("Update Gagal!", r.msg, "error");
+                                swal("Insert Gagal!", r.msg, "error");
                             }
                         },
                         complete: function() {

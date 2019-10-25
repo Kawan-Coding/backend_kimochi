@@ -9,9 +9,9 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <!-- Favicon icon -->
-    <?php 
-        $loc = base_url().'/assets/';
-    ?>
+    <?php
+$loc = base_url() . '/assets/';
+?>
     <link rel="icon" type="image/png" sizes="16x16" href="<?=$loc?>images/favicon.png">
     <title>Material Pro Admin Template - The Most Complete & Trusted Bootstrap 4 Admin Template</title>
     <!-- Bootstrap Core CSS -->
@@ -63,14 +63,14 @@
                     <a class="navbar-brand" href="index.html">
                         <!-- Logo icon --><b>
                             <!--You can put here icon as well // <i class="wi wi-sunset"></i> //-->
-                            
+
                             <!-- Light Logo icon -->
                             <img src="<?=$loc?>images/logo-light-icon.png" alt="homepage" class="light-logo" />
                         </b>
                         <!--End Logo icon -->
                         <!-- Logo text --><span>
-                         
-                         <!-- Light Logo text -->    
+
+                         <!-- Light Logo text -->
                          <img src="<?=$loc?>images/logo-light-text.png" class="light-logo" alt="homepage" /></span> </a>
                 </div>
                 <!-- ============================================================== -->
@@ -117,7 +117,7 @@
                         </li>
                     </ul>
                     <div class="text-center m-t-30">
-                        
+
                     </div>
                 </nav>
                 <!-- End Sidebar navigation -->
@@ -161,8 +161,8 @@
                 <!-- ============================================================== -->
                 <div id="content">
                     <?php
-                    $this->load->view($content);
-                    ?>
+$this->load->view($content);
+?>
                 </div>
                 <!-- ============================================================== -->
             </div>
@@ -187,7 +187,7 @@
     <!-- ============================================================== -->
     <!-- All Jquery -->
     <!-- ============================================================== -->
-    
+
     <!-- Bootstrap tether Core JavaScript -->
     <!-- <script src="<?=$loc?>plugins/bootstrap/js/tether.min.js"></script> -->
     <!-- <script src="<?=$loc?>plugins/bootstrap/js/bootstrap.min.js"></script> -->
