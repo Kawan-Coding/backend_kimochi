@@ -63,22 +63,8 @@
                                 </div>
                                 <div class="col-md-12">
                                     <label for="nama" class="control-label">Nama</label>
-                                    <div class="form-group">
+                                    <div class="form-group" id="metode_pembayaran_id">
                                         <input type="text" name="nama" value="" class="form-control" id="nama" required />
-                                    </div>
-                                </div>
-                                <div id="createupdate" class="row col-md-12">
-                                    <div class="col-md-6">
-                                        <label for="create_at" class="control-label">Create At</label>
-                                        <div class="form-group">
-                                            <input type="text" name="create_at" value="" class="form-control" id="create_at" />
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label for="update_at" class="control-label">Update At</label>
-                                        <div class="form-group">
-                                            <input type="text" name="update_at" value="" class="form-control" id="update_at" />
-                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -135,17 +121,17 @@
                 }
             }, {
                 "render": function(data, type, JsonResultRow, meta) {
-                    return get_nama_cabang_byID(JsonResultRow.cabang_id);
+                    return get_nama_cabang_byID(JsonResultRow[0].cabang_id);
                 }
             }, {
                 "render": function(data, type, JsonResultRow, meta) {
-                    return get_nama_metode_pembayaran_byID(JsonResultRow.metode_pembayaran_id);
+                    return render_content_table(JsonResultRow);
                 }
             }, {
                 "render": function(data, type, JsonResultRow, meta) {
-                    return '<button class="btn btn-info edit_jenis"  style="width: 40px; margin-right : 5px;" onclick ="read(' + "'" + JsonResultRow.id + "'" + ')"><i class="fa fa-eye"></i></button>' +
-                        '<button class="btn btn-info edit_jenis" style="width: 40px;margin-right : 5px;" onclick ="update(' + "'" + JsonResultRow.id + "'" + ')"><i class="fa fa-pencil-square-o"></i></a>' +
-                        '<button class="btn btn-danger delete_jenis" style="width: 40px;" onclick ="del(' + "'" + JsonResultRow.id + "'" + ')"><i class="fa fa-trash-o"></i></a>';
+                    return '<button class="btn btn-info edit_jenis"  style="width: 40px; margin-right : 5px;" onclick ="read(' + "'" + JsonResultRow[0].cabang_id + "'" + ')"><i class="fa fa-eye"></i></button>' +
+                        '<button class="btn btn-info edit_jenis" style="width: 40px;margin-right : 5px;" onclick ="update(' + "'" + JsonResultRow[0].cabang_id + "'" + ')"><i class="fa fa-pencil-square-o"></i></a>' +
+                        '<button class="btn btn-danger delete_jenis" style="width: 40px;" onclick ="del(' + "'" + JsonResultRow[0].cabang_id + "'" + ')"><i class="fa fa-trash-o"></i></a>';
                 }
             }
 
@@ -196,6 +182,7 @@
                 // console.log(r);
                 if (r.error == false) {
                     render_dropdown('#cabang_id', arr_cabang_all.data);
+                    render_checkbox('#metode_pembayaran_id',arr_metode_pembayaran_all.data)
                     conf_state(state);
                     $("select[id='cabang_id'] option[value=" + r.data.cabang_id + "]").attr("selected", "selected");
                     $('#nama').val(r.data.nama);
@@ -349,6 +336,17 @@
 
     // var arr_cabang_all; sebelumnya gini error
 </script>
+<script>
+function render_content_table(array) {
+    str='';
+    array.forEach(element => {
+        console.log('element');
+        str+='<span class="label label-success" style="margin:3px">'+get_nama_metode_pembayaran_byID(element.metode_pembayaran_id)+'</span>';
+        console.log(element);
+    });
+    return str;
+}
+</script>
 
 <script>
     //change
@@ -428,6 +426,12 @@
         console.log(data);
         $.each(data, function(key, value) {
             $(id).append("<option value=" + value.id + ">" + value.nama + "</option>");
+        });
+    }
+    function render_checkbox(id, data) {
+        console.log(data);
+        $.each(data, function(key, value) {
+            $(id).append('<label><input type="checkbox" name="metode_pembayaran_id[]" value="'+value.id +'" >' + get_nama_metode_pembayaran_byID(value.id) + '</label>');
         });
     }
 </script>

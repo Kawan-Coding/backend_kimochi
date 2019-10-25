@@ -17,12 +17,12 @@ $route['api/cashregister/open']['POST'] = '/api/CashRegisterController/open';
 $route['api/cashregister/close']['POST'] = '/api/CashRegisterController/close';
 
 //API_GET
-$route['api/api_get/get_data_booking']['GET'] = '/api/api_get/get_data_booking_where_status_booking';
-$route['api/api_get/get_data_barang']['GET'] = '/api/api_get/get_data_barang';
-$route['api/api_get/get_detail_aksesoris']['POST'] = '/api/api_get/get_detail_aksesoris';
+$route['api/api_get/get_data_booking']['GET'] = '/api/Api_Get/get_data_booking_where_status_booking';
+$route['api/api_get/get_data_barang']['GET'] = '/api/Api_Get/get_data_barang';
+$route['api/api_get/get_detail_aksesoris']['POST'] = '/api/Api_Get/get_detail_aksesoris';
 
 //API_GET TRANSAKSI
-$route['api/api_get/get_transaksi']['GET'] = '/api/api_get/get_transaksi';
+$route['api/api_get/get_transaksi']['GET'] = '/api/Api_Get/get_transaksi';
 
 // API CRUD USER 
 $route['api/user/(:num)']['GET'] = '/api/UserController/get/$1';

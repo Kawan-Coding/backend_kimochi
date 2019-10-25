@@ -30,13 +30,27 @@ class Allowed_payment extends CI_Controller
     function is_valid()
     {
         if (isset($_POST) && count($_POST) <= 0) {
-            $this->msg('', '400', '','tidak ada masukan');
+            $this->msg('', '400', '', 'tidak ada masukan');
         }
     }
 
     public function get_all()
     {
-        $this->msg('data', '200', $this->Master->get_all($this->tabel));
+        $data = $this->Master->get_all($this->tabel);
+        $result = array();
+        foreach ($data as $element) {
+            $result[$element['cabang_id']][] = $element;
+        }
+
+        $this->msg('data', '200', $this->_group_by($result));
+    }
+    function _group_by($array)
+    {
+        $return = array();
+        foreach ($array as $val) {
+            $return[] = $val;
+        }
+        return $return;
     }
 
     public function get()
@@ -44,7 +58,6 @@ class Allowed_payment extends CI_Controller
         $this->is_valid();
         $cabang_id =  $this->input->post('cabang_id');
         $this->msg('data', '200', $this->Master->get_all($this->tabel, array('cabang_id' => $cabang_id)));
-
     }
 
 

@@ -8,7 +8,6 @@ class CashRegisterController     extends CI_Controller
     public function __construct()
     {
         parent::__construct();
-        // $this->load->library('../controllers/instructor');
         // Your own constructor code
         // $this->load->model('user');
         // $this->date = new DateTime();

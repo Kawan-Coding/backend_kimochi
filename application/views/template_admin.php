@@ -111,6 +111,8 @@
                         </li>
                         <li> <a class="waves-effect waves-dark" href="<?php echo base_url('admin/barang') ?>" aria-expanded="false"><i class="mdi mdi-book-open-variant"></i><span class="hide-menu">barang</span></a>
                         </li>
+                        <li> <a class="waves-effect waves-dark" href="<?php echo base_url('admin/allowed_payment') ?>" aria-expanded="false"><i class="mdi mdi-book-open-variant"></i><span class="hide-menu">allowed payment</span></a>
+                        </li>
                         <li> <a class="waves-effect waves-dark" href="pages-error-404.html" aria-expanded="false"><i class="mdi mdi-help-circle"></i><span class="hide-menu">Error 404</span></a>
                         </li>
                     </ul>
