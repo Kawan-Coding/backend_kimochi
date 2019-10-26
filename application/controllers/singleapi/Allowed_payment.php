@@ -55,25 +55,40 @@ class Allowed_payment extends CI_Controller
 
     public function get()
     {
-        $this->is_valid();
-        $cabang_id =  $this->input->post('cabang_id');
-        $this->msg('data', '200', $this->Master->get_all($this->tabel, array('cabang_id' => $cabang_id)));
+        $data = $this->Master->get_all($this->tabel, array('cabang_id' => $this->input->post('cabang_id')));
+        // var_dump($data);
+        $result = array();
+        foreach ($data as $element) {
+            $result[$element['cabang_id']][] = $element;
+        }
+
+        $this->msg('data', '200', $this->_group_by($result));
     }
 
 
     function add()
     {
-        $this->is_valid();
-        $params = array(
-            'cabang_id' => $this->input->post('cabang_id'),
-            'metode_pembayaran_id' => $this->input->post('metode_pembayaran_id')
-        );
-        $res = $this->Master->add($this->tabel, $params);
-        if ($res['status']) {
-            $this->msg('data', '200', $res['data']);
+
+        $arr_metode_pembayaran_id = $this->input->post('metode_pembayaran_id');
+        // var_dump($arr_metode_pembayaran_id);
+        // var_dump($this->input->post('cabang_id'));
+        if (!empty($arr_metode_pembayaran_id)) {
+            foreach ($arr_metode_pembayaran_id as $key => $value) {
+                $data = array(
+                    'cabang_id' => $this->input->post('cabang_id'),
+                    'metode_pembayaran_id' => $value
+                );
+                $res = $this->Master->add($this->tabel,  $data);
+                if (!$res['status']) {
+                    $this->msg('data', '400', '', $res['data']['message']);
+                }
+            }
+            if ($res['status']) {
+                $this->msg('data', '200', $res['data']);
+            }
         } else {
-            $this->msg('data', '400', '', $res['data']['message']);
-        };
+            $this->msg('data', '400', '', 'mohon memasukkan metode pembayaran');
+        }
     }
 
     /*
@@ -82,34 +97,48 @@ class Allowed_payment extends CI_Controller
     function edit()
     {
         $this->is_valid();
+        $arr_metode_pembayaran_id = $this->input->post('metode_pembayaran_id');
         // $this->msg('data', '200', $this->input->post('nama'));
         // check if the produk exists before trying to edit it
         $id =  $this->input->post('id');
-        $data = array(
-            'cabang_id' => $this->input->post('cabang_id'),
-            'metode_pembayaran_id' => $this->input->post('metode_pembayaran_id')
-        );
-        $res = $this->Master->update($this->tabel,  array('id' => $id), $data);
-        if ($res['status']) {
-            $this->msg('data', '200', $res['data']);
+        $res = '';
+        if (!empty($arr_metode_pembayaran_id)) {
+            $this->remove(true);
+            foreach ($arr_metode_pembayaran_id as $key => $value) {
+                $data = array(
+                    'cabang_id' => $this->input->post('cabang_id'),
+                    'metode_pembayaran_id' => $value
+                );
+                // var_dump($data);
+                $res = $this->Master->add($this->tabel,  $data);
+                if (!$res['status']) {
+                    $this->msg('data', '400', '', $res['data']['message']);
+                }
+            }
+            if ($res['status']) {
+                $this->msg('data', '200', $res['data']);
+            }
         } else {
-            $this->msg('data', '400', '', $res['data']['message']);
-        };
+            $this->msg('data', '400', '', 'mohon memasukkan metode pembayaran');
+        }
     }
 
     /*
      * Deleting produk
      */
-    function remove()
+    function remove($edit = false)
     {
         $this->is_valid();
-        $id =  $this->input->post('id');
-        $res = $this->Master->delete($this->tabel, array('id' => $id));
-
-        if ($res['status']) {
-            $this->msg('data', '200', $res['data']);
+        $cabang_id =  $this->input->post('cabang_id');
+        $res = $this->Master->delete($this->tabel, array('cabang_id' => $cabang_id), 'cabang_id');
+        if ($edit) {
+            return $res['status'];
         } else {
-            $this->msg('data', '400', '', $res['data']['message']);
-        };
+            if ($res['status']) {
+                $this->msg('data', '200', $res['data']);
+            } else {
+                $this->msg('data', '400', '', $cabang_id . "delete " . $res['data']['message']);
+            };
+        }
     }
 }

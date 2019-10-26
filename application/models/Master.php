@@ -65,7 +65,7 @@ class Master extends CI_Model
 
         $this->db->insert($tabel, $data);
         $res = array();
-        if ($this->db->affected_rows() != 1) {
+        if (!($this->db->affected_rows() >0)) {
             $res['data'] = $this->db->error();
             $res['status'] = false;
         } else {
@@ -103,13 +103,13 @@ class Master extends CI_Model
     /*
      * public function untuk delete allowed_payment
      */
-    public function delete($tabel, $where)
+    public function delete($tabel, $where,$c='id')
     {
         $count = $this->db->get_where($tabel, $where)->row_array();
         $res = array();
-        if (isset($count['id'])) {
+        if (isset($count[$c])) {
             $this->db->delete($tabel, $where);
-            if ($this->db->affected_rows() != 1) {
+            if (!($this->db->affected_rows() >0) ) {
                 $res['data'] = $this->db->error();
                 $res['status'] = false;
             } else {

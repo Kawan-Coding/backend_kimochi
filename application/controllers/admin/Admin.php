@@ -12,70 +12,70 @@ class Admin extends CI_Controller
     public function metode_pembayaran()
     {
         $data = array(
-            'content' => 'content/Konten1',
+            'content' => 'Content/Konten1',
         );
         $this->load->view('template_admin', $data);
     }
     public function produk()
     {
         $data = array(
-            'content' => 'content/Konten2',
+            'content' => 'Content/Konten2',
         );
         $this->load->view('template_admin', $data);
     }
     public function pegawai()
     {
         $data = array(
-            'content' => 'content/Konten3',
+            'content' => 'Content/Konten3',
         );
         $this->load->view('template_admin', $data);
     }
     public function cabang()
     {
         $data = array(
-            'content' => 'content/Konten4',
+            'content' => 'Content/Konten4',
         );
         $this->load->view('template_admin', $data);
     }
     public function responsible()
     {
         $data = array(
-            'content' => 'content/Konten5',
+            'content' => 'Content/Konten5',
         );
         $this->load->view('template_admin', $data);
     }
     public function jenis()
     {
         $data = array(
-            'content' => 'content/Konten6',
+            'content' => 'Content/Konten6',
         );
         $this->load->view('template_admin', $data);
     }
     public function kategori()
     {
         $data = array(
-            'content' => 'content/Konten7',
+            'content' => 'Content/Konten7',
         );
         $this->load->view('template_admin', $data);
     }
     public function status_tranksaksi()
     {
         $data = array(
-            'content' => 'content/Konten8',
+            'content' => 'Content/Konten8',
         );
         $this->load->view('template_admin', $data);
     }
     public function barang()
     {
         $data = array(
-            'content' => 'content/Konten9',
+            'content' => 'Content/Konten9',
         );
         $this->load->view('template_admin', $data);
     }
     public function allowed_payment()
     {
         $data = array(
-            'content' => 'content/Konten10',
+            'content' => 'Content/Konten10',
         );
         $this->load->view('template_admin', $data);
     }

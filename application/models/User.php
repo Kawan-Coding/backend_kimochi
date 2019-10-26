@@ -67,7 +67,7 @@ class User extends CI_Model
             } else {
                 return  false;
             }
-        }else{
+        } else {
             return false;
         }
 

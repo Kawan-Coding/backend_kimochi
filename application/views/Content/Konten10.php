@@ -1,3 +1,4 @@
+<SCript>console.log("FIRST")</SCript>
 <style>
     ::-webkit-scrollbar {
         width: 0px;
@@ -16,7 +17,7 @@
     }
 </style>
 <section id="produk">
-    <h4>status transaksi</h4>
+    <h4>allowed payment</h4>
     <hr>
     <div class="col-12 text-right">
         <button class="btn btn-info " data-toggle="modal" data-target="#add" style="position: fixed; bottom: 36px;   right: 20px; padding: 18.5px;
@@ -25,7 +26,7 @@
         </button>
     </div>
     <div class="col-12 card shadow mt-5 mb-5">
-        <h4 class="my-3">Data status transaksi</h4>
+        <h4 class="my-3">Data allowed payment</h4>
         <table id="table" class="table table-striped table-bordered">
             <thead>
                 <tr>
@@ -54,18 +55,18 @@
                     <form method="POST" id="form" class="form-horizontal need-validate" novalidate>
                         <div class="box-body">
                             <div class="row clearfix">
-                                <div class="col-md-6">
-                                    <label for="cabang_id" class="control-label">Jenis Id</label>
+                                <div class="col-md-12">
+                                    <label for="cabang_id" class="control-label">Cabang</label>
                                     <div class="form-group">
                                         <select type="text" name="cabang_id" value="" class="form-control" id="cabang_id" required />
                                         </select>
                                     </div>
                                 </div>
                                 <div class="col-md-12">
-                                    <label for="nama" class="control-label">Nama</label>
-                                    <div class="form-group" id="metode_pembayaran_id">
-                                        <input type="text" name="nama" value="" class="form-control" id="nama" required />
+                                    <label for="nama" class="control-label">Metode Pembayaran</label>
+                                    <div id="metode_pembayaran_container" class="row">
                                     </div>
+
                                 </div>
                             </div>
                         </div>
@@ -90,9 +91,9 @@
 <script>
     let m_view = 'view';
     let bash_api = "<?php echo base_url('sapi/allowed_payment/') ?>";
-    console.log(bash_api);
+    var rendered_data_id_cabang = [];
     var number, is_update;
-    let label = " allowed_payment ";
+    let label = " allowed payment ";
     $(document).ready(function() {
         table.ajax.reload();
         number = 0;
@@ -109,7 +110,7 @@
         }
         return number;
     }
-    
+
     var table = $('#table').DataTable({
         "ajax": {
             url: bash_api + 'get_all',
@@ -121,6 +122,7 @@
                 }
             }, {
                 "render": function(data, type, JsonResultRow, meta) {
+                    rendered_data_id_cabang.push(JsonResultRow[0].cabang_id);
                     return get_nama_cabang_byID(JsonResultRow[0].cabang_id);
                 }
             }, {
@@ -149,7 +151,7 @@
         $("#form input").val('');
         $('#modal_crop').unbind();
         $('#submit').off('click');
-        $('#image_preview,#cabang_id,#kategori_id').empty();
+        $('#image_preview,#cabang_id,#metode_pembayaran_container').empty();
         $("#foto").prop("required", false);
         $("#form").removeClass("was-validated").addClass("needs-validation");
 
@@ -157,37 +159,38 @@
 
     function conf_state(state) {
         if (state == "read") {
-            $('.modal-title').text("Read" + label);
+            $('.modal-title').text(state + label);
             $("#form :input,select").prop("readonly", true); //change
             $('#conf').hide(); //change
             $("#form input").css("color", "black");
             $("#createupdate").show();
+            
 
         } else if (state == "update" || state == "create") {
-            $('.modal-title').text("Update" + label);
+            $('.modal-title').text(state + label);
             $("#form :input,select").prop("readonly", false)
             $("#form input").css("color", "#464a4c");
             $('#conf').show();
             $("#createupdate").hide();
+            
         }
     }
 
     function read(ID, state = "read") {
-        console.log("edit" + edit);
         $.ajax({
             url: bash_api + 'read',
             type: 'POST',
-            data: "id=" + ID,
+            data: "cabang_id=" + ID,
             success: function(r) {
-                // console.log(r);
                 if (r.error == false) {
                     render_dropdown('#cabang_id', arr_cabang_all.data);
-                    render_checkbox('#metode_pembayaran_id',arr_metode_pembayaran_all.data)
+                    render_checkbox('#metode_pembayaran_container', arr_metode_pembayaran_all.data);
+                    render_placehorder_checkbox(r.data[0]);
                     conf_state(state);
-                    $("select[id='cabang_id'] option[value=" + r.data.cabang_id + "]").attr("selected", "selected");
-                    $('#nama').val(r.data.nama);
-                    $('#create_at').val(r.data.create_at);
-                    $('#update_at').val(r.data.update_at);
+                    $("select[id='cabang_id'] option[value=" + r.data[0][0].cabang_id + "]").attr("selected", "selected");
+                    // console.log("TCL: read -> r.data.cabang_id", r.data[0][0].cabang_id);
+
+                    $("#form select").prop("disabled", 'disabled');
                     $('#edit').modal('show');
                 } else {
                     swal('Gagal !', r.msg, 'error');
@@ -199,7 +202,8 @@
     function update(ID) {
 
         read(ID, "update");
-        $('.modal-title').text("update jenis pariwisata");
+        $("#form select").prop("disabled", 'disabled');
+        // $('.modal-title').text("update jenis pariwisata");
         $('.form-group').removeClass('has-error'); // clear error class
         $(function() {
             $('#submit').click(function(event) {
@@ -210,7 +214,8 @@
                     swal("Update Gagal!", "form tidak valid", "error");
                 } else {
                     var mydata = new FormData(document.getElementById("form"));
-                    mydata.append('id', ID);
+                    // mydata.append('del_cabang_id', ID);
+                    mydata.append('cabang_id',ID);
                     $.ajax({
                         url: bash_api + 'update',
                         type: "POST",
@@ -242,23 +247,21 @@
 
 
     function create() {
-        $("#foto").prop("required", true);
-        $("#image_preview").append('<div class="show-image"><img src="" class="rounded image_view p-1" alt="..." style="width:100%;" id="img_preview_src">');
-        render_dropdown('#cabang_id', arr_cabang_all.data);
-        render_dropdown('#kategori_id', arr_metode_pembayaran_all.data);
-
         conf_state("create");
         $("#form input").val('');
         $('#edit').modal('show');
-        $('.modal-title').text("tambah jenis pariwisata");
+        $("#form select").prop("disabled", false);
+        // $('.modal-title').text("tambah jenis pariwisata");
         $('.form-group').removeClass('has-error'); // clear error class
+        render_dropdown('#cabang_id', arr_cabang_all.data, 'insert');
+        render_checkbox('#metode_pembayaran_container', arr_metode_pembayaran_all.data);
         $(function() {
             $('#submit').click(function(event) {
                 event.preventDefault();
                 if ($('#form')[0].checkValidity() === false) {
                     event.preventDefault();
                     event.stopPropagation();
-                    swal("Update Gagal!", "form tidak valid", "error");
+                    swal("Insert Gagal!", "form tidak valid", "error");
                 } else {
                     var mydata = new FormData(document.getElementById("form"));
                     $.ajax({
@@ -273,14 +276,15 @@
                         success: function(r) {
                             if (r.error == false) {
                                 is_update = true;
-                                swal("Update Berhasil!", '', "success");
+                                swal("Insert Berhasil!", '', "success");
                                 table.ajax.reload();
+                                $('#edit').modal('toggle');
                             } else {
-                                swal("Update Gagal!", r.msg, "error");
+                                swal("Insert Gagal!", r.msg, "error");
                             }
                         },
                         complete: function() {
-                            $('#edit').modal('toggle');
+                            
                         }
                     });
                 }
@@ -303,7 +307,7 @@
                     url: bash_api + 'delete',
                     type: 'POST',
                     dataType: 'json',
-                    data: "id=" + ID,
+                    data: "cabang_id=" + ID,
                     success: function(r) {
                         if (r.error === true) {
                             swal('Hapus Gagal', r.msg, 'error');
@@ -319,7 +323,6 @@
         });
     }
     $("#foto").change(function() {
-        console.log('cahne');
         readURL(this);
     });
     //change
@@ -337,15 +340,13 @@
     // var arr_cabang_all; sebelumnya gini error
 </script>
 <script>
-function render_content_table(array) {
-    str='';
-    array.forEach(element => {
-        console.log('element');
-        str+='<span class="label label-success" style="margin:3px">'+get_nama_metode_pembayaran_byID(element.metode_pembayaran_id)+'</span>';
-        console.log(element);
-    });
-    return str;
-}
+    function render_content_table(array) {
+        str = '';
+        array.forEach(element => {
+            str += '<span class="label label-success" style="margin:3px">' + get_nama_metode_pembayaran_byID(element.metode_pembayaran_id) + '</span>';
+        });
+        return str;
+    }
 </script>
 
 <script>
@@ -372,11 +373,9 @@ function render_content_table(array) {
         if (arr_cabang_all == "") {
             arr_cabang_all = get_jenis_all();
         }
-        console.log(arr_cabang_all.data)
         var result = arr_cabang_all.data.filter(function(element) {
             return element.id == id;
         })
-        // console.log(result[0].nama)  POIN kesalahana
         if (result == "") {
             return '<p class="text-danger">DELETED</p>';
         } else {
@@ -408,11 +407,9 @@ function render_content_table(array) {
         if (arr_metode_pembayaran_all == "") {
             arr_metode_pembayaran_all = get_kategori_all();
         }
-        console.log(arr_metode_pembayaran_all.data)
         var result = arr_metode_pembayaran_all.data.filter(function(element) {
             return element.id == id;
         })
-        // console.log(result[0].nama)  POIN kesalahana
         if (result == "") {
             return '<p class="text-danger">DELETED</p>';
         } else {
@@ -422,16 +419,40 @@ function render_content_table(array) {
 </script>
 
 <script>
-    function render_dropdown(id, data) {
-        console.log(data);
+    function render_dropdown(id, data,state='') {
         $.each(data, function(key, value) {
-            $(id).append("<option value=" + value.id + ">" + value.nama + "</option>");
+            if (state === 'insert') {
+                if (!rendered_data_id_cabang.includes(value.id)) {
+                    $(id).append("<option value=" + value.id + ">" + value.nama + "</option>");
+                }
+            }
+            else {
+                $(id).append("<option value=" + value.id + ">" + value.nama + "</option>");
+            }
         });
     }
+
     function render_checkbox(id, data) {
-        console.log(data);
+
         $.each(data, function(key, value) {
-            $(id).append('<label><input type="checkbox" name="metode_pembayaran_id[]" value="'+value.id +'" >' + get_nama_metode_pembayaran_byID(value.id) + '</label>');
+            // console.log("TCL: functionrender_checkbox -> value", value)
+            let a = '<div class="form-check col-md-6">';
+            let b = '<input class="form-check-input" name="metode_pembayaran_id[]" type="checkbox" value="' + value.id;
+            let c = '" id="defaultCheck' + value.id + '">'
+            let d = '<label class="form-check-label" for="defaultCheck' + value.id + '">'
+            let e = '</label></div>'
+
+
+
+            $(id).append(a + b + c + d + value.nama + e);
+        });
+    }
+
+    function render_placehorder_checkbox(data) {
+        data.forEach(element => {
+            // console.log("TCL: functionrender_placehorder_checkbox -> element", element);
+            $('#defaultCheck' + element.metode_pembayaran_id).prop('checked', true);
+            $('textarea').attr('placeholder', $(this).is(':checked') ? 'name' : 'age');
         });
     }
 </script>

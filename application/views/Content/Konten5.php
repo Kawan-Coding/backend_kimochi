@@ -220,6 +220,7 @@
             $("#form :input,select").prop("readonly", true); //change
             $("#form input").css("color", "black");
             $("#createupdate").show();
+            $("#form select").prop("disabled", 'disabled');
 
         } else if (state == "update" || state == "create") {
             $('#conf').show();
@@ -227,6 +228,7 @@
             $("#form :input,select").prop("readonly", false)
             $("#form input").css("color", "#464a4c");
             $("#createupdate").hide();
+            $("#form select").prop("disabled", false);
         }
     }
 
@@ -245,12 +247,12 @@
                     conf_state(state);
                     // console.log(arr_pegawai_all.data['id'].includes(r.data.pegawai_id));
                     // if (get_nama_pegawai_byID(r.data.pegawai_id) != '<p class="text-danger">DELETED</p>') {
-                        $("select[id='pegawai_id'] option[value=" + r.data.pegawai_id + "]").attr("selected", "selected");
+                    $("select[id='pegawai_id'] option[value=" + r.data.pegawai_id + "]").attr("selected", "selected");
                     // } else {
                     //     $("select[id='pegawai_id']").append("<option value=" + r.data.pegawai_id + " selected >" + get_nama_pegawai_byID(r.data.pegawai_id) + "</option>");
                     // }
                     // if (get_nama_pegawai_byID(r.data.cabang_id) != '<p class="text-danger">DELETED</p>') {
-                        $("select[id='cabang_id'] option[value=" + r.data.cabang_id + "]").attr("selected", "selected");
+                    $("select[id='cabang_id'] option[value=" + r.data.cabang_id + "]").attr("selected", "selected");
                     // } else {
                     //     $("select[id='cabang_id']").append("<option value=" + r.data.cabang_id + " selected >" + get_nama_cabang_byID(r.data.cabang_id) + "</option>");
                     // }
@@ -275,7 +277,7 @@
     }
 
     function update(ID) {
-       
+
         read(ID, "update");
         // $('.modal-title').text("update jenis pariwisata");
         $('.form-group').removeClass('has-error'); // clear error class
