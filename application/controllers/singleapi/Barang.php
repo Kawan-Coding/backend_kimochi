@@ -1,6 +1,5 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
-
 class Barang extends CI_Controller
 {
     protected $date;
@@ -26,18 +25,16 @@ class Barang extends CI_Controller
             ->_display();
         exit;
     }
-
     function is_valid()
     {
         if (isset($_POST) && count($_POST) <= 0) {
-            $this->msg('', '400', '','tidak ada masukan');        }
+            $this->msg('', '400', '', 'tidak ada masukan');
+        }
     }
-
     public function get_all()
     {
-        $this->msg('data', '200', $this->Master->get_all($this->tabel,array("status !="=>"delete")));
+        $this->msg('data', '200', $this->Master->get_all($this->tabel, array("status !=" => "delete")));
     }
-
     public function get()
     {
         $this->is_valid();
@@ -46,12 +43,10 @@ class Barang extends CI_Controller
         if ($res['status']) {
             $this->msg('data', '200', $res['data']);
         } else {
-            $this->msg('data', '400', '',$res['data']['message']);
+            $this->msg('data', '400', '', $res['data']['message']);
             // $this->msg('data', '400',$res);
         };
     }
-
-
     public function upload_image()
     {
         $config['upload_path'] = './uploads/';
@@ -72,7 +67,7 @@ class Barang extends CI_Controller
     function add()
     {
         $this->is_valid();
-        $file_foto = $this->upload_image();
+
         $params = array(
             'cabang_id' => $this->input->post('cabang_id'),
             'produk_id' => $this->input->post('produk_id'),
@@ -81,20 +76,31 @@ class Barang extends CI_Controller
             'detail' => $this->input->post('detail'),
             'create_at' => date('Y-m-d H:i:s'),
             'update_at' => date('Y-m-d H:i:s'),
-            'foto' => $file_foto['name'],
         );
-        if ($file_foto['status']) {
+        if (!empty($_FILES['foto']['name'])) {
+            $file_foto = $this->upload_image();
+            $params['foto'] = $file_foto['name'];
+            if ($file_foto['status']) {
+                $res = $this->Master->add($this->tabel, $params);
+                if ($res['status']) {
+                    $this->msg('data', '200', $res['data']);
+                } else {
+                    $this->msg('data', '400', '', $res['data']['message']);
+                };
+            } else {
+                $this->msg('data', '400', '', $file_foto['error_msg']['img']);
+            }
+        } else {
+            $x = $this->Master->get_select('produk', 'foto', array('id' => $params['produk_id']));
+            $params['foto'] = $x['data']['foto'];
             $res = $this->Master->add($this->tabel, $params);
             if ($res['status']) {
-                $this->msg('data', '200', $res['data']);
+                $this->msg('data', '200',  $res['data']);
             } else {
-                $this->msg('data', '400', '',$res['data']['message']);
+                $this->msg('data', '400', '', $res['data']['message']);
             };
-        } else {
-            $this->msg('data', '400','', $file_foto['error_msg']['img']);
         }
     }
-
     /*
      * Editing a produk
      */
@@ -120,22 +126,23 @@ class Barang extends CI_Controller
                 if ($res['status']) {
                     $this->msg('data', '200', $res['data']);
                 } else {
-                    $this->msg('data', '400','', $res['data']['message']);
+                    $this->msg('data', '400', '', $res['data']['message']);
                 };
             } else {
-                $this->msg('data', '400','', $file_foto['error_msg']['img']);
+                $this->msg('data', '400', '', $file_foto['error_msg']['img']);
             }
         } else {
+            $x = $this->Master->get_select('produk', 'foto', array('id' => $data['produk_id']));
+            $data['foto'] = $x['data']['foto'];
             // unset($params['foto']);
             $res = $this->Master->update($this->tabel,  array('id' => $id), $data);
             if ($res['status']) {
                 $this->msg('data', '200', $res['data']);
             } else {
-                $this->msg('data', '400','', $res['data']['message']);
+                $this->msg('data', '400', '', $res['data']['message']);
             };
         }
     }
-
     /*
      * Deleting produk
      */
@@ -143,7 +150,7 @@ class Barang extends CI_Controller
     {
         $this->is_valid();
         $id =  $this->input->post('id');
-        $res = $this->Master->update($this->tabel,  array('id' => $id), array('status'=>'delete'));
+        $res = $this->Master->update($this->tabel,  array('id' => $id), array('status' => 'delete'));
         if ($res['status']) {
             $this->msg('data', '200', $res['data']);
         } else {

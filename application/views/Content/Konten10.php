@@ -315,7 +315,8 @@
                         } else {
                             is_update = true;
                             swal('Hapus berhasil', '', 'success');
-                            $('#table').dataTable().api().ajax.reload();
+                            location.reload();
+                            // $('#table').dataTable().api().ajax.reload();
                         }
                     }
                 });

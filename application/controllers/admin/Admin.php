@@ -79,4 +79,18 @@ class Admin extends CI_Controller
         );
         $this->load->view('template_admin', $data);
     }
+    public function validasi()
+    {
+        $data = array(
+            'content' => 'Content/Konten11',
+        );
+        $this->load->view('template_admin', $data);
+    }
+    public function diskon()
+    {
+        $data = array(
+            'content' => 'Content/Konten12',
+        );
+        $this->load->view('template_admin', $data);
+    }
 }

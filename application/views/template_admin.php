@@ -17,6 +17,7 @@ $loc = base_url() . '/assets/';
     <!-- Bootstrap Core CSS -->
     <!-- <link href="<?=$loc?>plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet"> -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css"  crossorigin="anonymous"> -->
     <!-- chartist CSS -->
     <link href="<?=$loc?>plugins/chartist-js/dist/chartist.min.css" rel="stylesheet">
     <link href="<?=$loc?>plugins/chartist-js/dist/chartist-init.css" rel="stylesheet">
@@ -27,6 +28,7 @@ $loc = base_url() . '/assets/';
     <link href="<?=$loc?>css/style.css" rel="stylesheet">
     <!-- You can change the theme colors from here -->
     <link href="<?=$loc?>css/colors/blue.css" id="theme" rel="stylesheet">
+
     <script
   src="https://code.jquery.com/jquery-3.4.1.min.js"
   integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
