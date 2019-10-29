@@ -46,16 +46,20 @@ class Master extends CI_Model
     /*
      * Get all allowed_payment
      */
-    public function get_all($tabel, $where = '',$order='')
+    public function get_all($tabel, $where = '',$order='',$select='')
     {
         if ($where != '') {
             $this->db->where($where);
+        }
+        if ($select !='') {
+            $this->db->select($select);
         }
         if ($order !='') {
             $this->db->order_by($order[0], $order[1]);
         }
         return $this->db->get($tabel)->result_array();
     }
+    
 
     /*
      * public function untuk add new allowed_payment

@@ -26,6 +26,14 @@ $route['api/api_get/get_detail_aksesoris']['POST'] = '/api/Api_Get/get_detail_ak
 //API_GET TRANSAKSI
 $route['api/api_get/get_transaksi']['GET'] = '/api/Api_Get/get_transaksi';
 
+//API  PAYMENT
+$route['api/payment/get_all']['GET'] = '/api/Payment/get_all';
+$route['api/payment/read']['POST'] = '/api/Payment/get';
+$route['api/payment/create']['POST'] = '/api/Payment/add';
+$route['api/payment/update']['POST'] = '/api/Payment/edit';
+$route['api/payment/delete']['POST'] = '/api/Payment/remove';
+
+
 // API CRUD USER 
 $route['api/user/(:num)']['GET'] = '/api/UserController/get/$1';
 $route['api/user/register']['POST'] = '/api/UserController/register';

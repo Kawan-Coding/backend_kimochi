@@ -78,23 +78,25 @@ class Api_Taking_Order extends CI_Controller
             'barang_id' => $this->input->post('barang_id'),
             'customer_id' => $this->input->post('customer_id'),
             'qyt' => $this->input->post('qyt'),
-            'total' => $this->input->post('total'),
-            'status' => 'booking',
+
+            'status' => $this->input->post('status'),
             'create_at' => date('Y-m-d H:i:s'),
             'update_at' => date('Y-m-d H:i:s'),
         );
         // if ($file_foto['status']) {
+        // tr_id = kodecabang(3)_kodecustomer(4)_timestamp YYYYMMDD
+        $params['tr_id'] = sprintf("%03d", $params['cabang_id']) . sprintf("%04d", $params['customer_id']) . date('Ymd');
         $params['data_barang'] = json_encode($this->get_data_barang());
         $params['data_customer'] = json_encode($this->get_data_customer());
+        $params['total'] = (float) $params['qyt'] * (float) json_decode($params['data_barang'])->barang->harga;
+        // var_dump($param['total']);
         $res = $this->Master->add($this->tabel, $params);
         if ($res['status']) {
+            $res['data']['tr_id'] = $params['tr_id'];
             $this->msg('data', '200', $res['data']);
         } else {
             $this->msg('data', '400', '', $res['data']['message']);
         };
-        // } else {
-        //     $this->msg('data', '400','', $file_foto['error_msg']['img']);
-        // }
     }
 
     function set_taking_order_order()
@@ -120,7 +122,7 @@ class Api_Taking_Order extends CI_Controller
             $data_barang['barang'] = $res['data'];
             if ($this->input->post('jenis_transaksi') == 'cuci_helm') {
                 $file_foto = $this->upload_image();
-                $data_barang['kondisi'] = $this->input->post('kondisi');
+                $data_barang['kondisi'] = json_decode($this->input->post('kondisi'));
                 $data_barang['foto'] = $file_foto['name'];
                 if ($file_foto['status']) {
                     return $data_barang;

@@ -35,6 +35,7 @@ class Api_Get extends CI_Controller
     public function get_data_booking_where_status_booking()
     {
         $res = $this->Master->get('taking_order', array('status' => 'booking'));
+        $res['data']['data_customer']=json_decode($res['data']['data_customer']);
         if ($res['status']) {
             $this->msg('data', '200', $res['data']);
         } else {
