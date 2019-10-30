@@ -9,7 +9,7 @@ class Api_Get extends CI_Controller
     {
         parent::__construct();
         // Your own constructor code
-        // $this->load->model('user');
+        $this->load->model('Api_get_model');
         $this->date = new DateTime();
         // $this->load->library('Msg');
         //==== ALLOWING CORS
@@ -46,8 +46,17 @@ class Api_Get extends CI_Controller
 
     public function get_data_barang()
     {
-        $res = $this->Master->get_all('barang');
-        $this->msg('data', '200', $this->Master->get_all('barang'));
+        $res = $this->Api_get_model->get_data_barang();
+        // var_dump($res);
+        foreach ($res as $key => $value) {
+            if ($value['kategori_id']=='1') {
+                $data['cuci_helm'][]=$value;
+            }else if($value['kategori_id']=='2'){
+                $data['aksesoris'][]=$value;
+            }
+        }
+
+        $this->msg('data', '200', $data);
     }
     public function get_detail_barang()
     {

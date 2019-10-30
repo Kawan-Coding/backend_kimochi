@@ -57,11 +57,12 @@ class UserController extends CI_Controller
                 'data' => ''
             ]);
         } elseif ($this->user->is_valid()) {
+            $cash_flow_status = $this->user->get_status_last_cashflow();
             return $this->response([
                 'error' => false,
                 'message' => 'login berhasil',
                 'data' => [
-                    'cash_flow_status'=>$this->user->get_status_last_cashflow(),
+                    'cash_flow_status'=>$cash_flow_status?$cash_flow_status:"validated",
                     'login'=>'login',
                     'responsible'=>[
                         'pegawai'=>$this->user->get('username',$_POST['username']),

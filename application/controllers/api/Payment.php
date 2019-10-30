@@ -9,7 +9,7 @@ class Payment extends CI_Controller
     {
         parent::__construct();
         // Your own constructor code
-        // $this->load->model('user');
+        $this->load->model('Payment_model');
         $this->date = new DateTime();
         // $this->load->library('Msg');
         //==== ALLOWING CORS
@@ -38,8 +38,9 @@ class Payment extends CI_Controller
     {
         $data = $this->Master->get_all($this->tabel);
         foreach ($data as $key => $value) {
-            $data[$key]['data_customer']=json_decode(  $data[$key]['data_customer']);
-            $data[$key]['data_order']=json_decode(  $data[$key]['data_order']);
+            $data_order = json_decode(  $data[$key]['data_order']);
+            $data[$key]['data_customer']=json_decode(  $data[$key]['data_customer'])->customer;
+            // $data[$key]['data_order']=;
             $data[$key]['data_payment']=json_decode(  $data[$key]['data_payment']);
         }
         $this->msg('data', '200', $data);
@@ -56,6 +57,36 @@ class Payment extends CI_Controller
             $this->msg('data', '400', '', $res['data']['message']);
             // $this->msg('data', '400',$res);
         };
+    }
+
+    public function get_setoran_hari_ini()
+    {
+        $this->is_valid();
+        $id =  $this->input->post('responsible_id');
+        $total_payment=$this->Payment_model->get_omset('payment','SUM(total) as total',array('create_at' => date('Y-m-d')),array('responsible_id'=>$id));
+        $total_cash_flow=$this->Payment_model->get_omset('cash_flow','SUM(open_cash) as total',array('open' => date('Y-m-d')),array('responsible_id'=>$id));
+        if ($total_payment&&$total_cash_flow) {
+            $res['omset']=(float)$total_payment->total + (float)$total_cash_flow->total;
+            $res['cash_register']=(float)$total_cash_flow->total;
+        }else{
+            $res['omset']="ERROR";
+        }
+        var_dump($res);
+        $res['tunai'];
+        $res['non_tunai'];
+        $res['setoran_hari_ini'];
+        $res = $this->Payment_model->get($this->tabel, array('tr_id' => $id));
+        if ($res['status']) {
+            $this->msg('data', '200', $res['data']);
+        } else {
+            $this->msg('data', '400', '', $res['data']['message']);
+            // $this->msg('data', '400',$res);
+        };
+    }
+
+    function get_tunai(Type $var = null)
+    {
+        $res=$this->Master->get_select($this->tabel, $select, $where);
     }
 
 

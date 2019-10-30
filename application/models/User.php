@@ -124,13 +124,14 @@ class User extends CI_Model
     {
         $this->db->select('cabang.id,cabang.nama,	cabang.alamat,cabang.latlong');
         $this->db->select('responsible.id as id_responsible,responsible.role');
-        $this->db->order_by('close', 'DESC');
-        $this->db->from('cash_flow');
-        $this->db->join('responsible', 'responsible.id = cash_flow.responsible_id');
+        // $this->db->order_by('close', 'DESC');
+        $this->db->from('responsible');
+        // $this->db->join('responsible', 'responsible.id = cash_flow.responsible_id');
         $this->db->join('pegawai', 'pegawai.id = responsible.pegawai_id');
         $this->db->join('cabang', 'cabang.id = responsible.cabang_id');
         $this->db->where('pegawai.username', $this->input->post("username"));
-        $query =  $this->db->get();
-        return $query->row();
+        $query =  $this->db->get()->row();
+        $query->latlong=json_decode($query->latlong);
+        return $query;
     }
 }

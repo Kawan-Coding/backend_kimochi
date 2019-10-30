@@ -210,7 +210,7 @@
         render_value_produk(this.value);
     });
     $('#cabang_id').on('change', function() {
-        tmp_cabang_id=this.value;
+        tmp_cabang_id = this.value;
     });
 
     function render_value_produk(id) {
@@ -221,7 +221,7 @@
 
     function conf_state(state) {
         if (state == "read") {
-            $('.modal-title').text(state+ label);
+            $('.modal-title').text(state + label);
             $("#form :input,select").prop("readonly", true); //change
             $('#conf,#foto').hide(); //change
             $("#form input").css("color", "black");
@@ -238,6 +238,7 @@
     }
 
 
+    let tmp_kategori_id = '';
 
     function read(ID, state = "read", url_tmp = bash_api + 'read', produk = false) {
         console.log("edit" + edit);
@@ -256,8 +257,9 @@
                         tmp_produk_id = r.data.produk_id;
                     }
                     if (produk) {
-                        if (tmp_cabang_id=='') {
-                            tmp_cabang_id=$("#cabang_id option:first").val();
+                        if (tmp_cabang_id == '') {
+                            tmp_cabang_id = $("#cabang_id option:first").val();
+                            tmp_kategori_id = r.data.kategori_id;
                         }
                         tmp_produk_id = ID;
                         console.log("TCL: read -> tmp_produk_id", tmp_produk_id)
@@ -343,6 +345,7 @@
                     swal("Insert Gagal!", "form tidak valid", "error");
                 } else {
                     var mydata = new FormData(document.getElementById("form"));
+                    mydata.append('kategori_id', tmp_kategori_id);
                     $.ajax({
                         url: bash_api + 'create',
                         type: "POST",

@@ -32,6 +32,7 @@ $route['api/payment/read']['POST'] = '/api/Payment/get';
 $route['api/payment/create']['POST'] = '/api/Payment/add';
 $route['api/payment/update']['POST'] = '/api/Payment/edit';
 $route['api/payment/delete']['POST'] = '/api/Payment/remove';
+$route['api/payment/get_setoran_hari_ini']['POST'] = '/api/Payment/get_setoran_hari_ini';
 
 
 // API CRUD USER 
