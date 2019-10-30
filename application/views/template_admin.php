@@ -115,6 +115,10 @@ $loc = base_url() . '/assets/';
                         </li>
                         <li> <a class="waves-effect waves-dark" href="<?php echo base_url('admin/allowed_payment') ?>" aria-expanded="false"><i class="mdi mdi-book-open-variant"></i><span class="hide-menu">allowed payment</span></a>
                         </li>
+                        <li> <a class="waves-effect waves-dark" href="<?php echo base_url('admin/notifikasi') ?>" aria-expanded="false"><i class="mdi mdi-book-open-variant"></i><span class="hide-menu">notifikasi</span></a>
+                        </li>
+                        <li> <a class="waves-effect waves-dark" href="<?php echo base_url('admin/diskon') ?>" aria-expanded="false"><i class="mdi mdi-book-open-variant"></i><span class="hide-menu">diskon</span></a>
+                        </li>
                         <li> <a class="waves-effect waves-dark" href="pages-error-404.html" aria-expanded="false"><i class="mdi mdi-help-circle"></i><span class="hide-menu">Error 404</span></a>
                         </li>
                     </ul>

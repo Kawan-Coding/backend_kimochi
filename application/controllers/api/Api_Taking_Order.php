@@ -104,7 +104,7 @@ class Api_Taking_Order extends CI_Controller
             // var_dump($value);
             $this->set_taking_order_booking_action($key,$params, $value);
         }
-        $this->msg('data', '200', 'sukses');
+        $this->msg('data', '200', array('tr_id'=>$params['tr_id']));
     }
     //foto dan kondisi
     function set_taking_order_booking_action($key,$params, $data)
@@ -113,7 +113,10 @@ class Api_Taking_Order extends CI_Controller
         $params['barang_id'] = $data['barang_id'];
         $params['qyt'] = $data['qyt'];
         $params['data_barang'] = json_encode($this->get_data_barang($key,$data, $data['jenis_transaksi']));
-        $params['total'] = (float) $params['qyt'] * (float) json_decode($params['data_barang'])->barang->harga;
+        $harga_barang = (float) json_decode($params['data_barang'])->barang->harga;
+        // var_dump($harga_barang);
+        $params['total'] = (float) $params['qyt'] * $harga_barang ;
+        // var_dump($params['total'] );
         $res = $this->Master->add($this->tabel, $params);
         if ($res['status']) {
             $res['data']['tr_id'] = $params['tr_id'];
@@ -127,11 +130,11 @@ class Api_Taking_Order extends CI_Controller
     function set_taking_order_order()
     {
         $this->is_valid();
-        $id =  $this->input->post('id');
+        $id =  $this->input->post('tr_id');
         $data = array(
             'status' => 'order',
         );
-        $res = $this->Master->update($this->tabel,  array('id' => $id), $data);
+        $res = $this->Master->update($this->tabel,  array('tr_id' => $id), $data);
         if ($res['status']) {
             $this->msg('data', '200', $res['data']);
         } else {
@@ -143,9 +146,9 @@ class Api_Taking_Order extends CI_Controller
     {
         $res = $this->Master->get('barang', array('id' => $data['barang_id']));
         if ($res['status']) {
-            var_dump($res['status']);
+            // var_dump($res['status']);
             $data_barang['barang'] = $res['data'];
-            echo $jenis;
+            // echo $jenis;
             if ($jenis === 'cuci_helm') {
                 $file_foto = $this->upload_image($key);
                 // var_dump($file_foto['name']);

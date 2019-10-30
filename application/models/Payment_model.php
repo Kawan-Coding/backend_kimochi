@@ -17,19 +17,25 @@ class Payment_model extends CI_Model
     {
         $this->date = new DateTime();
     }
-    function get_omset($tabel,$select,$like,$where)
+    function get_sum($tabel, $select, $like, $where)
     {
-        $this->db->select($select,FALSE);
+        $this->db->select($select, FALSE);
         $this->db->from($tabel);
         $this->db->like($like);
         $this->db->where($where);
         $this->db->group_by("responsible_id");
         $query =  $this->db->get();
         $res = $query->row();
-        if ($res!=NULL) {
+        if ($res != NULL) {
             return $res;
         }
     }
+
+    // function get_sum($where,$like)
+    // {
+    //     $this->db->like($like);
+    //     $this->db->where($where);
+    // }
 
     function get_responsible($where)
     {

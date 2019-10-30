@@ -93,4 +93,11 @@ class Admin extends CI_Controller
         );
         $this->load->view('template_admin', $data);
     }
+    public function notifikasi()
+    {
+        $data = array(
+            'content' => 'Content/Konten13',
+        );
+        $this->load->view('template_admin', $data);
+    }
 }

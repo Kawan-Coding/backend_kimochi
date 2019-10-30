@@ -38,10 +38,10 @@ class Payment extends CI_Controller
     {
         $data = $this->Master->get_all($this->tabel);
         foreach ($data as $key => $value) {
-            $data_order = json_decode(  $data[$key]['data_order']);
-            $data[$key]['data_customer']=json_decode(  $data[$key]['data_customer'])->customer;
+            $data_order = json_decode($data[$key]['data_order']);
+            $data[$key]['data_customer'] = json_decode($data[$key]['data_customer'])->customer;
             // $data[$key]['data_order']=;
-            $data[$key]['data_payment']=json_decode(  $data[$key]['data_payment']);
+            $data[$key]['data_payment'] = json_decode($data[$key]['data_payment']);
         }
         $this->msg('data', '200', $data);
     }
@@ -63,30 +63,24 @@ class Payment extends CI_Controller
     {
         $this->is_valid();
         $id =  $this->input->post('responsible_id');
-        $total_payment=$this->Payment_model->get_omset('payment','SUM(total) as total',array('create_at' => date('Y-m-d')),array('responsible_id'=>$id));
-        $total_cash_flow=$this->Payment_model->get_omset('cash_flow','SUM(open_cash) as total',array('open' => date('Y-m-d')),array('responsible_id'=>$id));
-        if ($total_payment&&$total_cash_flow) {
-            $res['omset']=(float)$total_payment->total + (float)$total_cash_flow->total;
-            $res['cash_register']=(float)$total_cash_flow->total;
-        }else{
-            $res['omset']="ERROR";
-        }
-        var_dump($res);
-        $res['tunai'];
-        $res['non_tunai'];
-        $res['setoran_hari_ini'];
-        $res = $this->Payment_model->get($this->tabel, array('tr_id' => $id));
-        if ($res['status']) {
-            $this->msg('data', '200', $res['data']);
+        $arr_sum = $this->Payment_model->get_sum('payment', 'sum(total) as total,sum(total_payment) as total_payment,sum(tunai) as tunai,sum(non_tunai) as non_tunai,sum(potongan) as potongan', array('create_at' => date('Y-m-d')), array('responsible_id' => $id));
+        // $this->msg('data', '200', $arr_sum->total_payment);
+        $total_cash_flow = $this->Payment_model->get_sum('cash_flow', 'SUM(open_cash) as total', array('open' => date('Y-m-d')), array('responsible_id' => $id));
+        if ($arr_sum->total_payment && $total_cash_flow) {
+            $res['omset'] = (float) $arr_sum->total_payment + (float) $total_cash_flow->total;
+            $res['cash_register'] = (float) $total_cash_flow->total;
         } else {
-            $this->msg('data', '400', '', $res['data']['message']);
-            // $this->msg('data', '400',$res);
-        };
+            $res['omset'] = "ERROR";
+        }
+        $res['tunai'] = $arr_sum->tunai;
+        $res['non_tunai'] = $arr_sum->non_tunai;
+        $res['setoran_hari_ini'] = $res['cash_register'] + $res['tunai'];
+        // var_dump($res);
+        $this->msg('data', '200', $res);
     }
 
-    function get_tunai(Type $var = null)
+    function get_sum_jenis($data)
     {
-        $res=$this->Master->get_select($this->tabel, $select, $where);
     }
 
 
@@ -108,19 +102,35 @@ class Payment extends CI_Controller
         );
         $params['data_customer'] = json_encode($this->get_data_customer());
         $params['data_order'] = json_encode($this->get_data_order());
-        $params['data_payment'] = json_encode($this->get_data_payment());
-        $params['total'] = json_decode($params['data_order'])->total;
+        $data_payment = $this->get_data_payment();
+        // $this->msg('data', '200', $data_payment);
+        $params['data_payment'] = json_encode($data_payment['payment_method']);
+
+        $params['total'] = $data_payment['total'];//masukan aja
+        $params['total_payment'] = $data_payment['total_payment'];//masukan + diskon
+        $params['tunai'] = $data_payment['tunai'];
+        $params['non_tunai'] = $data_payment['non_tunai'];
+        $params['potongan'] = $data_payment['potongan'];
         // var_dump(json_decode($params['data_payment'])->total);
         // var_dump(json_decode($params['data_order'])->total);
-        if ((float)json_decode($params['data_payment'])->total<=(float)json_decode($params['data_order'])->total ) {
-            $this->msg('data', '400', '', "belum lunas");
+        $bayar = (float) $params['total_payment'];
+        $tagihan = (float) json_decode($params['data_order'])->total;
+
+        if ($bayar < $tagihan) {
+            $this->msg('data', '400', array('bayar' => $bayar, 'tagihan' => $tagihan), "belum lunas");
         }
 
         $res = $this->Master->add($this->tabel, $params);
+
         if ($res['status']) {
-            $this->msg('data', '200', $res['data']);
+            $update_status_taking_order = $this->Master->update('taking_order', array('tr_id' => $params['tr_id']), array('status' => 'paid'));
+            if ($update_status_taking_order['status']) {
+                $this->msg('data', '200', array('tr_id' => $params['tr_id']));
+            } else {
+                $this->msg('data', '400', $params['tr_id'], 'update taking order gagal');
+            }
         } else {
-            $this->msg('data', '400', '', $res['data']['message']);
+            $this->msg('data', '400', $params['tr_id'], $res['data']['message']);
         };
     }
 
@@ -138,28 +148,59 @@ class Payment extends CI_Controller
     function get_data_order()
     {
         $id =  $this->input->post('tr_id');
-        $res = $this->Master->get_all('taking_order', array('tr_id' => $id));
-        $data['total']=0.0;
+        $res = $this->Master->get_all('taking_order', array('tr_id' => $id), '', array('id AS taking_order_id', 'cabang_id', 'barang_id', 'data_barang', 'qyt', 'total', 'create_at', 'update_at'));
+        $data['total'] = 0.0;
         foreach ($res as $key => $value) {
             // var_dump($res[$key]["data_customer"]);
-            $res[$key]["data_customer"]=json_decode($res[$key]["data_customer"]);
-            $res[$key]["data_barang"]=json_decode($res[$key]["data_barang"]);
-            $data['total']+=(float)$res[$key]["total"];
+            // $res[$key]["data_customer"]=json_decode($res[$key]["data_customer"]);
+            $res[$key]["data_barang"] = json_decode($res[$key]["data_barang"])->barang;
+            $data['total'] += (float) $res[$key]["total"];
         }
         $data['taking_order'] = $res;
         // var_dump($data['total']);
         return $data;
     }
+
+    function in_array($str, $data)
+    {
+
+        foreach ($data as $key => $value) {
+            if ($str == $value['id']) {
+                return TRUE;
+            }
+        }
+        return FALSE;
+    }
     function get_data_payment()
     {
         $id =  $this->input->post('tr_id');
         $res = $this->Master->get_all('payment_method', array('tr_id' => $id));
-        $data['total']=0.0;
+        $id_potongan = $this->Master->get_all('metode_pembayaran', array("jenis" => 'potongan'), '', 'id');
+        $id_tunai = $this->Master->get_all('metode_pembayaran', array("jenis" => 'tunai'), '', 'id');
+        $id_non_tunai = $this->Master->get_all('metode_pembayaran', array("jenis" => 'non tunai'), '', 'id');
+        // var_dump( $id_non_tunai);
+        $data['total'] = 0.0;//masukan aja
+        $data['total_payment'] = 0.0;//diskon + masukan
+        $data['tunai'] = 0.0;
+        $data['non_tunai'] = 0.0;
+        $data['potongan'] = 0.0;
+
         foreach ($res as $key => $value) {
-            $res[$key]["data_metode_pembayaran"]=json_decode($res[$key]["data_metode_pembayaran"]);
-            $data['total']+=(float)$res[$key]["nominal"];
+            $res[$key]["data_metode_pembayaran"] = json_decode($res[$key]["data_metode_pembayaran"]);
+
+            if (!$this->in_array($value['metode_pembayaran_id'], $id_potongan)) {
+                $data['total'] += (float) $res[$key]["nominal"];
+            } else {
+                $data['potongan'] += (float) $res[$key]["nominal"];
+            }
+            $data['tunai'] += $this->in_array($value['metode_pembayaran_id'], $id_tunai) ? (float) $res[$key]["nominal"] : 0.0;
+            $data['non_tunai'] += $this->in_array($value['metode_pembayaran_id'], $id_non_tunai) ? (float) $res[$key]["nominal"] : 0.0;
+
+
+            $data['total_payment'] += (float) $res[$key]["nominal"];
         }
         $data['payment_method'] = $res;
+        // $this->msg('data', '200', $data);
         return $data;
     }
 

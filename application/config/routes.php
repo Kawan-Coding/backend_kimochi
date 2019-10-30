@@ -13,6 +13,7 @@ $route['admin/barang']['get'] = '/admin/admin/barang';
 $route['admin/allowed_payment']['get'] = '/admin/admin/allowed_payment';
 $route['admin/validasi']['get'] = '/admin/admin/validasi';
 $route['admin/diskon']['get'] = '/admin/admin/diskon';
+$route['admin/notifikasi']['get'] = '/admin/admin/notifikasi';
 //=====ROUTE API
 // CASH REGISTER
 $route['api/cashregister/open']['POST'] = '/api/CashRegisterController/open';
@@ -138,7 +139,12 @@ $route['sapi/diskon/delete']['POST'] = '/singleapi/Diskon/remove';
 $route['api/ato/set_booking']['POST'] = '/api/Api_Taking_Order/set_taking_order_booking';
 $route['api/ato/set_order']['POST'] = '/api/Api_Taking_Order/set_taking_order_order';
 
-
+//SINGLE NOTIFIKASI
+$route['sapi/notifikasi/get_all']['GET'] = '/singleapi/Notifikasi/get_all';
+$route['sapi/notifikasi/read']['POST'] = '/singleapi/Notifikasi/get';
+$route['sapi/notifikasi/create']['POST'] = '/singleapi/Notifikasi/add';
+$route['sapi/notifikasi/update']['POST'] = '/singleapi/Notifikasi/edit';
+$route['sapi/notifikasi/delete']['POST'] = '/singleapi/Notifikasi/remove';
 
 //API ADMIN
 

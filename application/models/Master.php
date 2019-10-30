@@ -46,13 +46,16 @@ class Master extends CI_Model
     /*
      * Get all allowed_payment
      */
-    public function get_all($tabel, $where = '',$order='',$select='')
+    public function get_all($tabel, $where = '',$order='',$select='',$like='')
     {
         if ($where != '') {
             $this->db->where($where);
         }
         if ($select !='') {
             $this->db->select($select);
+        }
+        if ($like !='') {
+            $this->db->like($like);
         }
         if ($order !='') {
             $this->db->order_by($order[0], $order[1]);
@@ -89,7 +92,7 @@ class Master extends CI_Model
         if (isset($count['id'])) {
             $this->db->where($where);
             $this->db->update($tabel, $data);
-            if ($this->db->affected_rows() != 1) {
+            if ($this->db->affected_rows() < 1) {
                 $res['data'] = $this->db->error();
                 $res['status'] = false;
             } else {
