@@ -110,7 +110,7 @@ class User extends CI_Model
 
     function get_status_last_cashflow()
     {
-        $this->db->select('cash_flow.status');
+        $this->db->select('cash_flow.status,cash_flow.id');
         $this->db->order_by('close', 'DESC');
         $this->db->from('cash_flow');
         $this->db->join('responsible', 'responsible.id = cash_flow.responsible_id');

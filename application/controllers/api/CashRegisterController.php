@@ -26,7 +26,19 @@ class CashRegisterController     extends CI_Controller
             ->_display();
         exit;
     }
-
+    public function get()
+    {
+        // $this->is_valid();
+        $id =  $this->input->post('cash_flow_id');
+        $res = $this->Master->get($this->tabel, array('id' => $id));
+        $res['data']['data_pegawai'] = json_decode($res['data']['data_pegawai']);
+        if ($res['status']) {
+            $this->msg('data', '200', $res['data']);
+        } else {
+            $this->msg('data', '400', '', $res['data']['message']);
+            // $this->msg('data', '400',$res);
+        };
+    }
 
     /*
      * Adding a new metode_pembayaran
@@ -39,7 +51,7 @@ class CashRegisterController     extends CI_Controller
                 'responsible_id' => $this->input->post('responsible_id'),
                 'open' => date('Y-m-d H:i:s'),
                 'open_cash' => $this->input->post('open_cash'),
-                'data_pegawai' => json_encode($this->Master->get('pegawai', array('id' =>$id_pegawai))),
+                'data_pegawai' => json_encode($this->Master->get('pegawai', array('id' => $id_pegawai))),
                 'status' => 'progress',
             );
             $run = $this->Master->add($this->tabel, $params);
@@ -59,7 +71,7 @@ class CashRegisterController     extends CI_Controller
      */
     function close()
     {
-        $id = $_POST['id'];
+        $id = $this->input->post('id');
         if (isset($_POST) && count($_POST) > 0) {
             $params = array(
                 'close' => date('Y-m-d H:i:s'),
@@ -67,18 +79,22 @@ class CashRegisterController     extends CI_Controller
                 'status' => 'unvalidated',
             );
             $is_progress =  $this->Master->get_select($this->tabel, array('status'), array('id' => $id));
-
-            if ($is_progress['data']['status'] == 'progress') {
-                $run = $this->Master->update($this->tabel, array('id' => $id), $params);
-                $this->msg('data', '200', $run['data']);
-                if ($run['status']) {
+            // var_dump($is_progress);
+            if ($is_progress['status']) {
+                if ($is_progress['data']['status'] == 'progress') {
+                    $run = $this->Master->update($this->tabel, array('id' => $id), $params);
                     $this->msg('data', '200', $run['data']);
+                    if ($run['status']) {
+                        $this->msg('data', '200', $run['data']);
+                    } else {
+                        $this->msg('data', '400', '', $run['data']);
+                        // $this->msg('data', '400',$run);
+                    };
                 } else {
-                    $this->msg('data', '400', '', $run['data']);
-                    // $this->msg('data', '400',$run);
-                };
+                    $this->msg('data', '300', '', 'Anda tidak dapat melakukan close register. Anda harus open register terlebih dahulu' . $is_progress['data']['status']);
+                }
             } else {
-                $this->msg('data', '300','', 'Anda tidak dapat melakukan close register. Anda harus open register terlebih dahulu' . $is_progress['data']['status']);
+                $this->msg('data', '400', $id, $is_progress['data']['message']);
             }
         } else {
             $this->msg('data', '400', '');

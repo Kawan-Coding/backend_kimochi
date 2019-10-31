@@ -63,25 +63,60 @@ class Payment extends CI_Controller
     {
         $this->is_valid();
         $id =  $this->input->post('responsible_id');
-        $arr_sum = $this->Payment_model->get_sum('payment', 'sum(total) as total,sum(total_payment) as total_payment,sum(tunai) as tunai,sum(non_tunai) as non_tunai,sum(potongan) as potongan', array('create_at' => date('Y-m-d')), array('responsible_id' => $id));
-        // $this->msg('data', '200', $arr_sum->total_payment);
-        $total_cash_flow = $this->Payment_model->get_sum('cash_flow', 'SUM(open_cash) as total', array('open' => date('Y-m-d')), array('responsible_id' => $id));
-        if ($arr_sum->total_payment && $total_cash_flow) {
-            $res['omset'] = (float) $arr_sum->total_payment + (float) $total_cash_flow->total;
-            $res['cash_register'] = (float) $total_cash_flow->total;
-        } else {
-            $res['omset'] = "ERROR";
-        }
-        $res['tunai'] = $arr_sum->tunai;
-        $res['non_tunai'] = $arr_sum->non_tunai;
-        $res['setoran_hari_ini'] = $res['cash_register'] + $res['tunai'];
-        // var_dump($res);
+        $where =  array('responsible_id' => $id);
+        $day =  date('Y-m-d');
+        $res = $this->get_setoran_day($where,$day);
         $this->msg('data', '200', $res);
     }
 
-    function get_sum_jenis($data)
+    function get_setoran_day($where,$day)
     {
+        $arr_sum = $this->Payment_model->get_sum('payment', 'sum(total) as total,sum(total_payment) as total_payment,sum(tunai) as tunai,sum(non_tunai) as non_tunai,sum(potongan) as potongan', array('create_at' => $day), $where);
+        $total_cash_flow = $this->Payment_model->get_sum('cash_flow', 'SUM(open_cash) as total', array('open' => $day), $where);
+        // $this->msg('data', '200', $total_cash_flow);
+        if ($arr_sum) {
+            $res['omset'] = (float) $arr_sum->total;
+            $res['tunai'] = (float)$arr_sum->tunai;
+            $res['non_tunai'] = (float)$arr_sum->non_tunai;
+        }else{
+            $res['omset'] = 0.0;
+            $res['tunai'] = 0.0;
+            $res['non_tunai'] = 0.0;
+        }
+        if ($total_cash_flow) {
+            $res['cash_register'] = (float) $total_cash_flow->total;
+        } else {
+            $res['cash_register'] = 0.0;
+        }
+        $res['setoran_hari_ini'] = $res['cash_register'] + $res['tunai'];
+        return $res;
     }
+
+    function get_history_transaksi()
+    {
+        $responsible_id = $this->input->post('responsible_id');
+        $day = $this->input->post('day');
+        $where =  array('responsible_id' => $responsible_id);
+        $res = $this->get_setoran_day($where,$day);
+        $arr_ht['omset'] = $res['omset'];
+        $arr_ht['tunai'] = $res['tunai'];
+        $arr_ht['non_tunai'] = $res['non_tunai'];
+        $arr_ht =array_merge($arr_ht,array('pembayaran'=>$this->Payment_model->get_history_transaksi($day, $where))) ;
+        $this->msg('data', '200', $arr_ht);
+    }
+    function get_omset_hari_ini()
+    {
+        $responsible_id = $this->input->post('responsible_id');
+        $day = date('Y-m-d');
+        $where =  array('responsible_id' => $responsible_id);
+        $res = $this->get_setoran_day($where,$day);
+        $arr_ht['omset'] = $res['omset'];
+        $arr_ht['tunai'] = $res['tunai'];
+        $arr_ht['non_tunai'] = $res['non_tunai'];
+        $arr_ht =array_merge($arr_ht,array('pembayaran'=>$this->Payment_model->get_history_transaksi($day, $where))) ;
+        $this->msg('data', '200', $arr_ht);
+    }
+
 
 
 
@@ -106,8 +141,8 @@ class Payment extends CI_Controller
         // $this->msg('data', '200', $data_payment);
         $params['data_payment'] = json_encode($data_payment['payment_method']);
 
-        $params['total'] = $data_payment['total'];//masukan aja
-        $params['total_payment'] = $data_payment['total_payment'];//masukan + diskon
+        $params['total'] = $data_payment['total']; //masukan aja
+        $params['total_payment'] = $data_payment['total_payment']; //masukan + diskon
         $params['tunai'] = $data_payment['tunai'];
         $params['non_tunai'] = $data_payment['non_tunai'];
         $params['potongan'] = $data_payment['potongan'];
@@ -179,8 +214,8 @@ class Payment extends CI_Controller
         $id_tunai = $this->Master->get_all('metode_pembayaran', array("jenis" => 'tunai'), '', 'id');
         $id_non_tunai = $this->Master->get_all('metode_pembayaran', array("jenis" => 'non tunai'), '', 'id');
         // var_dump( $id_non_tunai);
-        $data['total'] = 0.0;//masukan aja
-        $data['total_payment'] = 0.0;//diskon + masukan
+        $data['total'] = 0.0; //masukan aja
+        $data['total_payment'] = 0.0; //diskon + masukan
         $data['tunai'] = 0.0;
         $data['non_tunai'] = 0.0;
         $data['potongan'] = 0.0;

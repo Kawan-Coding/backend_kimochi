@@ -62,7 +62,8 @@ class UserController extends CI_Controller
                 'error' => false,
                 'message' => 'login berhasil',
                 'data' => [
-                    'cash_flow_status'=>$cash_flow_status?$cash_flow_status:"validated",
+                    'cash_flow_status'=>$cash_flow_status?$cash_flow_status->status:"validated",
+                    'cash_flow_id'=>$cash_flow_status?$cash_flow_status->id:"validated",
                     'login'=>'login',
                     'responsible'=>[
                         'pegawai'=>$this->user->get('username',$_POST['username']),

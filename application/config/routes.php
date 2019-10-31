@@ -18,6 +18,7 @@ $route['admin/notifikasi']['get'] = '/admin/admin/notifikasi';
 // CASH REGISTER
 $route['api/cashregister/open']['POST'] = '/api/CashRegisterController/open';
 $route['api/cashregister/close']['POST'] = '/api/CashRegisterController/close';
+$route['api/cashregister/get']['POST'] = '/api/CashRegisterController/get';
 
 //API_GET
 $route['api/api_get/get_data_booking']['GET'] = '/api/Api_Get/get_data_booking_where_status_booking';
@@ -34,6 +35,8 @@ $route['api/payment/create']['POST'] = '/api/Payment/add';
 $route['api/payment/update']['POST'] = '/api/Payment/edit';
 $route['api/payment/delete']['POST'] = '/api/Payment/remove';
 $route['api/payment/get_setoran_hari_ini']['POST'] = '/api/Payment/get_setoran_hari_ini';
+$route['api/payment/get_omset_hari_ini']['POST'] = '/api/Payment/get_omset_hari_ini';
+$route['api/payment/get_history_transaksi']['POST'] = '/api/Payment/get_history_transaksi';
 
 
 // API CRUD USER 
