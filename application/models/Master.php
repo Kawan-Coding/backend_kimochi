@@ -33,6 +33,7 @@ class Master extends CI_Model
         $this->db->select($select);
         $run = $this->db->get_where($tabel, $where)->row_array();
         $res = array();
+        // var_dump(($run));
         if (!isset($run)) {
             $res['data']['message'] = 'data not exist';
             $res['status'] = false;
@@ -46,7 +47,7 @@ class Master extends CI_Model
     /*
      * Get all allowed_payment
      */
-    public function get_all($tabel, $where = '',$order='',$select='',$like='')
+    public function get_all($tabel, $where = '',$order='',$select='',$like='',$array=TRUE,$group='')
     {
         if ($where != '') {
             $this->db->where($where);
@@ -57,10 +58,18 @@ class Master extends CI_Model
         if ($like !='') {
             $this->db->like($like);
         }
+
+        if ($group !='') {
+            $this->db->group_by($group);
+        }
         if ($order !='') {
             $this->db->order_by($order[0], $order[1]);
         }
-        return $this->db->get($tabel)->result_array();
+        if ($array) {
+            return $this->db->get($tabel)->result_array();
+        }else{
+            return $this->db->get($tabel)->row_array();
+        }
     }
     
 
@@ -71,6 +80,20 @@ class Master extends CI_Model
     {
 
         $this->db->insert($tabel, $data);
+        $res = array();
+        if (!($this->db->affected_rows() >0)) {
+            $res['data'] = $this->db->error();
+            $res['status'] = false;
+        } else {
+            $res['data'] = array('id' => $this->db->insert_id());
+            $res['status'] = true;
+        }
+        return $res;
+    }
+    public function insert_batch($tabel, $data)
+    {
+
+        $this->db->insert_batch($tabel, $data);
         $res = array();
         if (!($this->db->affected_rows() >0)) {
             $res['data'] = $this->db->error();

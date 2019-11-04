@@ -37,7 +37,7 @@ class Payment_method extends CI_Controller
 
     function get_tunai(Type $var = null)
     {
-        $res=$this->Master->get_select($this->tabel, $select, $where);
+        $res = $this->Master->get_select($this->tabel, $select, $where);
     }
 
 
@@ -50,21 +50,24 @@ class Payment_method extends CI_Controller
         $this->is_valid();
         $params = array(
             'tr_id' => $this->input->post('tr_id'),
-            'cabang_id' => $this->input->post('cabang_id'),
-            'customer_id' => $this->input->post('customer_id'),
-            'responsible_id' => $this->input->post('responsible_id'),
-
+            'metode_pembayaran_id' => $this->input->post('metode_pembayaran_id'),
+            'diskon_id' => $this->input->post('diskon_id'),
+            'data_metode_pembayaran' => $this->input->post('data_metode_pembayaran'),
+            'nominal' => $this->input->post('nominal'),
             'create_at' => date('Y-m-d H:i:s'),
             'update_at' => date('Y-m-d H:i:s'),
         );
-        $params['data_customer'] = json_encode($this->get_data_customer());
-        $params['data_order'] = json_encode($this->get_data_order());
-        $params['data_payment'] = json_encode($this->get_data_payment());
-        $params['total'] = json_decode($params['data_order'])->total;
-        // var_dump(json_decode($params['data_payment'])->total);
-        // var_dump(json_decode($params['data_order'])->total);
-        if ((float)json_decode($params['data_payment'])->total<=(float)json_decode($params['data_order'])->total ) {
-            $this->msg('data', '400', '', "belum lunas");
+
+        $detail_diskon = $this->Master->get_select('diskon', 'id,kode_diskon,nama,detail,mulai,akhir,potongan,kuota', array('id' => $params['diskon_id']));
+        if ($detail_diskon['status'] && $params['diskon_id']!=0) {
+            $decreament_kuota = array(
+                'kuota' => $detail_diskon['data']['kuota'] - 1
+            );
+            $params['data_metode_pembayaran'] = json_encode(array('diskon' => $detail_diskon['data']));
+            $this->Master->update('diskon', array('id' => $params['diskon_id']), $decreament_kuota);
+            // $params['diskon_id']=0;
+        }else{
+            $params['data_metode_pembayaran']=json_encode(array('diskon'=>NULL));
         }
 
         $res = $this->Master->add($this->tabel, $params);
@@ -90,12 +93,12 @@ class Payment_method extends CI_Controller
     {
         $id =  $this->input->post('tr_id');
         $res = $this->Master->get_all('taking_order', array('tr_id' => $id));
-        $data['total']=0.0;
+        $data['total'] = 0.0;
         foreach ($res as $key => $value) {
             // var_dump($res[$key]["data_customer"]);
-            $res[$key]["data_customer"]=json_decode($res[$key]["data_customer"]);
-            $res[$key]["data_barang"]=json_decode($res[$key]["data_barang"]);
-            $data['total']+=(float)$res[$key]["total"];
+            $res[$key]["data_customer"] = json_decode($res[$key]["data_customer"]);
+            $res[$key]["data_barang"] = json_decode($res[$key]["data_barang"]);
+            $data['total'] += (float) $res[$key]["total"];
         }
         $data['taking_order'] = $res;
         // var_dump($data['total']);
@@ -105,10 +108,10 @@ class Payment_method extends CI_Controller
     {
         $id =  $this->input->post('tr_id');
         $res = $this->Master->get_all('payment_method', array('tr_id' => $id));
-        $data['total']=0.0;
+        $data['total'] = 0.0;
         foreach ($res as $key => $value) {
-            $res[$key]["data_metode_pembayaran"]=json_decode($res[$key]["data_metode_pembayaran"]);
-            $data['total']+=(float)$res[$key]["nominal"];
+            $res[$key]["data_metode_pembayaran"] = json_decode($res[$key]["data_metode_pembayaran"]);
+            $data['total'] += (float) $res[$key]["nominal"];
         }
         $data['payment_method'] = $res;
         return $data;

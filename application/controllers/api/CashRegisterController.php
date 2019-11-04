@@ -31,6 +31,10 @@ class CashRegisterController     extends CI_Controller
         // $this->is_valid();
         $id =  $this->input->post('cash_flow_id');
         $res = $this->Master->get($this->tabel, array('id' => $id));
+        $res['data']['open']=date('d F Y H:i:s', strtotime($res['data']['open']));
+        // foreach ($res as $key => $value) {
+            // $res[0]['open']=date('d F Y', strtotime($res[0]['open']));
+        // }
         $res['data']['data_pegawai'] = json_decode($res['data']['data_pegawai']);
         if ($res['status']) {
             $this->msg('data', '200', $res['data']);

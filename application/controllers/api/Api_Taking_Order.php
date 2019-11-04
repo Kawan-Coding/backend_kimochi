@@ -41,8 +41,8 @@ class Api_Taking_Order extends CI_Controller
     public function get()
     {
         $this->is_valid();
-        $id =  $this->input->post('id');
-        $res = $this->Master->get($this->tabel, array('id' => $id));
+        $id =  $this->input->post('tr_id');
+        $res = $this->Master->get($this->tabel, array('tr_id' => $id));
         if ($res['status']) {
             $this->msg('data', '200', $res['data']);
         } else {
@@ -61,7 +61,7 @@ class Api_Taking_Order extends CI_Controller
         $_FILES['file']['size'] = $_FILES['data']['size'][$key]['foto_helm'];
         // var_dump($_FILES['data']['name'][$key]['foto_helm']);
         // var_dump($_FILES);
-        $config['upload_path'] = './uploads/pegawai';
+        $config['upload_path'] = './uploads/taking_order';
         $config['allowed_types'] = 'gif|jpg|png|JPG';
         $config['encrypt_name'] = true;
         // $config['max_size'] = 600;

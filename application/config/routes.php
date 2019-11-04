@@ -26,7 +26,8 @@ $route['api/api_get/get_data_barang']['GET'] = '/api/Api_Get/get_data_barang';
 $route['api/api_get/get_detail_aksesoris']['POST'] = '/api/Api_Get/get_detail_aksesoris';
 
 //API_GET TRANSAKSI
-$route['api/api_get/get_transaksi']['GET'] = '/api/Api_Get/get_transaksi';
+$route['api/api_get/get_transaksi_booking']['POST'] = '/api/Api_Get/get_transaksi_booking';
+$route['api/api_get/get_transaksi_order']['POST'] = '/api/Api_Get/get_transaksi_order';
 
 //API  PAYMENT
 $route['api/payment/get_all']['GET'] = '/api/Payment/get_all';
@@ -37,6 +38,7 @@ $route['api/payment/delete']['POST'] = '/api/Payment/remove';
 $route['api/payment/get_setoran_hari_ini']['POST'] = '/api/Payment/get_setoran_hari_ini';
 $route['api/payment/get_omset_hari_ini']['POST'] = '/api/Payment/get_omset_hari_ini';
 $route['api/payment/get_history_transaksi']['POST'] = '/api/Payment/get_history_transaksi';
+$route['api/payment/get_transaksi_hari_ini']['POST'] = '/api/Payment/get_transaksi_hari_ini';
 
 
 // API CRUD USER 
@@ -148,6 +150,13 @@ $route['sapi/notifikasi/read']['POST'] = '/singleapi/Notifikasi/get';
 $route['sapi/notifikasi/create']['POST'] = '/singleapi/Notifikasi/add';
 $route['sapi/notifikasi/update']['POST'] = '/singleapi/Notifikasi/edit';
 $route['sapi/notifikasi/delete']['POST'] = '/singleapi/Notifikasi/remove';
+
+//SINGLE PAYMENT_METHOD
+// $route['sapi/payment_method/get_all']['GET'] = '/singleapi/Payment_method/get_all';
+// $route['sapi/payment_method/read']['POST'] = '/singleapi/Payment_method/get';
+$route['api/payment_method/create']['POST'] = '/api/Payment_method/add';
+// $route['sapi/payment_method/update']['POST'] = '/singleapi/Payment_method/edit';
+// $route['sapi/payment_method/delete']['POST'] = '/singleapi/Payment_method/remove';
 
 //API ADMIN
 

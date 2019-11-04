@@ -35,11 +35,42 @@ class Payment_model extends CI_Model
         $this->db->select('sum(pm.nominal) as total', FALSE);
         $this->db->select('mp.nama,mp.id as metode_pembayaran_id');
         $this->db->from('payment_method as pm');
-        $this->db->like('p.create_at',$day);
+        $this->db->like('p.create_at', $day);
         $this->db->where($where);
-        $this->db->join('payment as p', 'pm.tr_id = p.tr_id','right');
-        $this->db->join('metode_pembayaran as mp', 'mp.id = pm.metode_pembayaran_id','full');
+        $this->db->join('payment as p', 'pm.tr_id = p.tr_id', 'right');
+        $this->db->join('metode_pembayaran as mp', 'mp.id = pm.metode_pembayaran_id', 'full');
         $this->db->group_by("mp.nama");
+        $query =  $this->db->get();
+        $res = $query->result_array();
+        if ($res != NULL) {
+            return $res;
+        }
+    }
+
+    function get_transaksi_hari_ini_bank($day, $where)
+    {
+        $this->db->select('pm.tr_id');
+        $this->db->select('mp.nama,pm.nominal');
+        $this->db->from('payment as p');
+        $this->db->like('p.create_at', $day);
+        $this->db->join('payment_method as pm', 'pm.tr_id = p.tr_id', 'right');
+        $this->db->join('metode_pembayaran as mp', 'mp.id = pm.metode_pembayaran_id');
+        $this->db->group_by('metode_pembayaran_id', 'tr_id');
+        $this->db->where($where);
+        $query =  $this->db->get();
+        $res = $query->result_array();
+        if ($res != NULL) {
+            return $res;
+        }
+    }
+    public function get_payment_method($tabel, $where = '')
+    {
+        $this->db->select('pm.nominal');
+        $this->db->select('mp.nama');
+        $this->db->from('payment_method as pm');
+        $this->db->join('metode_pembayaran as mp','mp.id = pm.metode_pembayaran_id', 'right');
+        $this->db->group_by('mp.id');
+        $this->db->where($where);
         $query =  $this->db->get();
         $res = $query->result_array();
         if ($res != NULL) {
