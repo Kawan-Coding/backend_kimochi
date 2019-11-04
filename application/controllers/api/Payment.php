@@ -185,8 +185,8 @@ class Payment extends CI_Controller
         $res = $this->Master->add($this->tabel, $params);
 
         if ($res['status']) {
-            $this->Master->update('taking_order', array('tr_id' => $params['tr_id']), array('status' => 'paid'));//update status menjadi PAID
-            $this->get_data_payment(TRUE);//update kuota 
+            $this->Master->update('taking_order', array('tr_id' => $params['tr_id']), array('status' => 'paid')); //update status menjadi PAID
+            $this->get_data_payment(TRUE); //update kuota 
             $this->msg('data', '200', array('tr_id' => $params['tr_id']));
         } else {
             $this->msg('data', '400', $params['tr_id'], $res['data']['message']);
@@ -234,32 +234,21 @@ class Payment extends CI_Controller
     {
         $id =  $this->input->post('tr_id');
         $res = $this->Master->get_all('payment_method', array('tr_id' => $id));
-        $methode_pembayaran = $this->Payment_model->get_payment_method('payment_method', array('pm.tr_id' => $id));
-        $id_potongan = $this->Master->get_all('metode_pembayaran', array("jenis" => 'potongan'), '', 'id');
-        $id_tunai = $this->Master->get_all('metode_pembayaran', array("jenis" => 'tunai'), '', 'id');
-        $id_non_tunai = $this->Master->get_all('metode_pembayaran', array("jenis" => 'non tunai'), '', 'id');
-        // var_dump( $id_non_tunai);
-        $data['total'] = 0.0; //masukan aja
-        $data['total_payment'] = 0.0; //diskon + masukan
-        $data['tunai'] = 0.0;
-        $data['non_tunai'] = 0.0;
-        $data['potongan'] = 0.0;
-        $data['methode_pembayaran'] = $methode_pembayaran;
+        if (!$update) {
+            $methode_pembayaran = $this->Payment_model->get_payment_method('payment_method', array('pm.tr_id' => $id));
+            $id_potongan = $this->Master->get_all('metode_pembayaran', array("jenis" => 'potongan'), '', 'id');
+            $id_tunai = $this->Master->get_all('metode_pembayaran', array("jenis" => 'tunai'), '', 'id');
+            $id_non_tunai = $this->Master->get_all('metode_pembayaran', array("jenis" => 'non tunai'), '', 'id');
+            // var_dump( $id_non_tunai);
+            $data['total'] = 0.0; //masukan aja
+            $data['total_payment'] = 0.0; //diskon + masukan
+            $data['tunai'] = 0.0;
+            $data['non_tunai'] = 0.0;
+            $data['potongan'] = 0.0;
+            $data['methode_pembayaran'] = $methode_pembayaran;
+        }
 
         foreach ($res as $key => $value) {
-            $res[$key]["data_metode_pembayaran"] = json_decode($res[$key]["data_metode_pembayaran"]);
-
-            if (!$this->in_array($value['metode_pembayaran_id'], $id_potongan)) {
-                $data['total'] += (float) $res[$key]["nominal"];
-            } else {
-                $data['potongan'] += (float) $res[$key]["nominal"];
-            }
-            $data['tunai'] += $this->in_array($value['metode_pembayaran_id'], $id_tunai) ? (float) $res[$key]["nominal"] : 0.0;
-            $data['non_tunai'] += $this->in_array($value['metode_pembayaran_id'], $id_non_tunai) ? (float) $res[$key]["nominal"] : 0.0;
-
-
-            $data['total_payment'] += (float) $res[$key]["nominal"];
-
             if ($update) {
                 $diskon_id = $value['diskon_id'];
                 $kuota = $this->Master->get_select('diskon', 'kuota', array('id' => $diskon_id))['data']['kuota'];
@@ -270,10 +259,22 @@ class Payment extends CI_Controller
                     );
                     $this->Master->update('diskon', array('id' => $diskon_id), $decreament_kuota);
                 }
+            } else {
+                $res[$key]["data_metode_pembayaran"] = json_decode($res[$key]["data_metode_pembayaran"]);
+                if (!$this->in_array($value['metode_pembayaran_id'], $id_potongan)) {
+                    $data['total'] += (float) $res[$key]["nominal"];
+                } else {
+                    $data['potongan'] += (float) $res[$key]["nominal"];
+                }
+                $data['tunai'] += $this->in_array($value['metode_pembayaran_id'], $id_tunai) ? (float) $res[$key]["nominal"] : 0.0;
+                $data['non_tunai'] += $this->in_array($value['metode_pembayaran_id'], $id_non_tunai) ? (float) $res[$key]["nominal"] : 0.0;
+                $data['total_payment'] += (float) $res[$key]["nominal"];
             }
         }
-        $data['payment_method'] = $res;
-        return $data;
+        if (!$update) {
+            $data['payment_method'] = $res;
+            return $data;
+        }
     }
 
     /*
