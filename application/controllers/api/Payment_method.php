@@ -59,11 +59,11 @@ class Payment_method extends CI_Controller
 
         $detail_diskon = $this->Master->get_select('diskon', 'id,kode_diskon,nama,detail,mulai,akhir,potongan,kuota', array('id' => $params['diskon_id']));
         if ($detail_diskon['status'] && $params['diskon_id']!=0) {
-            $decreament_kuota = array(
-                'kuota' => $detail_diskon['data']['kuota'] - 1
-            );
+            // $decreament_kuota = array(
+            //     'kuota' => $detail_diskon['data']['kuota'] - 1
+            // );
             $params['data_metode_pembayaran'] = json_encode(array('diskon' => $detail_diskon['data']));
-            $this->Master->update('diskon', array('id' => $params['diskon_id']), $decreament_kuota);
+            // $this->Master->update('diskon', array('id' => $params['diskon_id']), $decreament_kuota);
             // $params['diskon_id']=0;
         }else{
             $params['data_metode_pembayaran']=json_encode(array('diskon'=>NULL,'keterangan'=>json_decode($this->input->post('data_metode_pembayaran'))));

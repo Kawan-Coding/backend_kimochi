@@ -185,12 +185,9 @@ class Payment extends CI_Controller
         $res = $this->Master->add($this->tabel, $params);
 
         if ($res['status']) {
-            $update_status_taking_order = $this->Master->update('taking_order', array('tr_id' => $params['tr_id']), array('status' => 'paid'));
-            if ($update_status_taking_order['status']) {
-                $this->msg('data', '200', array('tr_id' => $params['tr_id']));
-            } else {
-                $this->msg('data', '400', $params['tr_id'], 'update taking order gagal');
-            }
+            $this->Master->update('taking_order', array('tr_id' => $params['tr_id']), array('status' => 'paid'));//update status menjadi PAID
+            $this->get_data_payment(TRUE);//update kuota 
+            $this->msg('data', '200', array('tr_id' => $params['tr_id']));
         } else {
             $this->msg('data', '400', $params['tr_id'], $res['data']['message']);
         };
@@ -233,7 +230,7 @@ class Payment extends CI_Controller
         }
         return FALSE;
     }
-    function get_data_payment()
+    function get_data_payment($update = FALSE)
     {
         $id =  $this->input->post('tr_id');
         $res = $this->Master->get_all('payment_method', array('tr_id' => $id));
@@ -262,9 +259,20 @@ class Payment extends CI_Controller
 
 
             $data['total_payment'] += (float) $res[$key]["nominal"];
+
+            if ($update) {
+                $diskon_id = $value['diskon_id'];
+                $kuota = $this->Master->get_select('diskon', 'kuota', array('id' => $diskon_id))['data']['kuota'];
+                // $this->msg('data', '200', $kuota);
+                if ($diskon_id != 0) {
+                    $decreament_kuota = array(
+                        'kuota' => $kuota - 1
+                    );
+                    $this->Master->update('diskon', array('id' => $diskon_id), $decreament_kuota);
+                }
+            }
         }
         $data['payment_method'] = $res;
-        // $this->msg('data', '200', $data);
         return $data;
     }
 
