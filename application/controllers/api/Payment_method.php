@@ -52,7 +52,6 @@ class Payment_method extends CI_Controller
             'tr_id' => $this->input->post('tr_id'),
             'metode_pembayaran_id' => $this->input->post('metode_pembayaran_id'),
             'diskon_id' => $this->input->post('diskon_id'),
-            'data_metode_pembayaran' => $this->input->post('data_metode_pembayaran'),
             'nominal' => $this->input->post('nominal'),
             'create_at' => date('Y-m-d H:i:s'),
             'update_at' => date('Y-m-d H:i:s'),
@@ -67,7 +66,7 @@ class Payment_method extends CI_Controller
             $this->Master->update('diskon', array('id' => $params['diskon_id']), $decreament_kuota);
             // $params['diskon_id']=0;
         }else{
-            $params['data_metode_pembayaran']=json_encode(array('diskon'=>NULL));
+            $params['data_metode_pembayaran']=json_encode(array('diskon'=>NULL,'keterangan'=>json_decode($this->input->post('data_metode_pembayaran'))));
         }
 
         $res = $this->Master->add($this->tabel, $params);
