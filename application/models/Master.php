@@ -14,9 +14,17 @@ class Master extends CI_Model
     /*
      * Get allowed_payment by id
      */
-    public function get($tabel, $where)
+    public function get($tabel, $where,$select='',$all=false)
     {
-        $run = $this->db->get_where($tabel, $where)->row_array();
+
+        if ($select !='') {
+            $this->db->select($select);
+        }
+        if ($all) {
+            $run = $this->db->get_where($tabel, $where)->result_array();
+        }else{
+            $run = $this->db->get_where($tabel, $where)->row_array();
+        }
         $res = array();
         if (!isset($run)) {
             $res['data']['message'] = 'data not exist ->tabel_'.$tabel;

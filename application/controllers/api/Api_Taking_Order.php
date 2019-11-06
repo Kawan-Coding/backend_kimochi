@@ -42,7 +42,11 @@ class Api_Taking_Order extends CI_Controller
     {
         $this->is_valid();
         $id =  $this->input->post('tr_id');
-        $res = $this->Master->get($this->tabel, array('tr_id' => $id));
+        $res = $this->Master->get($this->tabel, array('tr_id' => $id),array('data_barang'),true);
+        foreach ($res['data'] as $key => $value) {
+            // $res['data'][$key]['data_customer']=json_decode($value['data_customer']);
+            $res['data'][$key]['data_barang']=json_decode($value['data_barang'])->barang;
+        }
         if ($res['status']) {
             $this->msg('data', '200', $res['data']);
         } else {
@@ -50,6 +54,7 @@ class Api_Taking_Order extends CI_Controller
             // $this->msg('data', '400',$res);
         };
     }
+    
 
 
     public function upload_image($key)

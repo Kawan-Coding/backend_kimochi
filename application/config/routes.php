@@ -143,6 +143,7 @@ $route['sapi/diskon/delete']['POST'] = '/singleapi/Diskon/remove';
 //SINGLE TAKING ORDER
 $route['api/ato/set_booking']['POST'] = '/api/Api_Taking_Order/set_taking_order_booking';
 $route['api/ato/set_order']['POST'] = '/api/Api_Taking_Order/set_taking_order_order';
+$route['api/ato/read']['POST'] = '/api/Api_Taking_Order/get';
 
 //SINGLE NOTIFIKASI
 $route['sapi/notifikasi/get_all']['GET'] = '/singleapi/Notifikasi/get_all';
