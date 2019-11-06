@@ -168,8 +168,10 @@ class Payment extends CI_Controller
         // $this->msg('data', '200', $data_payment);
         $params['data_payment'] = json_encode($data_payment['payment_method']);
 
-        $params['total'] = $data_payment['total']; //masukan aja
-        $params['total_payment'] = $data_payment['total_payment']; //masukan + diskon
+        //KASUSNYA KEMARIN KEBALIK ISTILAHNYA JADI KETUKAR
+        $params['total_payment'] = $data_payment['total']; //masukan aja 
+        $params['total'] = $data_payment['total_payment']; //masukan  + diskon
+        
         $params['tunai'] = $data_payment['tunai'];
         $params['non_tunai'] = $data_payment['non_tunai'];
         $params['potongan'] = $data_payment['potongan'];
@@ -186,7 +188,7 @@ class Payment extends CI_Controller
 
         if ($res['status']) {
             $this->Master->update('taking_order', array('tr_id' => $params['tr_id']), array('status' => 'paid')); //update status menjadi PAID
-            $this->get_data_payment(TRUE); //update kuota 
+            $this->get_data_payment(TRUE); //update sisa_kuota 
             $this->msg('data', '200', array('tr_id' => $params['tr_id']));
         } else {
             $this->msg('data', '400', $params['tr_id'], $res['data']['message']);
@@ -245,19 +247,19 @@ class Payment extends CI_Controller
             $data['tunai'] = 0.0;
             $data['non_tunai'] = 0.0;
             $data['potongan'] = 0.0;
-            $data['methode_pembayaran'] = $methode_pembayaran;
+            // $this->msg('data', '200', $methode_pembayaran);
         }
 
         foreach ($res as $key => $value) {
             if ($update) {
                 $diskon_id = $value['diskon_id'];
-                $kuota = $this->Master->get_select('diskon', 'kuota', array('id' => $diskon_id))['data']['kuota'];
-                // $this->msg('data', '200', $kuota);
+                $sisa_kuota = $this->Master->get_select('diskon', 'sisa_kuota', array('id' => $diskon_id))['data']['sisa_kuota'];
+                // $this->msg('data', '200', $sisa_kuota);
                 if ($diskon_id != 0) {
-                    $decreament_kuota = array(
-                        'kuota' => $kuota - 1
+                    $decreament_sisa_kuota = array(
+                        'sisa_kuota' => $sisa_kuota - 1
                     );
-                    $this->Master->update('diskon', array('id' => $diskon_id), $decreament_kuota);
+                    $this->Master->update('diskon', array('id' => $diskon_id), $decreament_sisa_kuota);
                 }
             } else {
                 $res[$key]["data_metode_pembayaran"] = json_decode($res[$key]["data_metode_pembayaran"]);
@@ -272,7 +274,8 @@ class Payment extends CI_Controller
             }
         }
         if (!$update) {
-            $data['payment_method'] = $res;
+            $data['payment_method']['metode_pembayaran'] = $methode_pembayaran;
+            $data['payment_method']['detail'] = $res;
             return $data;
         }
     }

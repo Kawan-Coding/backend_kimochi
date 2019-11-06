@@ -139,6 +139,7 @@ $route['sapi/diskon/read']['POST'] = '/singleapi/Diskon/get';
 $route['sapi/diskon/create']['POST'] = '/singleapi/Diskon/add';
 $route['sapi/diskon/update']['POST'] = '/singleapi/Diskon/edit';
 $route['sapi/diskon/delete']['POST'] = '/singleapi/Diskon/remove';
+$route['sapi/diskon/get_available']['GET']  = '/singleapi/Diskon/get_available';
 
 //SINGLE TAKING ORDER
 $route['api/ato/set_booking']['POST'] = '/api/Api_Taking_Order/set_taking_order_booking';

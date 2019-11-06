@@ -52,6 +52,19 @@ class Diskon extends CI_Controller
         };
     }
 
+    public function get_available()
+    {
+        $now = date('Y-m-d H:i:s');
+        // $this->is_valid();
+        $res = $this->Master->get_all($this->tabel, array('sisa_kuota >'=>0,'mulai <='=>$now,'akhir >='=>$now),array('create_at','DESC'));
+        // if ($res['status']) {
+        $this->msg('data', '200', $res);
+        // } else {
+        // $this->msg('data', '400', '', $res['data']['message']);
+        // $this->msg('data', '400',$res);
+        // };
+    }
+
 
 
     /*
@@ -68,6 +81,7 @@ class Diskon extends CI_Controller
             'akhir' => $this->input->post('akhir'),
             'potongan' => $this->input->post('potongan'),
             'kuota' => $this->input->post('kuota'),
+            'sisa_kuota' => $this->input->post('kuota'),
             // 'potongan' => $this->input->post('potongan'),
             'create_at' => date('Y-m-d H:i:s'),
             'update_at' => date('Y-m-d H:i:s'),
@@ -99,6 +113,7 @@ class Diskon extends CI_Controller
             'akhir' => $this->input->post('akhir'),
             'potongan' => $this->input->post('potongan'),
             'kuota' => $this->input->post('kuota'),
+            'sisa_kuota' => $this->input->post('kuota'),
             'potongan' => $this->input->post('potongan'),
             // 'create_at' => date('Y-m-d H:i:s'),
             'update_at' => date('Y-m-d H:i:s'),

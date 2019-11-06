@@ -100,4 +100,11 @@ class Admin extends CI_Controller
         );
         $this->load->view('template_admin', $data);
     }
+    public function omset()
+    {
+        $data = array(
+            'content' => 'Content/Konten14',
+        );
+        $this->load->view('template_admin', $data);
+    }
 }

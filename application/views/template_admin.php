@@ -10,29 +10,26 @@
     <meta name="author" content="">
     <!-- Favicon icon -->
     <?php
-$loc = base_url() . '/assets/';
-?>
-    <link rel="icon" type="image/png" sizes="16x16" href="<?=$loc?>images/favicon.png">
+    $loc = base_url() . '/assets/';
+    ?>
+    <link rel="icon" type="image/png" sizes="16x16" href="<?= $loc ?>images/favicon.png">
     <title>Material Pro Admin Template - The Most Complete & Trusted Bootstrap 4 Admin Template</title>
     <!-- Bootstrap Core CSS -->
-    <!-- <link href="<?=$loc?>plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet"> -->
+    <!-- <link href="<?= $loc ?>plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet"> -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css"  crossorigin="anonymous"> -->
     <!-- chartist CSS -->
-    <link href="<?=$loc?>plugins/chartist-js/dist/chartist.min.css" rel="stylesheet">
-    <link href="<?=$loc?>plugins/chartist-js/dist/chartist-init.css" rel="stylesheet">
-    <link href="<?=$loc?>plugins/chartist-plugin-tooltip-master/dist/chartist-plugin-tooltip.css" rel="stylesheet">
+    <link href="<?= $loc ?>plugins/chartist-js/dist/chartist.min.css" rel="stylesheet">
+    <link href="<?= $loc ?>plugins/chartist-js/dist/chartist-init.css" rel="stylesheet">
+    <link href="<?= $loc ?>plugins/chartist-plugin-tooltip-master/dist/chartist-plugin-tooltip.css" rel="stylesheet">
     <!--This page css - Morris CSS -->
-    <link href="<?=$loc?>plugins/c3-master/c3.min.css" rel="stylesheet">
+    <link href="<?= $loc ?>plugins/c3-master/c3.min.css" rel="stylesheet">
     <!-- Custom CSS -->
-    <link href="<?=$loc?>css/style.css" rel="stylesheet">
+    <link href="<?= $loc ?>css/style.css" rel="stylesheet">
     <!-- You can change the theme colors from here -->
-    <link href="<?=$loc?>css/colors/blue.css" id="theme" rel="stylesheet">
+    <link href="<?= $loc ?>css/colors/blue.css" id="theme" rel="stylesheet">
 
-    <script
-  src="https://code.jquery.com/jquery-3.4.1.min.js"
-  integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
-  crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -45,7 +42,7 @@ $loc = base_url() . '/assets/';
     <!-- ============================================================== -->
     <!-- Preloader - style you can find in spinners.css -->
     <!-- ============================================================== -->
-    <div class="preloader">
+    <div class="preloader" style="background-color:transparent">
         <svg class="circular" viewBox="25 25 50 50">
             <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="2" stroke-miterlimit="10" /> </svg>
     </div>
@@ -67,13 +64,13 @@ $loc = base_url() . '/assets/';
                             <!--You can put here icon as well // <i class="wi wi-sunset"></i> //-->
 
                             <!-- Light Logo icon -->
-                            <img src="<?=$loc?>images/logo-light-icon.png" alt="homepage" class="light-logo" />
+                            <img src="<?= $loc ?>images/logo-light-icon.png" alt="homepage" class="light-logo" />
                         </b>
                         <!--End Logo icon -->
                         <!-- Logo text --><span>
 
-                         <!-- Light Logo text -->
-                         <img src="<?=$loc?>images/logo-light-text.png" class="light-logo" alt="homepage" /></span> </a>
+                            <!-- Light Logo text -->
+                            <img src="<?= $loc ?>images/logo-light-text.png" class="light-logo" alt="homepage" /></span> </a>
                 </div>
                 <!-- ============================================================== -->
                 <!-- End Logo -->
@@ -91,34 +88,61 @@ $loc = base_url() . '/assets/';
         <!-- ============================================================== -->
         <aside class="left-sidebar">
             <!-- Sidebar scroll-->
-            <div class="scroll-sidebar">
+            <div class="scroll-sidebar divider">
                 <!-- Sidebar navigation-->
-                <nav class="sidebar-nav">
+                <nav class="sidebar-nav nav nav-list tree">
                     <ul id="sidebarnav">
-                        <li> <a class="waves-effect waves-dark" href="<?php echo base_url('admin/metode_pembayaran') ?>" aria-expanded="false"><i class="mdi mdi-gauge"></i><span class="hide-menu">metode pembayaran</span></a>
-                        </li>
-                        <li> <a class="waves-effect waves-dark" href="<?php echo base_url('admin/produk') ?>"  aria-expanded="false"><i class="mdi mdi-account-check"></i><span class="hide-menu">produk</span></a>
-                        </li>
-                        <li> <a class="waves-effect waves-dark" href="<?php echo base_url('admin/pegawai') ?>"  aria-expanded="false"><i class="mdi mdi-table"></i><span class="hide-menu">pegawai</span></a>
-                        </li>
-                        <li> <a class="waves-effect waves-dark" href="<?php echo base_url('admin/cabang') ?>"  aria-expanded="false"><i class="mdi mdi-emoticon"></i><span class="hide-menu">cabang</span></a>
-                        </li>
-                        <li> <a class="waves-effect waves-dark" href="<?php echo base_url('admin/responsible') ?>" aria-expanded="false"><i class="mdi mdi-earth"></i><span class="hide-menu">responsible</span></a>
-                        </li>
-                        <li> <a class="waves-effect waves-dark" href="<?php echo base_url('admin/jenis') ?>" aria-expanded="false"><i class="mdi mdi-book-open-variant"></i><span class="hide-menu">Jenis</span></a>
-                        </li>
-                        <li> <a class="waves-effect waves-dark" href="<?php echo base_url('admin/kategori') ?>" aria-expanded="false"><i class="mdi mdi-book-open-variant"></i><span class="hide-menu">Kategori</span></a>
-                        </li>
-                        <li> <a class="waves-effect waves-dark" href="<?php echo base_url('admin/status_tranksaksi') ?>" aria-expanded="false"><i class="mdi mdi-book-open-variant"></i><span class="hide-menu">status tranksaksi</span></a>
-                        </li>
-                        <li> <a class="waves-effect waves-dark" href="<?php echo base_url('admin/barang') ?>" aria-expanded="false"><i class="mdi mdi-book-open-variant"></i><span class="hide-menu">barang</span></a>
-                        </li>
-                        <li> <a class="waves-effect waves-dark" href="<?php echo base_url('admin/allowed_payment') ?>" aria-expanded="false"><i class="mdi mdi-book-open-variant"></i><span class="hide-menu">allowed payment</span></a>
+                        <li> <a class="waves-effect waves-dark" href="<?php echo base_url('admin/diskon') ?>" aria-expanded="false"><i class="mdi mdi-book-open-variant"></i><span class="hide-menu">diskon</span></a>
                         </li>
                         <li> <a class="waves-effect waves-dark" href="<?php echo base_url('admin/notifikasi') ?>" aria-expanded="false"><i class="mdi mdi-book-open-variant"></i><span class="hide-menu">notifikasi</span></a>
                         </li>
-                        <li> <a class="waves-effect waves-dark" href="<?php echo base_url('admin/diskon') ?>" aria-expanded="false"><i class="mdi mdi-book-open-variant"></i><span class="hide-menu">diskon</span></a>
+                        <li> <a class="waves-effect waves-dark" href="<?php echo base_url('admin/cabang') ?>" aria-expanded="false"><i class="mdi mdi-emoticon"></i><span class="hide-menu">cabang</span></a>
                         </li>
+
+                        <li>
+                            <a class="waves-effect waves-dark tree-toggle nav-header "> <b>Produk</b> </a>
+                            <ul class="nav nav-list tree">
+                                <li> <a class="waves-effect waves-dark" href="<?php echo base_url('admin/kategori') ?>" aria-expanded="false"><i class="mdi mdi-book-open-variant"></i><span class="hide-menu">Kategori</span></a>
+                                </li>
+                                <li> <a class="waves-effect waves-dark" href="<?php echo base_url('admin/jenis') ?>" aria-expanded="false"><i class="mdi mdi-book-open-variant"></i><span class="hide-menu">Jenis</span></a>
+                                </li>
+                                <li> <a class="waves-effect waves-dark" href="<?php echo base_url('admin/status_tranksaksi') ?>" aria-expanded="false"><i class="mdi mdi-book-open-variant"></i><span class="hide-menu">status tranksaksi</span></a>
+                                </li>
+                                <li> <a class="waves-effect waves-dark" href="<?php echo base_url('admin/produk') ?>" aria-expanded="false"><i class="mdi mdi-account-check"></i><span class="hide-menu">produk</span></a>
+                                </li>
+                                <li> <a class="waves-effect waves-dark" href="<?php echo base_url('admin/barang') ?>" aria-expanded="false"><i class="mdi mdi-book-open-variant"></i><span class="hide-menu">barang</span></a>
+                                </li>
+                            </ul>
+                        </li>
+
+
+
+                        <li>
+                            <a class="waves-effect waves-dark tree-toggle nav-header "> <b>Metode Pembayaran</b> </a>
+                            <ul class="nav nav-list tree">
+                                <li> <a class="waves-effect waves-dark" href="<?php echo base_url('admin/metode_pembayaran') ?>" aria-expanded="false"><i class="mdi mdi-gauge"></i><span class="hide-menu">metode pembayaran</span></a>
+                                </li>
+                                <li> <a class="waves-effect waves-dark" href="<?php echo base_url('admin/allowed_payment') ?>" aria-expanded="false"><i class="mdi mdi-book-open-variant"></i><span class="hide-menu">allowed payment</span></a>
+                                </li>
+
+                            </ul>
+                        </li>
+
+                        <li>
+                            <a class="waves-effect waves-dark tree-toggle nav-header "> <b>Mobile Devices</b> </a>
+                            <ul class="nav nav-list tree">
+                                <li> <a class="waves-effect waves-dark" href="<?php echo base_url('admin/pegawai') ?>" aria-expanded="false"><i class="mdi mdi-table"></i><span class="hide-menu">pegawai</span></a>
+                                </li>
+                                <li> <a class="waves-effect waves-dark" href="<?php echo base_url('admin/responsible') ?>" aria-expanded="false"><i class="mdi mdi-earth"></i><span class="hide-menu">responsible</span></a>
+                                </li>
+                            </ul>
+                        </li>
+
+
+
+
+
+
                         <li> <a class="waves-effect waves-dark" href="pages-error-404.html" aria-expanded="false"><i class="mdi mdi-help-circle"></i><span class="hide-menu">Error 404</span></a>
                         </li>
                     </ul>
@@ -167,8 +191,8 @@ $loc = base_url() . '/assets/';
                 <!-- ============================================================== -->
                 <div id="content">
                     <?php
-$this->load->view($content);
-?>
+                    $this->load->view($content);
+                    ?>
                 </div>
                 <!-- ============================================================== -->
             </div>
@@ -195,34 +219,163 @@ $this->load->view($content);
     <!-- ============================================================== -->
 
     <!-- Bootstrap tether Core JavaScript -->
-    <!-- <script src="<?=$loc?>plugins/bootstrap/js/tether.min.js"></script> -->
-    <!-- <script src="<?=$loc?>plugins/bootstrap/js/bootstrap.min.js"></script> -->
+    <!-- <script src="<?= $loc ?>plugins/bootstrap/js/tether.min.js"></script> -->
+    <!-- <script src="<?= $loc ?>plugins/bootstrap/js/bootstrap.min.js"></script> -->
 
     <!-- <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script> -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
     <!-- slimscrollbar scrollbar JavaScript -->
-    <script src="<?=$loc?>js/jquery.slimscroll.js"></script>
+    <script src="<?= $loc ?>js/jquery.slimscroll.js"></script>
     <!--Wave Effects -->
-    <script src="<?=$loc?>js/waves.js"></script>
+    <script src="<?= $loc ?>js/waves.js"></script>
     <!--Menu sidebar -->
-    <script src="<?=$loc?>js/sidebarmenu.js"></script>
+    <script src="<?= $loc ?>js/sidebarmenu.js"></script>
     <!--stickey kit -->
-    <script src="<?=$loc?>plugins/sticky-kit-master/dist/sticky-kit.min.js"></script>
+    <script src="<?= $loc ?>plugins/sticky-kit-master/dist/sticky-kit.min.js"></script>
     <!--Custom JavaScript -->
-    <script src="<?=$loc?>js/custom.min.js"></script>
+    <script src="<?= $loc ?>js/custom.min.js"></script>
     <!-- ============================================================== -->
     <!-- This page plugins -->
     <!-- ============================================================== -->
     <!-- chartist chart -->
-    <script src="<?=$loc?>plugins/chartist-js/dist/chartist.min.js"></script>
-    <script src="<?=$loc?>plugins/chartist-plugin-tooltip-master/dist/chartist-plugin-tooltip.min.js"></script>
+    <script src="<?= $loc ?>plugins/chartist-js/dist/chartist.min.js"></script>
+    <script src="<?= $loc ?>plugins/chartist-plugin-tooltip-master/dist/chartist-plugin-tooltip.min.js"></script>
     <!--c3 JavaScript -->
-    <script src="<?=$loc?>plugins/d3/d3.min.js"></script>
-    <script src="<?=$loc?>plugins/c3-master/c3.min.js"></script>
-    <!-- <script src="<?=$loc?>plugins/datatables/jquery.dataTables.min.js"></script> -->
+    <script src="<?= $loc ?>plugins/d3/d3.min.js"></script>
+    <script src="<?= $loc ?>plugins/c3-master/c3.min.js"></script>
+    <!-- <script src="<?= $loc ?>plugins/datatables/jquery.dataTables.min.js"></script> -->
     <!-- Chart JS -->
-    <!-- <script src="<?=$loc?>js/dashboard1.js"></script> -->
+    <!-- <script src="<?= $loc ?>js/dashboard1.js"></script> -->
 </body>
+
+<style>
+    .no-padding {
+        padding: 0px;
+    }
+
+    .glyphicon-icon-rpad .glyphicon,
+    .glyphicon-icon-rpad .glyphicon.m8,
+    .fa-icon-rpad .fa,
+    .fa-icon-rpad .fa.m8 {
+        padding-right: 8px;
+    }
+
+    .glyphicon-icon-lpad .glyphicon,
+    .glyphicon-icon-lpad .glyphicon.m8,
+    .fa-icon-lpad .fa,
+    .fa-icon-lpad .fa.m8 {
+        padding-left: 8px;
+    }
+
+    .glyphicon-icon-rpad .glyphicon.m5,
+    .fa-icon-rpad .fa.m5 {
+        padding-right: 5px;
+    }
+
+    .glyphicon-icon-lpad .glyphicon.m5,
+    .fa-icon-lpad .fa.m5 {
+        padding-left: 5px;
+    }
+
+    .glyphicon-icon-rpad .glyphicon.m12,
+    .fa-icon-rpad .fa.m12 {
+        padding-right: 12px;
+    }
+
+    .glyphicon-icon-lpad .glyphicon.m12,
+    .fa-icon-lpad .fa.m12 {
+        padding-left: 12px;
+    }
+
+    .glyphicon-icon-rpad .glyphicon.m15,
+    .fa-icon-rpad .fa.m15 {
+        padding-right: 15px;
+    }
+
+    .glyphicon-icon-lpad .glyphicon.m15,
+    .fa-icon-lpad .fa.m15 {
+        padding-left: 15px;
+    }
+
+
+
+    ul.nav-menu-list-style .nav-header .menu-collapsible-icon {
+        position: absolute;
+        right: 3px;
+        top: 16px;
+        font-size: 9px;
+    }
+
+
+
+    ul.nav-menu-list-style {
+        margin: 0;
+    }
+
+    ul.nav-menu-list-style .nav-header {
+        border-top: 1px solid #FFFFFF;
+        border-bottom: 1px solid #e8e8e8;
+        display: block;
+        margin: 0;
+        line-height: 42px;
+        padding: 0 8px;
+        font-weight: 600;
+    }
+
+    ul.nav-menu-list-style>li {
+        position: relative;
+    }
+
+    ul.nav-menu-list-style>li a {
+        border-top: 1px solid #FFFFFF;
+        border-bottom: 1px solid #e8e8e8;
+        padding: 0 10px;
+        line-height: 32px;
+    }
+
+    ul.nav-menu-list-style>li:first-child a {}
+
+
+    ul.nav-menu-list-style {
+        list-style: none;
+        padding: 0px;
+        margin: 0px;
+    }
+
+    ul.nav-menu-list-style li .badge,
+    ul.nav-menu-list-style li .pull-right,
+    ul.nav-menu-list-style li span.badge,
+    ul.nav-menu-list-style li label.badge {
+        float: right;
+        margin-top: 7px;
+    }
+
+    ul.bullets {
+        list-style: inside disc
+    }
+
+    ul.numerics {
+        list-style: inside decimal
+    }
+
+    .ul.kas-icon-aero {}
+
+    ul.kas-icon-aero li a:before {
+        font-family: 'Glyphicons Halflings';
+        font-size: 9px;
+        content: "\e258";
+        padding-right: 8px;
+    }
+</style>
+
+<script>
+    $('.tree-toggle').click(function() {
+        $(this).parent().children('ul.tree').toggle(200);
+    });
+    $(function() {
+        $('.tree-toggle').parent().children('ul.tree').toggle(200);
+    })
+</script>
 
 </html>

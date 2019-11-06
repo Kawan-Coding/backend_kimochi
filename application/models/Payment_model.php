@@ -66,7 +66,7 @@ class Payment_model extends CI_Model
     public function get_payment_method($tabel, $where = '')
     {
         $this->db->select('pm.nominal');
-        $this->db->select('mp.nama');
+        $this->db->select('mp.nama,mp.id');
         $this->db->from('payment_method as pm');
         $this->db->join('metode_pembayaran as mp','mp.id = pm.metode_pembayaran_id', 'right');
         $this->db->group_by('mp.id');

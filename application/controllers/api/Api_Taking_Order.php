@@ -42,7 +42,7 @@ class Api_Taking_Order extends CI_Controller
     {
         $this->is_valid();
         $id =  $this->input->post('tr_id');
-        $res = $this->Master->get($this->tabel, array('tr_id' => $id),array('data_barang'),true);
+        $res = $this->Master->get($this->tabel, array('tr_id' => $id),array('data_barang','qyt','total'),true);
         foreach ($res['data'] as $key => $value) {
             // $res['data'][$key]['data_customer']=json_decode($value['data_customer']);
             $res['data'][$key]['data_barang']=json_decode($value['data_barang'])->barang;
