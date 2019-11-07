@@ -17,12 +17,32 @@ class Payment_model extends CI_Model
     {
         $this->date = new DateTime();
     }
-    function get_sum($tabel, $select, $like, $where)
+
+    function get_dt_for_omset($tabel, $like, $where)
+    {
+        if ($where != '') {
+            $this->db->where($where);
+        }
+        if ($like != '') {
+            $this->db->like($like);
+        }
+        $this->db->select('', FALSE);
+        $this->db->from('payment as p');
+        $this->db->join('payment_met as p', 'pm.tr_id = p.tr_id', 'right');
+
+    }
+    function get_sum($tabel, $select, $like, $where='')
     {
         $this->db->select($select, FALSE);
+        $this->db->select('pgw.username,CAST(p.create_at AS DATE) as create_at,c.nama', FALSE);
         $this->db->from($tabel);
         $this->db->like($like);
-        $this->db->where($where);
+        if ($where!='') {
+            $this->db->where($where);
+        }
+        $this->db->join('responsible as r', 'r.id = p.responsible_id');
+        $this->db->join('pegawai as pgw', 'pgw.id = r.pegawai_id');
+        $this->db->join('cabang as c', 'c.id = p.cabang_id');
         $this->db->group_by("responsible_id");
         $query =  $this->db->get();
         $res = $query->row();
@@ -68,7 +88,7 @@ class Payment_model extends CI_Model
         $this->db->select('pm.nominal');
         $this->db->select('mp.nama,mp.id');
         $this->db->from('payment_method as pm');
-        $this->db->join('metode_pembayaran as mp','mp.id = pm.metode_pembayaran_id', 'right');
+        $this->db->join('metode_pembayaran as mp', 'mp.id = pm.metode_pembayaran_id', 'right');
         $this->db->group_by('mp.id');
         $this->db->where($where);
         $query =  $this->db->get();

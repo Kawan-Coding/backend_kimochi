@@ -92,6 +92,8 @@
                 <!-- Sidebar navigation-->
                 <nav class="sidebar-nav nav nav-list tree">
                     <ul id="sidebarnav">
+                        <li> <a class="waves-effect waves-dark" href="<?php echo base_url('admin/omset') ?>" aria-expanded="false"><i class="mdi mdi-book-open-variant"></i><span class="hide-menu">omset</span></a>
+                        </li>
                         <li> <a class="waves-effect waves-dark" href="<?php echo base_url('admin/diskon') ?>" aria-expanded="false"><i class="mdi mdi-book-open-variant"></i><span class="hide-menu">diskon</span></a>
                         </li>
                         <li> <a class="waves-effect waves-dark" href="<?php echo base_url('admin/notifikasi') ?>" aria-expanded="false"><i class="mdi mdi-book-open-variant"></i><span class="hide-menu">notifikasi</span></a>
@@ -100,8 +102,8 @@
                         </li>
 
                         <li>
-                            <a class="waves-effect waves-dark tree-toggle nav-header "> <b>Produk</b> </a>
-                            <ul class="nav nav-list tree">
+                            <a href="javascript:void(0)" class=""> <b>Produk</b> </a>
+                            <ul class=" tree">
                                 <li> <a class="waves-effect waves-dark" href="<?php echo base_url('admin/kategori') ?>" aria-expanded="false"><i class="mdi mdi-book-open-variant"></i><span class="hide-menu">Kategori</span></a>
                                 </li>
                                 <li> <a class="waves-effect waves-dark" href="<?php echo base_url('admin/jenis') ?>" aria-expanded="false"><i class="mdi mdi-book-open-variant"></i><span class="hide-menu">Jenis</span></a>
@@ -118,8 +120,8 @@
 
 
                         <li>
-                            <a class="waves-effect waves-dark tree-toggle nav-header "> <b>Metode Pembayaran</b> </a>
-                            <ul class="nav nav-list tree">
+                            <a href="javascript:void(0)" class=" "> <b>Metode Pembayaran</b> </a>
+                            <ul class=" tree">
                                 <li> <a class="waves-effect waves-dark" href="<?php echo base_url('admin/metode_pembayaran') ?>" aria-expanded="false"><i class="mdi mdi-gauge"></i><span class="hide-menu">metode pembayaran</span></a>
                                 </li>
                                 <li> <a class="waves-effect waves-dark" href="<?php echo base_url('admin/allowed_payment') ?>" aria-expanded="false"><i class="mdi mdi-book-open-variant"></i><span class="hide-menu">allowed payment</span></a>
@@ -129,8 +131,8 @@
                         </li>
 
                         <li>
-                            <a class="waves-effect waves-dark tree-toggle nav-header "> <b>Mobile Devices</b> </a>
-                            <ul class="nav nav-list tree">
+                            <a href="javascript:void(0)" class=" "> <b>Mobile Devices</b> </a>
+                            <ul class=" tree">
                                 <li> <a class="waves-effect waves-dark" href="<?php echo base_url('admin/pegawai') ?>" aria-expanded="false"><i class="mdi mdi-table"></i><span class="hide-menu">pegawai</span></a>
                                 </li>
                                 <li> <a class="waves-effect waves-dark" href="<?php echo base_url('admin/responsible') ?>" aria-expanded="false"><i class="mdi mdi-earth"></i><span class="hide-menu">responsible</span></a>
@@ -250,123 +252,7 @@
 </body>
 
 <style>
-    .no-padding {
-        padding: 0px;
-    }
 
-    .glyphicon-icon-rpad .glyphicon,
-    .glyphicon-icon-rpad .glyphicon.m8,
-    .fa-icon-rpad .fa,
-    .fa-icon-rpad .fa.m8 {
-        padding-right: 8px;
-    }
-
-    .glyphicon-icon-lpad .glyphicon,
-    .glyphicon-icon-lpad .glyphicon.m8,
-    .fa-icon-lpad .fa,
-    .fa-icon-lpad .fa.m8 {
-        padding-left: 8px;
-    }
-
-    .glyphicon-icon-rpad .glyphicon.m5,
-    .fa-icon-rpad .fa.m5 {
-        padding-right: 5px;
-    }
-
-    .glyphicon-icon-lpad .glyphicon.m5,
-    .fa-icon-lpad .fa.m5 {
-        padding-left: 5px;
-    }
-
-    .glyphicon-icon-rpad .glyphicon.m12,
-    .fa-icon-rpad .fa.m12 {
-        padding-right: 12px;
-    }
-
-    .glyphicon-icon-lpad .glyphicon.m12,
-    .fa-icon-lpad .fa.m12 {
-        padding-left: 12px;
-    }
-
-    .glyphicon-icon-rpad .glyphicon.m15,
-    .fa-icon-rpad .fa.m15 {
-        padding-right: 15px;
-    }
-
-    .glyphicon-icon-lpad .glyphicon.m15,
-    .fa-icon-lpad .fa.m15 {
-        padding-left: 15px;
-    }
-
-
-
-    ul.nav-menu-list-style .nav-header .menu-collapsible-icon {
-        position: absolute;
-        right: 3px;
-        top: 16px;
-        font-size: 9px;
-    }
-
-
-
-    ul.nav-menu-list-style {
-        margin: 0;
-    }
-
-    ul.nav-menu-list-style .nav-header {
-        border-top: 1px solid #FFFFFF;
-        border-bottom: 1px solid #e8e8e8;
-        display: block;
-        margin: 0;
-        line-height: 42px;
-        padding: 0 8px;
-        font-weight: 600;
-    }
-
-    ul.nav-menu-list-style>li {
-        position: relative;
-    }
-
-    ul.nav-menu-list-style>li a {
-        border-top: 1px solid #FFFFFF;
-        border-bottom: 1px solid #e8e8e8;
-        padding: 0 10px;
-        line-height: 32px;
-    }
-
-    ul.nav-menu-list-style>li:first-child a {}
-
-
-    ul.nav-menu-list-style {
-        list-style: none;
-        padding: 0px;
-        margin: 0px;
-    }
-
-    ul.nav-menu-list-style li .badge,
-    ul.nav-menu-list-style li .pull-right,
-    ul.nav-menu-list-style li span.badge,
-    ul.nav-menu-list-style li label.badge {
-        float: right;
-        margin-top: 7px;
-    }
-
-    ul.bullets {
-        list-style: inside disc
-    }
-
-    ul.numerics {
-        list-style: inside decimal
-    }
-
-    .ul.kas-icon-aero {}
-
-    ul.kas-icon-aero li a:before {
-        font-family: 'Glyphicons Halflings';
-        font-size: 9px;
-        content: "\e258";
-        padding-right: 8px;
-    }
 </style>
 
 <script>

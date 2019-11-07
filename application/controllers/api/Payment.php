@@ -69,25 +69,50 @@ class Payment extends CI_Controller
         $this->msg('data', '200', $res);
     }
 
-    function get_setoran_day($where, $day)
+    function get_omset_all_day()
     {
-        $arr_sum = $this->Payment_model->get_sum('payment', 'sum(total) as total,sum(total_payment) as total_payment,sum(tunai) as tunai,sum(non_tunai) as non_tunai,sum(potongan) as potongan', array('create_at' => $day), $where);
+
+        $day = $this->input->post('day');
+        // CAST(create_at AS DATE),responsible_id  -> GROUB BY sehingga dipastikan responsible_id atau waktu berbeda
+        $arr_dt_payment = $this->Master->get_all('payment', '', '', 'responsible_id,CAST(create_at AS DATE) as create_at', '', TRUE, 'CAST(create_at AS DATE),responsible_id');
+        // $this->msg('data', '200', $arr_dt_payment);
+        $res = array();
+        foreach ($arr_dt_payment as $key => $value) {
+            // var_dump($value['responsible_id']);
+            $where =  array('responsible_id' => $value['responsible_id']);
+            array_push($res, $this->get_setoran_day($where, $value['create_at'], true));
+            // var_dump($res);
+        }
+        $this->msg('data', '200', $res);
+    }
+
+    function get_setoran_day($where, $day, $all = false)
+    {
+        $arr_sum = $this->Payment_model->get_sum('payment as p', 'sum(total) as total,sum(p.total_payment) as total_payment,sum(p.tunai) as tunai,sum(p.non_tunai) as non_tunai,sum(p.potongan) as potongan', array('p.create_at' => $day), $where);
         $total_cash_flow = $this->Master->get_all('cash_flow', $where, array('open', 'DESC'), 'open_cash as total', array('open' => $day), FALSE);
-        // $this->msg('data', '200', $total_cash_flow['total']);
+        // $this->msg('data', '200', $arr_sum);
         if ($arr_sum) {
-            $res['omset'] = (float) $arr_sum->total;
+            $res['omset'] = (float) $arr_sum->total_payment;
             $res['tunai'] = (float) $arr_sum->tunai;
             $res['non_tunai'] = (float) $arr_sum->non_tunai;
+            $res['pegawai'] = (float) $arr_sum->non_tunai;
+            if ($all) {
+                $res['tanggal'] = $arr_sum->create_at;
+                $res['pegawai'] = $arr_sum->username;
+                $res['cabang'] = $arr_sum->nama;
+            }
         } else {
             $res['omset'] = 0.0;
             $res['tunai'] = 0.0;
             $res['non_tunai'] = 0.0;
         }
+
         if ($total_cash_flow) {
             $res['cash_register'] = (float) $total_cash_flow['total'];
         } else {
             $res['cash_register'] = 0.0;
         }
+
         $res['setoran_hari_ini'] = $res['cash_register'] + $res['tunai'];
         return $res;
     }
@@ -171,7 +196,7 @@ class Payment extends CI_Controller
         //KASUSNYA KEMARIN KEBALIK ISTILAHNYA JADI KETUKAR
         $params['total_payment'] = $data_payment['total']; //masukan aja 
         $params['total'] = $data_payment['total_payment']; //masukan  + diskon
-        
+
         $params['tunai'] = $data_payment['tunai'];
         $params['non_tunai'] = $data_payment['non_tunai'];
         $params['potongan'] = $data_payment['potongan'];

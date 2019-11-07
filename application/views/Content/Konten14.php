@@ -30,11 +30,12 @@
             <thead>
                 <tr>
                     <th>No</th>
-                    <th>Jenis</th>
-                    <th>nama</th>
-                    <th>create_at</th>
-                    <th>update_at</th>
-                    <th>Actions</th>
+                    <th>tanggal</th>
+                    <th>pegawai</th>
+                    <th>cabang</th>
+                    <th>tunai</th>
+                    <th>non tunai</th>
+                    <th>total omset</th>
                 </tr>
             </thead>
             <tbody id="tbodyid">
@@ -106,7 +107,7 @@
 <script src="https://cdn.ckeditor.com/ckeditor5/12.0.0/classic/ckeditor.js"></script>
 <script>
     let m_view = 'view';
-    let bash_api = "<?php echo base_url('sapi/status_transaksi/') ?>";
+    let bash_api = "<?php echo base_url('api/payment/') ?>";
     console.log(bash_api);
     var number, is_update;
     let label = " status transaksi ";
@@ -128,7 +129,7 @@
     }
     var table = $('#table').DataTable({
         "ajax": {
-            url: bash_api + 'get_all',
+            url: bash_api + 'get_omset_all_day',
             dataSrc: 'data'
         },
         "columns": [{
@@ -136,27 +137,41 @@
                     return get_index();
                 }
             }, {
-                "render": function(data, type, JsonResultRow, meta) {
-                    return get_nama_jenis_byID(JsonResultRow.jenis_id);
-                }
+                "data": "tanggal"
             }, {
-                "data": "nama"
+                "data": "pegawai"
             }, {
-                "data": "create_at"
-            }, {
-                "data": "update_at"
+                "data": "cabang"
             }, {
                 "render": function(data, type, JsonResultRow, meta) {
-                    return '<button class="btn btn-info edit_jenis"  style="width: 40px; margin-right : 5px;" onclick ="read(' + "'" + JsonResultRow.id + "'" + ')"><i class="fa fa-eye"></i></button>' +
-                        '<button class="btn btn-info edit_jenis" style="width: 40px;margin-right : 5px;" onclick ="update(' + "'" + JsonResultRow.id + "'" + ')"><i class="fa fa-pencil-square-o"></i></a>' +
-                        '<button class="btn btn-danger delete_jenis" style="width: 40px;" onclick ="del(' + "'" + JsonResultRow.id + "'" + ')"><i class="fa fa-trash-o"></i></a>';
+                    return "" + addCommas(JsonResultRow.tunai);
                 }
+            }, {
+                "render": function(data, type, JsonResultRow, meta) {
+                    return "" + addCommas(JsonResultRow.non_tunai);
+                }
+
+            }, {
+                "render": function(data, type, JsonResultRow, meta) {
+                    return "" + addCommas(JsonResultRow.omset);
+                }
+
             }
 
         ]
     });
 
-
+    function addCommas(nStr) {
+        nStr += '';
+        x = nStr.split('.');
+        x1 = x[0];
+        x2 = x.length > 1 ? '.' + x[1] : '';
+        var rgx = /(\d+)(\d{3})/;
+        while (rgx.test(x1)) {
+            x1 = x1.replace(rgx, '$1' + ',' + '$2');
+        }
+        return x1 + x2;
+    }
 
     $('#edit').on('hidden.bs.modal', function(e) {
         if (e.handled !== true) {

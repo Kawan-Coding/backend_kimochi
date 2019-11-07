@@ -50,28 +50,35 @@ class Payment_method extends CI_Controller
         $this->is_valid();
         $params = array(
             'tr_id' => $this->input->post('tr_id'),
-            'metode_pembayaran_id' => $this->input->post('metode_pembayaran_id'),
-            'diskon_id' => $this->input->post('diskon_id'),
-            'nominal' => $this->input->post('nominal'),
             'create_at' => date('Y-m-d H:i:s'),
             'update_at' => date('Y-m-d H:i:s'),
         );
+        $data = $this->input->post('data');
+        // var_dump($data);
+        foreach ($data as $key => $value) {
+            // var_dump($value);
+            $this->add_action($key, $params, $value);
+        }
+        $this->msg('data', '200', array('tr_id' => $params['tr_id']));
+    }
+
+    function add_action($key, $params, $data)
+    {
+        $params['metode_pembayaran_id'] = $data['metode_pembayaran_id'];
+        $params['diskon_id'] = $data['diskon_id'];
+        $params['nominal'] = $data['nominal'];
 
         $detail_diskon = $this->Master->get_select('diskon', 'id,kode_diskon,nama,detail,mulai,akhir,potongan,kuota', array('id' => $params['diskon_id']));
-        if ($detail_diskon['status'] && $params['diskon_id']!=0) {
-            // $decreament_kuota = array(
-            //     'kuota' => $detail_diskon['data']['kuota'] - 1
-            // );
+        if ($detail_diskon['status'] && $params['diskon_id'] != 0) {
             $params['data_metode_pembayaran'] = json_encode(array('diskon' => $detail_diskon['data']));
-            // $this->Master->update('diskon', array('id' => $params['diskon_id']), $decreament_kuota);
-            // $params['diskon_id']=0;
-        }else{
-            $params['data_metode_pembayaran']=json_encode(array('diskon'=>NULL,'keterangan'=>json_decode($this->input->post('data_metode_pembayaran'))));
+        } else {
+            $params['data_metode_pembayaran'] = json_encode(array('diskon' => NULL, 'keterangan' => json_decode($this->input->post('data_metode_pembayaran'))));
         }
 
         $res = $this->Master->add($this->tabel, $params);
         if ($res['status']) {
-            $this->msg('data', '200', $res['data']);
+            return true;
+            // $this->msg('data', '200', $res['data']);
         } else {
             $this->msg('data', '400', '', $res['data']['message']);
         };
