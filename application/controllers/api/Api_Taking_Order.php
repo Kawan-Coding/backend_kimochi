@@ -57,26 +57,32 @@ class Api_Taking_Order extends CI_Controller
     
 
 
-    public function upload_image($key)
+    public function upload_image($data)
     {
-        $_FILES['file']['name'] = $_FILES['data']['name'][$key]['foto_helm'];
-        $_FILES['file']['type'] = $_FILES['data']['type'][$key]['foto_helm'];
-        $_FILES['file']['tmp_name'] =$_FILES['data']['tmp_name'][$key]['foto_helm'];
-        $_FILES['file']['error'] = $_FILES['data']['error'][$key]['foto_helm'];
-        $_FILES['file']['size'] = $_FILES['data']['size'][$key]['foto_helm'];
-        // var_dump($_FILES['data']['name'][$key]['foto_helm']);
-        // var_dump($_FILES);
-        $config['upload_path'] = './uploads/taking_order';
-        $config['allowed_types'] = 'gif|jpg|png|JPG';
-        $config['encrypt_name'] = true;
-        // $config['max_size'] = 600;
-        // $config['max_width'] = 1024;
-        // $config['max_height'] = 768;
-        $this->load->library('upload', $config);
-        $is_upload_succces = $this->upload->do_upload('file');
-        $file = $this->upload->data();
-        $error_upload = array('img' => $this->upload->display_errors());
-        return array('status' => $is_upload_succces, 'name' => $file['file_name'], 'error_msg' => $error_upload);
+        $name = strtotime(date('Y-m-d H:i:s')) . ".jpg";
+        $file = "./uploads/taking_order" . $name;
+		$uri = substr($data, strpos($data, ",") + 1);
+        file_put_contents($file, base64_decode($uri));
+        
+        // $_FILES['file']['name'] = $_FILES['data']['name'][$key]['foto_helm'];
+        // $_FILES['file']['type'] = $_FILES['data']['type'][$key]['foto_helm'];
+        // $_FILES['file']['tmp_name'] =$_FILES['data']['tmp_name'][$key]['foto_helm'];
+        // $_FILES['file']['error'] = $_FILES['data']['error'][$key]['foto_helm'];
+        // $_FILES['file']['size'] = $_FILES['data']['size'][$key]['foto_helm'];
+        // // var_dump($_FILES['data']['name'][$key]['foto_helm']);
+        // // var_dump($_FILES);
+        // $config['upload_path'] = './uploads/taking_order';
+        // $config['allowed_types'] = 'gif|jpg|png|JPG';
+        // $config['encrypt_name'] = true;
+        // // $config['max_size'] = 600;
+        // // $config['max_width'] = 1024;
+        // // $config['max_height'] = 768;
+        // $this->load->library('upload', $config);
+        // $is_upload_succces = $this->upload->do_upload('file');
+        // $file = $this->upload->data();
+        // $error_upload = array('img' => $this->upload->display_errors());
+        return array('status' => true, 'name' => $name, 'error_msg' => false);
+   
     }
     /*
      * Adding a new produk
@@ -103,13 +109,15 @@ class Api_Taking_Order extends CI_Controller
         //barang, qty,jenis_transaksi,              foto,kondisi
 
 
-        $data = $this->input->post('data');
-        // var_dump($data);
-        foreach ($data as $key => $value) {
-            // var_dump($value);
-            $this->set_taking_order_booking_action($key,$params, $value);
-        }
-        $this->msg('data', '200', array('tr_id'=>$params['tr_id']));
+        $data = json_decode($this->input->post('data'), TRUE);
+
+        var_dump($data);
+        // foreach ($data as $key => $value) {
+        //     // echo "looping ke"."$key";
+        //     // var_dump($value);
+        //     $this->set_taking_order_booking_action($key,$params, $value);
+        // }
+        // $this->msg('data', '200', array('tr_id'=>$params['tr_id']));
     }
     //foto dan kondisi
     function set_taking_order_booking_action($key,$params, $data)

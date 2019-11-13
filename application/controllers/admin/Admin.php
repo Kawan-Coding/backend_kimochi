@@ -107,4 +107,5 @@ class Admin extends CI_Controller
         );
         $this->load->view('template_admin', $data);
     }
+
 }

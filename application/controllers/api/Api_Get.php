@@ -50,9 +50,9 @@ class Api_Get extends CI_Controller
         // var_dump($res);
         foreach ($res as $key => $value) {
             if ($value['kategori_id']=='1') {
-                $data['cuci_helm'][]=$value;
+                $data['cuci_helm'][]=array_merge($value,array('qyt'=>0));
             }else if($value['kategori_id']=='2'){
-                $data['aksesoris'][]=$value;
+                $data['aksesoris'][]=array_merge($value,array('qyt'=>0));;
             }
         }
 

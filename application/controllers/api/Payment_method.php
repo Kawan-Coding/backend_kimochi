@@ -72,7 +72,7 @@ class Payment_method extends CI_Controller
         if ($detail_diskon['status'] && $params['diskon_id'] != 0) {
             $params['data_metode_pembayaran'] = json_encode(array('diskon' => $detail_diskon['data']));
         } else {
-            $params['data_metode_pembayaran'] = json_encode(array('diskon' => NULL, 'keterangan' => json_decode($this->input->post('data_metode_pembayaran'))));
+            $params['data_metode_pembayaran'] = json_encode(array('diskon' => NULL, 'keterangan' => json_decode($data['data_metode_pembayaran'])));
         }
 
         $res = $this->Master->add($this->tabel, $params);

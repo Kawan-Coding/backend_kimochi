@@ -104,15 +104,15 @@
                         <li>
                             <a href="javascript:void(0)" class=""> <b>Produk</b> </a>
                             <ul class=" tree">
-                                <li> <a class="waves-effect waves-dark" href="<?php echo base_url('admin/kategori') ?>" aria-expanded="false"><i class="mdi mdi-book-open-variant"></i><span class="hide-menu">Kategori</span></a>
+                                <li> <a class="waves-effect waves-dark" href="<?php echo base_url('admin/kategori') ?>" aria-expanded="false"><i class="mdi mdi-book-open-variant xnx"></i><span class="hide-menu">Kategori</span></a>
                                 </li>
-                                <li> <a class="waves-effect waves-dark" href="<?php echo base_url('admin/jenis') ?>" aria-expanded="false"><i class="mdi mdi-book-open-variant"></i><span class="hide-menu">Jenis</span></a>
+                                <li> <a class="waves-effect waves-dark" href="<?php echo base_url('admin/jenis') ?>" aria-expanded="false"><i class="mdi mdi-book-open-variant xnx"></i><span class="hide-menu">Jenis</span></a>
                                 </li>
-                                <li> <a class="waves-effect waves-dark" href="<?php echo base_url('admin/status_tranksaksi') ?>" aria-expanded="false"><i class="mdi mdi-book-open-variant"></i><span class="hide-menu">status tranksaksi</span></a>
+                                <li> <a class="waves-effect waves-dark" href="<?php echo base_url('admin/status_tranksaksi') ?>" aria-expanded="false"><i class="mdi mdi-book-open-variant xnx"></i><span class="hide-menu">status tranksaksi</span></a>
                                 </li>
-                                <li> <a class="waves-effect waves-dark" href="<?php echo base_url('admin/produk') ?>" aria-expanded="false"><i class="mdi mdi-account-check"></i><span class="hide-menu">produk</span></a>
+                                <li> <a class="waves-effect waves-dark" href="<?php echo base_url('admin/produk') ?>" aria-expanded="false"><i class="mdi mdi-account-check xnx"></i><span class="hide-menu">produk</span></a>
                                 </li>
-                                <li> <a class="waves-effect waves-dark" href="<?php echo base_url('admin/barang') ?>" aria-expanded="false"><i class="mdi mdi-book-open-variant"></i><span class="hide-menu">barang</span></a>
+                                <li> <a class="waves-effect waves-dark" href="<?php echo base_url('admin/barang') ?>" aria-expanded="false"><i class="mdi mdi-book-open-variant xnx"></i><span class="hide-menu">barang</span></a>
                                 </li>
                             </ul>
                         </li>
@@ -122,9 +122,9 @@
                         <li>
                             <a href="javascript:void(0)" class=" "> <b>Metode Pembayaran</b> </a>
                             <ul class=" tree">
-                                <li> <a class="waves-effect waves-dark" href="<?php echo base_url('admin/metode_pembayaran') ?>" aria-expanded="false"><i class="mdi mdi-gauge"></i><span class="hide-menu">metode pembayaran</span></a>
+                                <li> <a class="waves-effect waves-dark" href="<?php echo base_url('admin/metode_pembayaran') ?>" aria-expanded="false"><i class="mdi mdi-gauge xnx"></i><span class="hide-menu">metode pembayaran</span></a>
                                 </li>
-                                <li> <a class="waves-effect waves-dark" href="<?php echo base_url('admin/allowed_payment') ?>" aria-expanded="false"><i class="mdi mdi-book-open-variant"></i><span class="hide-menu">allowed payment</span></a>
+                                <li> <a class="waves-effect waves-dark" href="<?php echo base_url('admin/allowed_payment') ?>" aria-expanded="false"><i class="mdi mdi-book-open-variant xnx"></i><span class="hide-menu">allowed payment</span></a>
                                 </li>
 
                             </ul>
@@ -133,9 +133,9 @@
                         <li>
                             <a href="javascript:void(0)" class=" "> <b>Mobile Devices</b> </a>
                             <ul class=" tree">
-                                <li> <a class="waves-effect waves-dark" href="<?php echo base_url('admin/pegawai') ?>" aria-expanded="false"><i class="mdi mdi-table"></i><span class="hide-menu">pegawai</span></a>
+                                <li> <a class="waves-effect waves-dark" href="<?php echo base_url('admin/pegawai') ?>" aria-expanded="false"><i class="mdi mdi-table xnx"></i><span class="hide-menu">pegawai</span></a>
                                 </li>
-                                <li> <a class="waves-effect waves-dark" href="<?php echo base_url('admin/responsible') ?>" aria-expanded="false"><i class="mdi mdi-earth"></i><span class="hide-menu">responsible</span></a>
+                                <li> <a class="waves-effect waves-dark" href="<?php echo base_url('admin/responsible') ?>" aria-expanded="false"><i class="mdi mdi-earth xnx"></i><span class="hide-menu">responsible</span></a>
                                 </li>
                             </ul>
                         </li>
@@ -252,7 +252,10 @@
 </body>
 
 <style>
-
+    .xnx {
+        /* background-color: red; */
+        margin-right: 6px;
+    }
 </style>
 
 <script>

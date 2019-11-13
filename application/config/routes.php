@@ -135,6 +135,13 @@ $route['sapi/allowed_payment/create']['POST'] = '/singleapi/allowed_payment/add'
 $route['sapi/allowed_payment/update']['POST'] = '/singleapi/allowed_payment/edit';
 $route['sapi/allowed_payment/delete']['POST'] = '/singleapi/allowed_payment/remove';
 
+//SINGLE VALIDASI
+$route['sapi/validasi/get_all']['GET'] = '/singleapi/Validasi/get_all';
+$route['sapi/validasi/read']['POST'] = '/singleapi/Validasi/get';
+$route['sapi/validasi/create']['POST'] = '/singleapi/Validasi/add';
+$route['sapi/validasi/update']['POST'] = '/singleapi/Validasi/edit';
+$route['sapi/validasi/delete']['POST'] = '/singleapi/Validasi/remove';
+// Validasi
 //SINGLE ALLOWED PAYMENT
 $route['sapi/diskon/get_all']['GET'] = '/singleapi/Diskon/get_all';
 $route['sapi/diskon/read']['POST'] = '/singleapi/Diskon/get';
