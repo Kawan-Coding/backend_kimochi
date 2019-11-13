@@ -78,9 +78,13 @@ class AdminProduk extends CI_Controller
             'kategori_id' => $this->input->post('kategori_id'),
             'nama' => $this->input->post('nama'),
             'harga' => $this->input->post('harga'),
+            'harga_beli' => $this->input->post('harga_beli'),
+            'kimochi_wallet' => $this->input->post('kimochi_wallet'),
             'create_at' => date('Y-m-d H:i:s'),
             'detail' => $this->input->post('detail'),
             'foto' => $file_foto['name'],
+
+            
         );
         if ($file_foto['status']) {
             $res = $this->Master->add($this->tabel, $params);
@@ -107,6 +111,8 @@ class AdminProduk extends CI_Controller
             'kategori_id' => $this->input->post('kategori_id'),
             'nama' => $this->input->post('nama'),
             'harga' => $this->input->post('harga'),
+            'harga_beli' => $this->input->post('harga_beli'),
+            'kimochi_wallet' => $this->input->post('kimochi_wallet'),
             'detail' => $this->input->post('detail'),
             'update_at' => date('Y-m-d H:i:s'),
         );

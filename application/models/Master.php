@@ -26,7 +26,8 @@ class Master extends CI_Model
             $run = $this->db->get_where($tabel, $where)->row_array();
         }
         $res = array();
-        if (!isset($run)) {
+        // var_dump(empty($run));
+        if (empty($run)) {
             $res['data']['message'] = 'data not exist ->tabel_'.$tabel;
             $res['status'] = false;
         } else {

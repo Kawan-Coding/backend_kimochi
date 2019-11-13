@@ -77,7 +77,7 @@ class Api_Get extends CI_Controller
     public function get_transaksi_booking()
     {
         $cabang_id = $this->input->post('cabang_id');
-        $el = $this->Master->get_all('taking_order', array('status'=>'booking','cabang_id'=>$cabang_id),array('tr_id','DESC'),'id as taking_order_id,tr_id,data_customer,customer_id,status,create_at as jam_order','',TRUE,'tr_id');
+        $el = $this->Master->get_all('taking_order', array('status'=>'booking','cabang_id'=>$cabang_id),array('tr_id','DESC'),'id as taking_order_id,tr_id,data_customer,customer_id,status,status_produksi,create_at as jam_order','',TRUE,'tr_id');
         foreach ($el as $key => $value) {
             $el[$key]['data_customer']=json_decode($value['data_customer'])->customer;
         }
@@ -86,7 +86,7 @@ class Api_Get extends CI_Controller
     public function get_transaksi_order()
     {
         $cabang_id = $this->input->post('cabang_id');
-        $el = $this->Master->get_all('taking_order', array('status !='=>'booking','cabang_id'=>$cabang_id),array('status','ASC'),'id as taking_order_id,tr_id,data_customer,customer_id,status,create_at as jam_order','',TRUE,'tr_id');
+        $el = $this->Master->get_all('taking_order', array('status !='=>'booking','cabang_id'=>$cabang_id),array('status','ASC'),'id as taking_order_id,tr_id,data_customer,customer_id,status,status_produksi,create_at as jam_order','',TRUE,'tr_id');
         foreach ($el as $key => $value) {
             $el[$key]['data_customer']=json_decode($value['data_customer'])->customer;
             $el[$key]['status']=$el[$key]['status']=='order' ?'unpaid':'paid';

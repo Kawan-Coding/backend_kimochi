@@ -42,28 +42,32 @@ class Api_Taking_Order extends CI_Controller
     {
         $this->is_valid();
         $id =  $this->input->post('tr_id');
-        $res = $this->Master->get($this->tabel, array('tr_id' => $id),array('data_barang','qyt','total'),true);
-        foreach ($res['data'] as $key => $value) {
-            // $res['data'][$key]['data_customer']=json_decode($value['data_customer']);
-            $res['data'][$key]['data_barang']=json_decode($value['data_barang'])->barang;
-        }
+        $res = $this->Master->get($this->tabel, array('tr_id' => $id), array('data_barang', 'qyt', 'total', 'customer_id'), true);
         if ($res['status']) {
-            $this->msg('data', '200', $res['data']);
+            $data_customer = $this->Master->get('customer', ['id' => $res['data'][0]['customer_id']]);
+            $res['customer'] = $data_customer['data'];
+            // $this->msg('data', '200', $data_customer);
+            foreach ($res['data'] as $key => $value) {
+                // $res['data'][$key]['data_customer']=json_decode($value['data_customer']);
+                $res['data'][$key]['data_barang'] = json_decode($value['data_barang'])->barang;
+            }
+
+            $this->msg('data', '200', $res);
         } else {
             $this->msg('data', '400', '', $res['data']['message']);
             // $this->msg('data', '400',$res);
         };
     }
-    
+
 
 
     public function upload_image($data)
     {
         $name = strtotime(date('Y-m-d H:i:s')) . ".jpg";
         $file = "./uploads/taking_order" . $name;
-		$uri = substr($data, strpos($data, ",") + 1);
+        $uri = substr($data, strpos($data, ",") + 1);
         file_put_contents($file, base64_decode($uri));
-        
+
         // $_FILES['file']['name'] = $_FILES['data']['name'][$key]['foto_helm'];
         // $_FILES['file']['type'] = $_FILES['data']['type'][$key]['foto_helm'];
         // $_FILES['file']['tmp_name'] =$_FILES['data']['tmp_name'][$key]['foto_helm'];
@@ -82,7 +86,6 @@ class Api_Taking_Order extends CI_Controller
         // $file = $this->upload->data();
         // $error_upload = array('img' => $this->upload->display_errors());
         return array('status' => true, 'name' => $name, 'error_msg' => false);
-   
     }
     /*
      * Adding a new produk
@@ -120,15 +123,15 @@ class Api_Taking_Order extends CI_Controller
         // $this->msg('data', '200', array('tr_id'=>$params['tr_id']));
     }
     //foto dan kondisi
-    function set_taking_order_booking_action($key,$params, $data)
+    function set_taking_order_booking_action($key, $params, $data)
     {
 
         $params['barang_id'] = $data['barang_id'];
         $params['qyt'] = $data['qyt'];
-        $params['data_barang'] = json_encode($this->get_data_barang($key,$data, $data['jenis_transaksi']));
+        $params['data_barang'] = json_encode($this->get_data_barang($key, $data, $data['jenis_transaksi']));
         $harga_barang = (float) json_decode($params['data_barang'])->barang->harga;
         // var_dump($harga_barang);
-        $params['total'] = (float) $params['qyt'] * $harga_barang ;
+        $params['total'] = (float) $params['qyt'] * $harga_barang;
         // var_dump($params['total'] );
         $res = $this->Master->add($this->tabel, $params);
         if ($res['status']) {
@@ -137,7 +140,6 @@ class Api_Taking_Order extends CI_Controller
         } else {
             $this->msg('data', '400', '', $res['data']['message']);
         };
-
     }
 
     function set_taking_order_order()
@@ -155,7 +157,7 @@ class Api_Taking_Order extends CI_Controller
         };
     }
 
-    function get_data_barang($key,$data, $jenis)
+    function get_data_barang($key, $data, $jenis)
     {
         $res = $this->Master->get('barang', array('id' => $data['barang_id']));
         if ($res['status']) {
@@ -173,7 +175,7 @@ class Api_Taking_Order extends CI_Controller
                     $this->msg('data', '400', '', $file_foto['error_msg']['img']);
                 }
             } else {
-               
+
                 return $data_barang;
             }
         } else {

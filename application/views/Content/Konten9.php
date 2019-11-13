@@ -78,10 +78,24 @@
                                         <input type="text" name="nama" value="" class="form-control" id="nama" required />
                                     </div>
                                 </div>
-                                <div class="col-md-12">
+                                <div class="col-md-4">
                                     <label for="harga" class="control-label">Harga</label>
                                     <div class="form-group">
-                                        <input type="text" name="harga" value="" class="form-control" id="harga" required />
+                                        <input type="number" name="harga" value="" class="form-control" id="harga" required />
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="harga_beli" class="control-label">Harga Produksi</label>
+                                    <div class="form-group">
+                                        <input type="number" name="harga_beli" value="" class="form-control" id="harga_beli"
+                                               required/>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="kimochi_wallet" class="control-label">Kimochi Wallet</label>
+                                    <div class="form-group">
+                                        <input type="number" name="kimochi_wallet" value="" class="form-control" id="kimochi_wallet"
+                                               required/>
                                     </div>
                                 </div>
                                 <div class="col-md-12">
@@ -272,6 +286,8 @@
                     $('#nama').val(r.data.nama);
                     $('#detail').val(r.data.detail);
                     $('#harga').val(r.data.harga);
+                    $('#harga_beli').val(r.data.harga_beli);
+                    $('#kimochi_wallet').val(r.data.kimochi_wallet);
                     // $('#foto').val(r.data.foto);
                     $("#image_preview").append('<div class="show-image"><img src="' + "<?php echo base_url('') ?>" + "/uploads/" + r.data.foto + '" class="rounded image_view p-1" alt="..." style="width:100%;" id="img_preview_src">');
                     $('#create_at').val(r.data.create_at);
