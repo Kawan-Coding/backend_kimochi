@@ -153,6 +153,7 @@ $route['sapi/diskon/get_available']['GET']  = '/singleapi/Diskon/get_available';
 //SINGLE TAKING ORDER
 $route['api/ato/set_booking']['POST'] = '/api/Api_Taking_Order/set_taking_order_booking';
 $route['api/ato/set_order']['POST'] = '/api/Api_Taking_Order/set_taking_order_order';
+$route['api/ato/set_status_to_finish']['POST'] = '/api/Api_Taking_Order/set_status_to_finish';
 $route['api/ato/read']['POST'] = '/api/Api_Taking_Order/get';
 
 //SINGLE NOTIFIKASI

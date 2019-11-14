@@ -58,34 +58,29 @@ class Api_Taking_Order extends CI_Controller
             // $this->msg('data', '400',$res);
         };
     }
+    
 
 
-
-    public function upload_image($data)
+    public function upload_image($key)
     {
-        $name = strtotime(date('Y-m-d H:i:s')) . ".jpg";
-        $file = "./uploads/taking_order" . $name;
-        $uri = substr($data, strpos($data, ",") + 1);
-        file_put_contents($file, base64_decode($uri));
-
-        // $_FILES['file']['name'] = $_FILES['data']['name'][$key]['foto_helm'];
-        // $_FILES['file']['type'] = $_FILES['data']['type'][$key]['foto_helm'];
-        // $_FILES['file']['tmp_name'] =$_FILES['data']['tmp_name'][$key]['foto_helm'];
-        // $_FILES['file']['error'] = $_FILES['data']['error'][$key]['foto_helm'];
-        // $_FILES['file']['size'] = $_FILES['data']['size'][$key]['foto_helm'];
-        // // var_dump($_FILES['data']['name'][$key]['foto_helm']);
-        // // var_dump($_FILES);
-        // $config['upload_path'] = './uploads/taking_order';
-        // $config['allowed_types'] = 'gif|jpg|png|JPG';
-        // $config['encrypt_name'] = true;
-        // // $config['max_size'] = 600;
-        // // $config['max_width'] = 1024;
-        // // $config['max_height'] = 768;
-        // $this->load->library('upload', $config);
-        // $is_upload_succces = $this->upload->do_upload('file');
-        // $file = $this->upload->data();
-        // $error_upload = array('img' => $this->upload->display_errors());
-        return array('status' => true, 'name' => $name, 'error_msg' => false);
+        $_FILES['file']['name'] = $_FILES['data']['name'][$key]['foto_helm'];
+        $_FILES['file']['type'] = $_FILES['data']['type'][$key]['foto_helm'];
+        $_FILES['file']['tmp_name'] =$_FILES['data']['tmp_name'][$key]['foto_helm'];
+        $_FILES['file']['error'] = $_FILES['data']['error'][$key]['foto_helm'];
+        $_FILES['file']['size'] = $_FILES['data']['size'][$key]['foto_helm'];
+        // var_dump($_FILES['data']['name'][$key]['foto_helm']);
+        // var_dump($_FILES);
+        $config['upload_path'] = './uploads/taking_order';
+        $config['allowed_types'] = 'gif|jpg|png|JPG';
+        $config['encrypt_name'] = true;
+        // $config['max_size'] = 600;
+        // $config['max_width'] = 1024;
+        // $config['max_height'] = 768;
+        $this->load->library('upload', $config);
+        $is_upload_succces = $this->upload->do_upload('file');
+        $file = $this->upload->data();
+        $error_upload = array('img' => $this->upload->display_errors());
+        return array('status' => $is_upload_succces, 'name' => $file['file_name'], 'error_msg' => $error_upload);
     }
     /*
      * Adding a new produk
@@ -111,27 +106,25 @@ class Api_Taking_Order extends CI_Controller
 
         //barang, qty,jenis_transaksi,              foto,kondisi
 
-
-        $data = json_decode($this->input->post('data'), TRUE);
-
-        var_dump($data);
-        // foreach ($data as $key => $value) {
-        //     // echo "looping ke"."$key";
-        //     // var_dump($value);
-        //     $this->set_taking_order_booking_action($key,$params, $value);
-        // }
-        // $this->msg('data', '200', array('tr_id'=>$params['tr_id']));
+        $data = json_decode($this->input->post('data'), TRUE);//untuk fawwas
+        // $data = $this->input->post('data');//untuk postman TP
+        // var_dump($data);
+        foreach ($data as $key => $value) {
+            // var_dump($value);
+            $this->set_taking_order_booking_action($key,$params, $value);
+        }
+        $this->msg('data', '200', array('tr_id'=>$params['tr_id']));
     }
     //foto dan kondisi
-    function set_taking_order_booking_action($key, $params, $data)
+    function set_taking_order_booking_action($key,$params, $data)
     {
 
         $params['barang_id'] = $data['barang_id'];
         $params['qyt'] = $data['qyt'];
-        $params['data_barang'] = json_encode($this->get_data_barang($key, $data, $data['jenis_transaksi']));
+        $params['data_barang'] = json_encode($this->get_data_barang($key,$data, $data['jenis_transaksi']));
         $harga_barang = (float) json_decode($params['data_barang'])->barang->harga;
         // var_dump($harga_barang);
-        $params['total'] = (float) $params['qyt'] * $harga_barang;
+        $params['total'] = (float) $params['qyt'] * $harga_barang ;
         // var_dump($params['total'] );
         $res = $this->Master->add($this->tabel, $params);
         if ($res['status']) {
@@ -140,6 +133,7 @@ class Api_Taking_Order extends CI_Controller
         } else {
             $this->msg('data', '400', '', $res['data']['message']);
         };
+
     }
 
     function set_taking_order_order()
@@ -157,7 +151,23 @@ class Api_Taking_Order extends CI_Controller
         };
     }
 
-    function get_data_barang($key, $data, $jenis)
+    function set_status_to_finish()
+    {
+        $this->is_valid();
+        $id =  $this->input->post('tr_id');
+        $data = array(
+            'status_produksi' => 'finish',
+        );
+        $res = $this->Master->update($this->tabel,  array('tr_id' => $id), $data);
+        // var_dump($res);
+        if ($res['status']) {
+            $this->msg('data', '200', $res['data']);
+        } else {
+            $this->msg('data', '400', '', $res['data']['message']);
+        };
+    }
+
+    function get_data_barang($key,$data, $jenis)
     {
         $res = $this->Master->get('barang', array('id' => $data['barang_id']));
         if ($res['status']) {
@@ -175,7 +185,7 @@ class Api_Taking_Order extends CI_Controller
                     $this->msg('data', '400', '', $file_foto['error_msg']['img']);
                 }
             } else {
-
+               
                 return $data_barang;
             }
         } else {

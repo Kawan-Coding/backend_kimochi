@@ -13,7 +13,7 @@ class Api_get_model extends CI_Model
 
     function get_data_barang()
     {
-        $this->db->select('b.id,b.cabang_id,b.produk_id,b.nama,b.detail,b.harga,b.foto');
+        $this->db->select('b.id,b.cabang_id,b.produk_id,b.nama,b.detail,b.harga,b.foto,b.harga_beli,b.kimochi_wallet');
         $this->db->select('p.kategori_id');
         // $this->db->select('');
         $this->db->from('barang AS b');
