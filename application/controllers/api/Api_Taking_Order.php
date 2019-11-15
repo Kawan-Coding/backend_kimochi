@@ -63,11 +63,13 @@ class Api_Taking_Order extends CI_Controller
 
     public function upload_image($key)
     {
-        $_FILES['file']['name'] = $_FILES['data']['name'][$key]['foto_helm'];
-        $_FILES['file']['type'] = $_FILES['data']['type'][$key]['foto_helm'];
-        $_FILES['file']['tmp_name'] =$_FILES['data']['tmp_name'][$key]['foto_helm'];
-        $_FILES['file']['error'] = $_FILES['data']['error'][$key]['foto_helm'];
-        $_FILES['file']['size'] = $_FILES['data']['size'][$key]['foto_helm'];
+        // var_dump($_FILES);
+        // $this->msg('data', '400', $_FILES['img']['name'][$key]);
+        $_FILES['file']['name'] = $_FILES['img']['name'][$key];
+        $_FILES['file']['type'] = $_FILES['img']['type'][$key];
+        $_FILES['file']['tmp_name'] =$_FILES['img']['tmp_name'][$key];
+        $_FILES['file']['error'] = $_FILES['img']['error'][$key];
+        $_FILES['file']['size'] = $_FILES['img']['size'][$key];
         // var_dump($_FILES['data']['name'][$key]['foto_helm']);
         // var_dump($_FILES);
         $config['upload_path'] = './uploads/taking_order';
@@ -166,7 +168,7 @@ class Api_Taking_Order extends CI_Controller
             $this->msg('data', '400', '', $res['data']['message']);
         };
     }
-
+    private $counter = 0;
     function get_data_barang($key,$data, $jenis)
     {
         $res = $this->Master->get('barang', array('id' => $data['barang_id']));
@@ -175,7 +177,8 @@ class Api_Taking_Order extends CI_Controller
             $data_barang['barang'] = $res['data'];
             // echo $jenis;
             if ($jenis === 'cuci_helm') {
-                $file_foto = $this->upload_image($key);
+                $file_foto = $this->upload_image($this->counter);
+                $this->counter++;
                 // var_dump($file_foto['name']);
                 $data_barang['kondisi'] = $data['kondisi'];
                 $data_barang['foto_helm'] = $file_foto['name'];
