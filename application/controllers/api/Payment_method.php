@@ -9,7 +9,7 @@ class Payment_method extends CI_Controller
     {
         parent::__construct();
         // Your own constructor code
-        $this->load->model('Payment_model');
+        $this->load->model('Payment_method_model');
         $this->date = new DateTime();
         // $this->load->library('Msg');
         //==== ALLOWING CORS
@@ -53,13 +53,42 @@ class Payment_method extends CI_Controller
             'create_at' => date('Y-m-d H:i:s'),
             'update_at' => date('Y-m-d H:i:s'),
         );
+
         $data = $this->input->post('data');
-        // var_dump($data);
+        //CEK KIMOCHI PAYMENT DARI CUSTOMER CUKUP APA ENGGA
+        $id_post_kimochi_payment = $this->get_id_kimochi_wallet($data);
+        $kimochi_wallet_customer = $this->Payment_method_model->get_kimochi_wallet($params['tr_id']);
+        if ($data[$id_post_kimochi_payment]['nominal'] > $kimochi_wallet_customer->kimochi_wallet) {
+            $this->msg('data', '400', '', 'tidak bisa menggunakan kimochi wallet, saldo tidak cukup' . " | data index $id_post_kimochi_payment | saldo $kimochi_wallet_customer->kimochi_wallet");
+        } else {
+            $tmp_dt_update = array(
+                'kimochi_wallet' => $kimochi_wallet_customer->kimochi_wallet - $data[$id_post_kimochi_payment]['nominal'],
+            );
+            $update_kimochi_customer = $this->Master->update('customer',  array('id' => $kimochi_wallet_customer->id), $tmp_dt_update);
+            if (!$update_kimochi_customer['status']) {
+                $this->msg('data', '400', '', $update_kimochi_customer['data']['message']);
+            }
+        }
+
+        // $this->msg('data', '200', );
+
         foreach ($data as $key => $value) {
             // var_dump($value);
             $this->add_action($key, $params, $value);
         }
-        $this->msg('data', '200', array('tr_id' => $params['tr_id']));
+        $kimochi_wallet_customer = $this->Payment_method_model->get_kimochi_wallet($params['tr_id']);
+        $this->msg('data', '200', array('tr_id' => $params['tr_id'],'kimochi_payment' => $kimochi_wallet_customer->kimochi_wallet));
+    }
+
+    function get_id_kimochi_wallet($data)
+    {
+        $id_kimochi_wallet = $this->Master->get('metode_pembayaran', array("nama" => 'KIMOCHI WALLET'), 'id')['data']['id'];
+        foreach ($data as $key => $value) {
+            if ($value['metode_pembayaran_id'] == $id_kimochi_wallet) {
+                return $key;
+            }
+        }
+        return null;
     }
 
     function add_action($key, $params, $data)
@@ -84,67 +113,6 @@ class Payment_method extends CI_Controller
         };
     }
 
-    function get_data_customer()
-    {
-        $id =  $this->input->post('customer_id');
-        $res = $this->Master->get('customer', array('id' => $id));
-        if ($res['status']) {
-            $data['customer'] = $res['data'];
-            return $data;
-        } else {
-            $this->msg('data', '400', '', $res['data']['message']);
-        };
-    }
-    function get_data_order()
-    {
-        $id =  $this->input->post('tr_id');
-        $res = $this->Master->get_all('taking_order', array('tr_id' => $id));
-        $data['total'] = 0.0;
-        foreach ($res as $key => $value) {
-            // var_dump($res[$key]["data_customer"]);
-            $res[$key]["data_customer"] = json_decode($res[$key]["data_customer"]);
-            $res[$key]["data_barang"] = json_decode($res[$key]["data_barang"]);
-            $data['total'] += (float) $res[$key]["total"];
-        }
-        $data['taking_order'] = $res;
-        // var_dump($data['total']);
-        return $data;
-    }
-    function get_data_payment()
-    {
-        $id =  $this->input->post('tr_id');
-        $res = $this->Master->get_all('payment_method', array('tr_id' => $id));
-        $data['total'] = 0.0;
-        foreach ($res as $key => $value) {
-            $res[$key]["data_metode_pembayaran"] = json_decode($res[$key]["data_metode_pembayaran"]);
-            $data['total'] += (float) $res[$key]["nominal"];
-        }
-        $data['payment_method'] = $res;
-        return $data;
-    }
-
-    /*
-     * Editing a produk
-     */
-    function edit()
-    {
-        $this->is_valid();
-        // $this->msg('data', '200', $this->input->post('nama'));
-        // check if the produk exists before trying to edit it
-        $id =  $this->input->post('id');
-        $data = array(
-            'nama' => $this->input->post('nama'),
-            'nomor' => $this->input->post('nomor'),
-            'update_at' => date('Y-m-d H:i:s'),
-
-        );
-        $res = $this->Master->update($this->tabel,  array('id' => $id), $data);
-        if ($res['status']) {
-            $this->msg('data', '200', $res['data']);
-        } else {
-            $this->msg('data', '400', '', $res['data']['message']);
-        };
-    }
 
     /*
      * Deleting produk

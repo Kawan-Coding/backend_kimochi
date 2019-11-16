@@ -21,7 +21,7 @@ class Api_get_model extends CI_Model
         $this->db->join('produk AS p', 'p.id = b.produk_id');
         // $this->db->join('pegawai', 'pegawai.id = responsible.pegawai_id');
         // $this->db->join('cabang', 'cabang.id = responsible.cabang_id');
-        // $this->db->where('pegawai.username', $this->input->post("username"));
+        $this->db->where('b.status !=','delete' );
         $query =  $this->db->get();
         return $query->result_array();
     }
