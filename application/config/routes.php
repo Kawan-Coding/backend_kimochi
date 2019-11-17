@@ -130,6 +130,7 @@ $route['sapi/barang/delete']['POST'] = '/singleapi/Barang/remove';
 
 //SINGLE ALLOWED PAYMENT
 $route['sapi/allowed_payment/get_all']['GET'] = '/singleapi/allowed_payment/get_all';
+$route['sapi/allowed_payment/get_where_cabang_id']['POST'] = '/singleapi/allowed_payment/get_where_cabang_id';
 $route['sapi/allowed_payment/read']['POST'] = '/singleapi/allowed_payment/get';
 $route['sapi/allowed_payment/create']['POST'] = '/singleapi/allowed_payment/add';
 $route['sapi/allowed_payment/update']['POST'] = '/singleapi/allowed_payment/edit';
@@ -167,6 +168,7 @@ $route['sapi/notifikasi/delete']['POST'] = '/singleapi/Notifikasi/remove';
 // $route['sapi/payment_method/get_all']['GET'] = '/singleapi/Payment_method/get_all';
 // $route['sapi/payment_method/read']['POST'] = '/singleapi/Payment_method/get';
 $route['api/payment_method/create']['POST'] = '/api/Payment_method/add';
+$route['api/payment_method/get_all']['POST'] = '/api/Payment_method/get_all';
 // $route['sapi/payment_method/update']['POST'] = '/singleapi/Payment_method/edit';
 // $route['sapi/payment_method/delete']['POST'] = '/singleapi/Payment_method/remove';
 

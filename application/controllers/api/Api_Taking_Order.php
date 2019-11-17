@@ -43,11 +43,12 @@ class Api_Taking_Order extends CI_Controller
         $this->is_valid();
         $id =  $this->input->post('tr_id');
         $res = $this->Master->get($this->tabel, array('tr_id' => $id), array('data_barang', 'qyt', 'total', 'customer_id'), true);
-        $timestamp = $this->Master->get($this->tabel, array('tr_id' => $id), array('create_at','update_at'));
+        $timestamp = $this->Master->get($this->tabel, array('tr_id' => $id), array('create_at','update_at','status_produksi'));
+        $timestamp['data']['create_at']=date('d F Y H:i:s', strtotime($timestamp['data']->create_at));
         if ($res['status']) {
             $data_customer = $this->Master->get('customer', ['id' => $res['data'][0]['customer_id']]);
             $res['customer'] = $data_customer['data'];
-            $res['timestamp']= $timestamp['data'];
+            $res['dll']= $timestamp['data'];
             $res['total_kimochi_wallet']=0;
             // $this->msg('data', '200', $data_customer);
             foreach ($res['data'] as $key => $value) {

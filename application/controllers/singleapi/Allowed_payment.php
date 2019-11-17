@@ -9,7 +9,7 @@ class Allowed_payment extends CI_Controller
     {
         parent::__construct();
         // Your own constructor code
-        // $this->load->model('Allowed_payment');
+        $this->load->model('Allowed_payment_model');
         $this->date = new DateTime();
         // $this->load->library('Msg');
         //==== ALLOWING CORS
@@ -41,8 +41,17 @@ class Allowed_payment extends CI_Controller
         foreach ($data as $element) {
             $result[$element['cabang_id']][] = $element;
         }
-
         $this->msg('data', '200', $this->_group_by($result));
+    }
+    public function get_where_cabang_id()
+    {
+        $cabang_id = $this->input->post('cabang_id');
+        $data = $this->Allowed_payment_model->get_where_cabang_id($cabang_id);
+        // $result = array();
+        // foreach ($data as $element) {
+        //     $result[$element['cabang_id']][] = $element;
+        // }
+        $this->msg('data', '200', $data);
     }
     function _group_by($array)
     {

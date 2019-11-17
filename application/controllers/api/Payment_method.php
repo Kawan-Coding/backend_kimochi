@@ -39,6 +39,10 @@ class Payment_method extends CI_Controller
     {
         $res = $this->Master->get_select($this->tabel, $select, $where);
     }
+    public function get_all()
+    {
+        $this->msg('data', '200', $this->Master->get_all($this->tabel));
+    }
 
 
 
@@ -74,15 +78,15 @@ class Payment_method extends CI_Controller
 
         foreach ($data as $key => $value) {
             // var_dump($value);
-            $this->add_action($key, $params, $value);
+            $this->add_action($id_post_kimochi_payment, $params, $value,$key);
         }
         $kimochi_wallet_customer = $this->Payment_method_model->get_kimochi_wallet($params['tr_id']);
-        $this->msg('data', '200', array('tr_id' => $params['tr_id'],'kimochi_payment' => $kimochi_wallet_customer->kimochi_wallet));
+        $this->msg('data', '200', array('tr_id' => $params['tr_id'], 'kimochi_payment' => $kimochi_wallet_customer->kimochi_wallet));
     }
 
     function get_id_kimochi_wallet($data)
     {
-        $id_kimochi_wallet = $this->Master->get('metode_pembayaran', array("nama" => 'KIMOCHI WALLET'), 'id')['data']['id'];
+        $id_kimochi_wallet = $this->Master->get('metode_pembayaran', array("jenis" => 'kw'), 'id')['data']['id'];
         foreach ($data as $key => $value) {
             if ($value['metode_pembayaran_id'] == $id_kimochi_wallet) {
                 return $key;
@@ -91,7 +95,7 @@ class Payment_method extends CI_Controller
         return null;
     }
 
-    function add_action($key, $params, $data)
+    function add_action($kimochi_wallet_id, $params, $data,$key)
     {
         $params['metode_pembayaran_id'] = $data['metode_pembayaran_id'];
         $params['diskon_id'] = $data['diskon_id'];
@@ -101,7 +105,13 @@ class Payment_method extends CI_Controller
         if ($detail_diskon['status'] && $params['diskon_id'] != 0) {
             $params['data_metode_pembayaran'] = json_encode(array('diskon' => $detail_diskon['data']));
         } else {
-            $params['data_metode_pembayaran'] = json_encode(array('diskon' => NULL, 'keterangan' => json_decode($data['data_metode_pembayaran'])));
+            // var_dump($kimochi_wallet_id) ;
+            if ($kimochi_wallet_id == $key) {
+                $tmp_arr = array('media'=>'kimochi_wallet');
+                $params['data_metode_pembayaran'] = json_encode(array('diskon' => NULL, 'keterangan' => $tmp_arr));
+            } else {
+                $params['data_metode_pembayaran'] = json_encode(array('diskon' => NULL, 'keterangan' => json_decode($data['data_metode_pembayaran'])));
+            }
         }
 
         $res = $this->Master->add($this->tabel, $params);

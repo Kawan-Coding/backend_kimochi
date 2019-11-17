@@ -19,7 +19,7 @@ class Allowed_payment_model extends CI_Model
         $run = $this->db->get_where($tabel, $where)->row_array();
         $res = array();
         if (!isset($run)) {
-            $res['data']['message'] = 'data not exist ->tabel_'.$tabel;
+            $res['data']['message'] = 'data not exist ->tabel_' . $tabel;
             $res['status'] = false;
         } else {
             $res['data'] = $run;
@@ -27,7 +27,7 @@ class Allowed_payment_model extends CI_Model
         }
         return $res;
     }
-    
+
     public function get_select($tabel, $select, $where)
     {
         $this->db->select($select);
@@ -42,7 +42,15 @@ class Allowed_payment_model extends CI_Model
         }
         return $res;
     }
-
+    function get_where_cabang_id($cabang_id)
+    {
+        $this->db->select('mp.*');
+        $this->db->from('allowed_payment as ap');
+        $this->db->join('metode_pembayaran as mp', 'ap.metode_pembayaran_id = mp.id');
+        $this->db->where('ap.cabang_id', $cabang_id);
+        $query =  $this->db->get();
+        return $query->result_array();
+    }
     /*
      * Get all allowed_payment
      */
@@ -52,5 +60,4 @@ class Allowed_payment_model extends CI_Model
         FROM allowed_payment GROUP BY cabang_id;");
         return $query->result_array();
     }
-
 }
