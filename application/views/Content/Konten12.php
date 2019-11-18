@@ -266,7 +266,7 @@
         if (satuan == "persen") {
             return (tmp_potongan / 100) * 1.0;
         } else if (satuan == "rupiah") {
-            return -1 * tmp_potongan;
+            return 1 * tmp_potongan;
         }
     }
 

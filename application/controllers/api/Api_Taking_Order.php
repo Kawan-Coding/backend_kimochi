@@ -43,19 +43,20 @@ class Api_Taking_Order extends CI_Controller
         $this->is_valid();
         $id =  $this->input->post('tr_id');
         $res = $this->Master->get($this->tabel, array('tr_id' => $id), array('data_barang', 'qyt', 'total', 'customer_id'), true);
-        $timestamp = $this->Master->get($this->tabel, array('tr_id' => $id), array('create_at','update_at','status_produksi'));
-        $timestamp['data']['create_at']=date('d F Y H:i:s', strtotime($timestamp['data']->create_at));
+        $timestamp = $this->Master->get($this->tabel, array('tr_id' => $id), array('create_at', 'update_at', 'status_produksi'));
+        $timestamp['data']['create_at'] = date('d F Y H:i:s', strtotime($timestamp['data']['create_at']));
+        $timestamp['data']['update_at'] = date('d F Y H:i:s', strtotime($timestamp['data']['update_at']));
         if ($res['status']) {
             $data_customer = $this->Master->get('customer', ['id' => $res['data'][0]['customer_id']]);
             $res['customer'] = $data_customer['data'];
-            $res['dll']= $timestamp['data'];
-            $res['total_kimochi_wallet']=0;
+            $res['dll'] = $timestamp['data'];
+            $res['total_kimochi_wallet'] = 0;
             // $this->msg('data', '200', $data_customer);
             foreach ($res['data'] as $key => $value) {
                 // $res['data'][$key]['data_customer']=json_decode($value['data_customer']);
                 $tmp_data_barang = json_decode($value['data_barang'])->barang;
                 $res['data'][$key]['data_barang'] = $tmp_data_barang;
-                $res['total_kimochi_wallet']+=$tmp_data_barang->kimochi_wallet;
+                $res['total_kimochi_wallet'] += $tmp_data_barang->kimochi_wallet;
             }
 
             $this->msg('data', '200', $res);
@@ -64,7 +65,7 @@ class Api_Taking_Order extends CI_Controller
             // $this->msg('data', '400',$res);
         };
     }
-    
+
 
 
     public function upload_image($key)
@@ -73,7 +74,7 @@ class Api_Taking_Order extends CI_Controller
         // $this->msg('data', '400', $_FILES['img']['name'][$key]);
         $_FILES['file']['name'] = $_FILES['img']['name'][$key];
         $_FILES['file']['type'] = $_FILES['img']['type'][$key];
-        $_FILES['file']['tmp_name'] =$_FILES['img']['tmp_name'][$key];
+        $_FILES['file']['tmp_name'] = $_FILES['img']['tmp_name'][$key];
         $_FILES['file']['error'] = $_FILES['img']['error'][$key];
         $_FILES['file']['size'] = $_FILES['img']['size'][$key];
         // var_dump($_FILES['data']['name'][$key]['foto_helm']);
@@ -96,6 +97,9 @@ class Api_Taking_Order extends CI_Controller
     function set_taking_order_booking()
     {
         $this->is_valid();
+        if (empty($this->input->post('tr_id'))) {
+            $this->remove($this->input->post('tr_id'));
+        }
         $customer_id = $this->input->post('customer_id');
         $cabang_id = $this->input->post('cabang_id');
         $params = array(
@@ -114,25 +118,25 @@ class Api_Taking_Order extends CI_Controller
 
         //barang, qty,jenis_transaksi,              foto,kondisi
 
-        $data = json_decode($this->input->post('data'), TRUE);//untuk fawwas
+        $data = json_decode($this->input->post('data'), TRUE); //untuk fawwas
         // $data = $this->input->post('data');//untuk postman TP
         // var_dump($data);
         foreach ($data as $key => $value) {
             // var_dump($value);
-            $this->set_taking_order_booking_action($key,$params, $value);
+            $this->set_taking_order_booking_action($key, $params, $value);
         }
-        $this->msg('data', '200', array('tr_id'=>$params['tr_id']));
+        $this->msg('data', '200', array('tr_id' => $params['tr_id']));
     }
     //foto dan kondisi
-    function set_taking_order_booking_action($key,$params, $data)
+    function set_taking_order_booking_action($key, $params, $data)
     {
 
         $params['barang_id'] = $data['barang_id'];
         $params['qyt'] = $data['qyt'];
-        $params['data_barang'] = json_encode($this->get_data_barang($key,$data, $data['jenis_transaksi']));
+        $params['data_barang'] = json_encode($this->get_data_barang($key, $data, $data['jenis_transaksi']));
         $harga_barang = (float) json_decode($params['data_barang'])->barang->harga;
         // var_dump($harga_barang);
-        $params['total'] = (float) $params['qyt'] * $harga_barang ;
+        $params['total'] = (float) $params['qyt'] * $harga_barang;
         // var_dump($params['total'] );
         $res = $this->Master->add($this->tabel, $params);
         if ($res['status']) {
@@ -141,7 +145,6 @@ class Api_Taking_Order extends CI_Controller
         } else {
             $this->msg('data', '400', '', $res['data']['message']);
         };
-
     }
 
     function set_taking_order_order()
@@ -175,7 +178,7 @@ class Api_Taking_Order extends CI_Controller
         };
     }
     private $counter = 0;
-    function get_data_barang($key,$data, $jenis)
+    function get_data_barang($key, $data, $jenis)
     {
         $res = $this->Master->get('barang', array('id' => $data['barang_id']));
         if ($res['status']) {
@@ -194,7 +197,7 @@ class Api_Taking_Order extends CI_Controller
                     $this->msg('data', '400', '', $file_foto['error_msg']['img']);
                 }
             } else {
-               
+
                 return $data_barang;
             }
         } else {
@@ -209,6 +212,19 @@ class Api_Taking_Order extends CI_Controller
             $data_customer['customer'] = $res['data'];
             // $data_customer['barang'] = $this->get_data_barang();
             return $data_customer;
+        } else {
+            $this->msg('data', '400', '', $res['data']['message']);
+        };
+    }
+
+    function remove($tr_id)
+    {
+        // $this->is_valid();
+        // $id =  $this->input->post('id');
+        $res = $this->Master->delete($this->tabel, array('tr_id' => $tr_id));
+
+        if ($res['status']) {
+            $this->msg('data', '200', $res['data']);
         } else {
             $this->msg('data', '400', '', $res['data']['message']);
         };

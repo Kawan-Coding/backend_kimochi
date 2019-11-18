@@ -58,19 +58,22 @@ class Payment_method extends CI_Controller
             'update_at' => date('Y-m-d H:i:s'),
         );
 
-        $data = $this->input->post('data');
+        $data = json_decode($this->input->post('data'), TRUE);
+        // $data = $this->input->post('data');
         //CEK KIMOCHI PAYMENT DARI CUSTOMER CUKUP APA ENGGA
         $id_post_kimochi_payment = $this->get_id_kimochi_wallet($data);
         $kimochi_wallet_customer = $this->Payment_method_model->get_kimochi_wallet($params['tr_id']);
-        if ($data[$id_post_kimochi_payment]['nominal'] > $kimochi_wallet_customer->kimochi_wallet) {
-            $this->msg('data', '400', '', 'tidak bisa menggunakan kimochi wallet, saldo tidak cukup' . " | data index $id_post_kimochi_payment | saldo $kimochi_wallet_customer->kimochi_wallet");
-        } else {
-            $tmp_dt_update = array(
-                'kimochi_wallet' => $kimochi_wallet_customer->kimochi_wallet - $data[$id_post_kimochi_payment]['nominal'],
-            );
-            $update_kimochi_customer = $this->Master->update('customer',  array('id' => $kimochi_wallet_customer->id), $tmp_dt_update);
-            if (!$update_kimochi_customer['status']) {
-                $this->msg('data', '400', '', $update_kimochi_customer['data']['message']);
+        if ($id_post_kimochi_payment!=NULL) {
+            if ($data[$id_post_kimochi_payment]['nominal'] > $kimochi_wallet_customer->kimochi_wallet) {
+                $this->msg('data', '400', '', 'tidak bisa menggunakan kimochi wallet, saldo tidak cukup' . " | data index $id_post_kimochi_payment | saldo $kimochi_wallet_customer->kimochi_wallet");
+            } else {
+                $tmp_dt_update = array(
+                    'kimochi_wallet' => $kimochi_wallet_customer->kimochi_wallet - $data[$id_post_kimochi_payment]['nominal'],
+                );
+                $update_kimochi_customer = $this->Master->update('customer',  array('id' => $kimochi_wallet_customer->id), $tmp_dt_update);
+                if (!$update_kimochi_customer['status']) {
+                    $this->msg('data', '400', '', $update_kimochi_customer['data']['message']);
+                }
             }
         }
 
@@ -78,7 +81,7 @@ class Payment_method extends CI_Controller
 
         foreach ($data as $key => $value) {
             // var_dump($value);
-            $this->add_action($id_post_kimochi_payment, $params, $value,$key);
+            $this->add_action($id_post_kimochi_payment, $params, $value, $key);
         }
         $kimochi_wallet_customer = $this->Payment_method_model->get_kimochi_wallet($params['tr_id']);
         $this->msg('data', '200', array('tr_id' => $params['tr_id'], 'kimochi_payment' => $kimochi_wallet_customer->kimochi_wallet));
@@ -95,7 +98,7 @@ class Payment_method extends CI_Controller
         return null;
     }
 
-    function add_action($kimochi_wallet_id, $params, $data,$key)
+    function add_action($kimochi_wallet_id, $params, $data, $key)
     {
         $params['metode_pembayaran_id'] = $data['metode_pembayaran_id'];
         $params['diskon_id'] = $data['diskon_id'];
@@ -103,14 +106,15 @@ class Payment_method extends CI_Controller
 
         $detail_diskon = $this->Master->get_select('diskon', 'id,kode_diskon,nama,detail,mulai,akhir,potongan,kuota', array('id' => $params['diskon_id']));
         if ($detail_diskon['status'] && $params['diskon_id'] != 0) {
-            $params['data_metode_pembayaran'] = json_encode(array('diskon' => $detail_diskon['data']));
+            $tmp_diskon = array('media' => 'diskon','nominal'=>$params['nominal']);
+            $params['data_metode_pembayaran'] = json_encode(array('keterangan' => $tmp_diskon));
         } else {
             // var_dump($kimochi_wallet_id) ;
             if ($kimochi_wallet_id == $key) {
-                $tmp_arr = array('media'=>'kimochi_wallet');
-                $params['data_metode_pembayaran'] = json_encode(array('diskon' => NULL, 'keterangan' => $tmp_arr));
+                $tmp_arr = array('media' => 'kimochi_wallet');
+                $params['data_metode_pembayaran'] = json_encode(array( 'keterangan' => $tmp_arr));
             } else {
-                $params['data_metode_pembayaran'] = json_encode(array('diskon' => NULL, 'keterangan' => json_decode($data['data_metode_pembayaran'])));
+                $params['data_metode_pembayaran'] = json_encode(array('keterangan' => $data['data_metode_pembayaran']));
             }
         }
 
