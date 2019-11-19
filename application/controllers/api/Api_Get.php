@@ -49,16 +49,18 @@ class Api_Get extends CI_Controller
     {
         $tr_id = $this->input->post('tr_id');
         if (!empty($tr_id)) {
-            $to = $this->Master->get('taking_order', ['tr_id' => $tr_id], ['data_barang','qyt'], TRUE);
+            $to = $this->Master->get('taking_order', ['tr_id' => $tr_id], ['data_barang', 'qyt'], TRUE);
             // $this->msg('data', '200', $to);
-        } else { }
+        } else {
+            $to = null;
+        }
         $res = $this->Api_get_model->get_data_barang();
         // var_dump($res);
         foreach ($res as $key => $value) {
             if ($value['kategori_id'] == '1') {
                 $data['cuci_helm'][] = array_merge($value, array('qyt' => $this->get_qyt($to, $value, $res)));
             } else if ($value['kategori_id'] == '2') {
-                $data['aksesoris'][] = array_merge($value, array('qyt' => $this->get_qyt($to, $value,$res)));
+                $data['aksesoris'][] = array_merge($value, array('qyt' => $this->get_qyt($to, $value, $res)));
             }
         }
         $this->msg('data', '200', $data);
@@ -66,18 +68,13 @@ class Api_Get extends CI_Controller
 
     function get_qyt($to, $barang, $barangAll)
     {
-        var_dump("x");
-        // $this->msg('data', '200', $to);
-        foreach ($to['data'] as $key => $ito) {
-            echo "loop1";
-            foreach ($barangAll as $key => $ibarang) {
-                echo "loop2";
-                var_dump(json_decode($ito['data_barang'])->barang->produk_id);
-                var_dump("|" . $barang['produk_id']);
-                $to_id_barang = json_decode($ito['data_barang'])->barang->produk_id;
-                if ($barang['produk_id'] == $to_id_barang) {
-                    // var_dump($ito['qyt']);
-                    return ($ito['qyt']);
+        if ($to != NULL) {
+            foreach ($to['data'] as $key => $ito) {
+                foreach ($barangAll as $key => $ibarang) {
+                    $to_id_barang = json_decode($ito['data_barang'])->barang->produk_id;
+                    if ($barang['produk_id'] == $to_id_barang) {
+                        return ($ito['qyt']);
+                    }
                 }
             }
         }
