@@ -97,7 +97,7 @@ class Api_Taking_Order extends CI_Controller
     function set_taking_order_booking()
     {
         $this->is_valid();
-        if (empty($this->input->post('tr_id'))) {
+        if (!empty($this->input->post('tr_id'))) {
             $this->remove($this->input->post('tr_id'));
         }
         $customer_id = $this->input->post('customer_id');
