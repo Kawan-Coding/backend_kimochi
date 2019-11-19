@@ -23,7 +23,7 @@ $route['api/cashregister/get']['POST'] = '/api/CashRegisterController/get';
 
 //API_GET
 $route['api/api_get/get_data_booking']['GET'] = '/api/Api_Get/get_data_booking_where_status_booking';
-$route['api/api_get/get_data_barang']['GET'] = '/api/Api_Get/get_data_barang';
+$route['api/api_get/get_data_barang']['POST'] = '/api/Api_Get/get_data_barang';
 $route['api/api_get/get_detail_aksesoris']['POST'] = '/api/Api_Get/get_detail_aksesoris';
 
 //API_GET TRANSAKSI

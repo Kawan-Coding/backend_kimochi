@@ -11,6 +11,7 @@ class Api_Get extends CI_Controller
         // Your own constructor code
         $this->load->model('Api_get_model');
         $this->date = new DateTime();
+        // $config['allow_get_array'] = TRUE;
         // $this->load->library('Msg');
         //==== ALLOWING CORS
         header('Access-Control-Allow-Origin: *');
@@ -35,7 +36,7 @@ class Api_Get extends CI_Controller
     public function get_data_booking_where_status_booking()
     {
         $res = $this->Master->get('taking_order', array('status' => 'booking'));
-        $res['data']['data_customer']=json_decode($res['data']['data_customer']);
+        $res['data']['data_customer'] = json_decode($res['data']['data_customer']);
         if ($res['status']) {
             $this->msg('data', '200', $res['data']);
         } else {
@@ -46,17 +47,41 @@ class Api_Get extends CI_Controller
 
     public function get_data_barang()
     {
+        $tr_id = $this->input->post('tr_id');
+        if (!empty($tr_id)) {
+            $to = $this->Master->get('taking_order', ['tr_id' => $tr_id], ['data_barang','qyt'], TRUE);
+            // $this->msg('data', '200', $to);
+        } else { }
         $res = $this->Api_get_model->get_data_barang();
         // var_dump($res);
         foreach ($res as $key => $value) {
-            if ($value['kategori_id']=='1') {
-                $data['cuci_helm'][]=array_merge($value,array('qyt'=>0));
-            }else if($value['kategori_id']=='2'){
-                $data['aksesoris'][]=array_merge($value,array('qyt'=>0));;
+            if ($value['kategori_id'] == '1') {
+                $data['cuci_helm'][] = array_merge($value, array('qyt' => $this->get_qyt($to, $value, $res)));
+            } else if ($value['kategori_id'] == '2') {
+                $data['aksesoris'][] = array_merge($value, array('qyt' => $this->get_qyt($to, $value,$res)));
             }
         }
-
         $this->msg('data', '200', $data);
+    }
+
+    function get_qyt($to, $barang, $barangAll)
+    {
+        var_dump("x");
+        // $this->msg('data', '200', $to);
+        foreach ($to['data'] as $key => $ito) {
+            echo "loop1";
+            foreach ($barangAll as $key => $ibarang) {
+                echo "loop2";
+                var_dump(json_decode($ito['data_barang'])->barang->produk_id);
+                var_dump("|" . $barang['produk_id']);
+                $to_id_barang = json_decode($ito['data_barang'])->barang->produk_id;
+                if ($barang['produk_id'] == $to_id_barang) {
+                    // var_dump($ito['qyt']);
+                    return ($ito['qyt']);
+                }
+            }
+        }
+        return 0;
     }
     public function get_detail_barang()
     {
@@ -77,21 +102,21 @@ class Api_Get extends CI_Controller
     public function get_transaksi_booking()
     {
         $cabang_id = $this->input->post('cabang_id');
-        $el = $this->Master->get_all('taking_order', array('status'=>'booking','cabang_id'=>$cabang_id),array('tr_id','DESC'),'id as taking_order_id,tr_id,data_customer,customer_id,status,status_produksi,create_at as jam_order','',TRUE,'tr_id');
+        $el = $this->Master->get_all('taking_order', array('status' => 'booking', 'cabang_id' => $cabang_id), array('tr_id', 'DESC'), 'id as taking_order_id,tr_id,data_customer,customer_id,status,status_produksi,create_at as jam_order', '', TRUE, 'tr_id');
         foreach ($el as $key => $value) {
-            $el[$key]['data_customer']=json_decode($value['data_customer'])->customer;
-            $el[$key]['jam_order']=date('d F Y H:i:s', strtotime($value['jam_order']));
+            $el[$key]['data_customer'] = json_decode($value['data_customer'])->customer;
+            $el[$key]['jam_order'] = date('d F Y H:i:s', strtotime($value['jam_order']));
         }
         $this->msg('data', '200', $el);
     }
     public function get_transaksi_order()
     {
         $cabang_id = $this->input->post('cabang_id');
-        $el = $this->Master->get_all('taking_order', array('status !='=>'booking','cabang_id'=>$cabang_id),array('status','ASC'),'id as taking_order_id,tr_id,data_customer,customer_id,status,status_produksi,create_at as jam_order','',TRUE,'tr_id');
+        $el = $this->Master->get_all('taking_order', array('status !=' => 'booking', 'cabang_id' => $cabang_id), array('status', 'ASC'), 'id as taking_order_id,tr_id,data_customer,customer_id,status,status_produksi,create_at as jam_order', '', TRUE, 'tr_id');
         foreach ($el as $key => $value) {
-            $el[$key]['data_customer']=json_decode($value['data_customer'])->customer;
-            $el[$key]['status']=$el[$key]['status']=='order' ?'unpaid':'paid';
-            $el[$key]['jam_order']=date('d F Y H:i:s', strtotime($value['jam_order']));
+            $el[$key]['data_customer'] = json_decode($value['data_customer'])->customer;
+            $el[$key]['status'] = $el[$key]['status'] == 'order' ? 'unpaid' : 'paid';
+            $el[$key]['jam_order'] = date('d F Y H:i:s', strtotime($value['jam_order']));
         }
         $this->msg('data', '200', $el);
     }
