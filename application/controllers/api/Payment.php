@@ -178,6 +178,7 @@ class Payment extends CI_Controller
     function add()
     {
         $this->is_valid();
+        $kw = $this->input->post('kimochi_wallet_bonus');
         $params = array(
             'tr_id' => $this->input->post('tr_id'),
             'cabang_id' => $this->input->post('cabang_id'),
@@ -187,7 +188,8 @@ class Payment extends CI_Controller
             'create_at' => date('Y-m-d H:i:s'),
             'update_at' => date('Y-m-d H:i:s'),
         );
-        $params['data_customer'] = json_encode($this->get_data_customer());
+        $dt_customer=$this->get_data_customer();
+        $params['data_customer'] = json_encode($dt_customer);
         $params['data_order'] = json_encode($this->get_data_order());
         $data_payment = $this->get_data_payment();
         // $this->msg('data', '200', $data_payment);
@@ -209,12 +211,14 @@ class Payment extends CI_Controller
         if ($bayar < $tagihan) {
             $this->msg('data', '400', array('bayar' => $bayar, 'tagihan' => $tagihan), "belum lunas");
         }
-
+        // var_dump($dt_customer);
+        // $this->msg('data', '200',);
         $res = $this->Master->add($this->tabel, $params);
 
         if ($res['status']) {
             $this->Master->update('taking_order', array('tr_id' => $params['tr_id']), array('status' => 'paid')); //update status menjadi PAID
             $this->get_data_payment(TRUE); //update sisa_kuota 
+            $this->Master->update('customer',['id'=>$dt_customer['customer']['id']],['kimochi_wallet'=>((int)$dt_customer['customer']['kimochi_wallet']+(int)$kw)]);
             $this->msg('data', '200', array('tr_id' => $params['tr_id']));
         } else {
             $this->msg('data', '400', $params['tr_id'], $res['data']['message']);

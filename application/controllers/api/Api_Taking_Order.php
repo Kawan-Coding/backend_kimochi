@@ -113,10 +113,6 @@ class Api_Taking_Order extends CI_Controller
             'create_at' => date('Y-m-d H:i:s'),
             'update_at' => date('Y-m-d H:i:s'),
         );
-        // var_dump($params );
-        // $this->msg('data', '200', $params);
-
-        //barang, qty,jenis_transaksi,              foto,kondisi
 
         $data = json_decode($this->input->post('data'), TRUE); //untuk fawwas
         // $data = $this->input->post('data');//untuk postman TP

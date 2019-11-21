@@ -9,7 +9,7 @@ class Customer extends CI_Controller
     {
         parent::__construct();
         // Your own constructor code
-        // $this->load->model('Customer');
+        $this->load->model('Customer_model');
         $this->date = new DateTime();
         // $this->load->library('Msg');
         //==== ALLOWING CORS
@@ -182,6 +182,12 @@ class Customer extends CI_Controller
         $this->is_valid();
         $no_telepon =  $this->input->post('no_telepon');
         $res = $this->Master->get($this->tabel, array('no_telepon' => $no_telepon));
+        $id_customer = $res['data']['id'];
+        $count_transaction = $this->Customer_model->get_count_transaction($id_customer);
+        // $this->msg('data', '200', $count_transaction);
+       
+            $res['data']['history_transaksi']=!empty($count_transaction)?$count_transaction->c:0;
+       
         if ($res['status']) {
             $this->msg('data', '200', $res['data']);
         } else {

@@ -48,9 +48,14 @@ class Api_Get extends CI_Controller
     public function get_data_barang()
     {
         $tr_id = $this->input->post('tr_id');
-        if (!empty($tr_id)) {
+        if (!empty($tr_id) ) {
+
             $to = $this->Master->get('taking_order', ['tr_id' => $tr_id], ['data_barang', 'qyt'], TRUE);
-            // $this->msg('data', '200', $to);
+            if(!$to['status']){
+                $this->msg('data', '400','', $to['data']['message']);
+                // $str_msg = 'query berhasil [TR ID tidak ada'
+                // $to = null;
+            }
         } else {
             $to = null;
         }
