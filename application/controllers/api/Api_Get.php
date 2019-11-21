@@ -75,16 +75,19 @@ class Api_Get extends CI_Controller
     function get_from_to($to, $barang, $barangAll, $ch = false)
     {
         $tmp= array();
-        $tmp['kondisi']=0;
-        $tmp['foto_helm']=0;
+
         // echo"hi";
         if ($to != NULL) {
+            $tmp['kondisi']=0;
+            $tmp['foto_helm']=0;
             foreach ($to['data'] as $key => $ito) {
                 foreach ($barangAll as $key => $ibarang) {
-                    $to_id_barang = json_decode($ito['data_barang'])->barang->produk_id;
-                    if ($barang['produk_id'] == $to_id_barang) {
+
+                    $to_id_barang = json_decode($ito['data_barang'])->barang->id;
+                    if ($barang['id'] == $to_id_barang) {
                         $tmp['qyt'] = $ito['qyt'];
                         $dt_barang = json_decode($ito['data_barang'], TRUE);
+                   
                         if ($ch) {
                             $tmp['kondisi'] = $dt_barang['kondisi'];
                             $tmp['foto_helm'] = $dt_barang['foto_helm'];
