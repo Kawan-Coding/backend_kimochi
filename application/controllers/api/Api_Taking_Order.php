@@ -72,24 +72,28 @@ class Api_Taking_Order extends CI_Controller
     {
         // var_dump($_FILES);
         // $this->msg('data', '400', $_FILES['img']['name'][$key]);
-        $_FILES['file']['name'] = $_FILES['img']['name'][$key];
-        $_FILES['file']['type'] = $_FILES['img']['type'][$key];
-        $_FILES['file']['tmp_name'] = $_FILES['img']['tmp_name'][$key];
-        $_FILES['file']['error'] = $_FILES['img']['error'][$key];
-        $_FILES['file']['size'] = $_FILES['img']['size'][$key];
-        // var_dump($_FILES['data']['name'][$key]['foto_helm']);
-        // var_dump($_FILES);
-        $config['upload_path'] = './uploads/taking_order';
-        $config['allowed_types'] = 'gif|jpg|png|JPG';
-        $config['encrypt_name'] = true;
-        // $config['max_size'] = 600;
-        // $config['max_width'] = 1024;
-        // $config['max_height'] = 768;
-        $this->load->library('upload', $config);
-        $is_upload_succces = $this->upload->do_upload('file');
-        $file = $this->upload->data();
-        $error_upload = array('img' => $this->upload->display_errors());
-        return array('status' => $is_upload_succces, 'name' => $file['file_name'], 'error_msg' => $error_upload);
+        if (!empty($_FILES)) {
+            $_FILES['file']['name'] = $_FILES['img']['name'][$key];
+            $_FILES['file']['type'] = $_FILES['img']['type'][$key];
+            $_FILES['file']['tmp_name'] = $_FILES['img']['tmp_name'][$key];
+            $_FILES['file']['error'] = $_FILES['img']['error'][$key];
+            $_FILES['file']['size'] = $_FILES['img']['size'][$key];
+            // var_dump($_FILES['data']['name'][$key]['foto_helm']);
+            // var_dump($_FILES);
+            $config['upload_path'] = './uploads/taking_order';
+            $config['allowed_types'] = 'gif|jpg|png|JPG';
+            $config['encrypt_name'] = true;
+            // $config['max_size'] = 600;
+            // $config['max_width'] = 1024;
+            // $config['max_height'] = 768;
+            $this->load->library('upload', $config);
+            $is_upload_succces = $this->upload->do_upload('file');
+            $file = $this->upload->data();
+            $error_upload = array('img' => $this->upload->display_errors());
+            return array('status' => $is_upload_succces, 'name' => $file['file_name'], 'error_msg' => $error_upload);
+        } else {
+            return false;
+        }
     }
     /*
      * Adding a new produk
@@ -99,11 +103,12 @@ class Api_Taking_Order extends CI_Controller
         $this->is_valid();
         if (!empty($this->input->post('tr_id'))) {
             $this->remove($this->input->post('tr_id'));
+            $tmp_tr_id = $this->input->post('tr_id');
         }
         $customer_id = $this->input->post('customer_id');
         $cabang_id = $this->input->post('cabang_id');
         $params = array(
-            'tr_id' => sprintf("%03d", $cabang_id) . sprintf("%04d", $customer_id) . date('YmdHis'),
+            'tr_id' => !empty($tmp_tr_id) ? $tmp_tr_id : sprintf("%03d", $cabang_id) . sprintf("%04d", $customer_id) . date('YmdHis'),
 
             'cabang_id' => $this->input->post('cabang_id'),
             'customer_id' => $this->input->post('customer_id'),
@@ -182,16 +187,21 @@ class Api_Taking_Order extends CI_Controller
             $data_barang['barang'] = $res['data'];
             // echo $jenis;
             if ($jenis === 'cuci_helm') {
-                $file_foto = $this->upload_image($this->counter);
-                $this->counter++;
-                // var_dump($file_foto['name']);
                 $data_barang['kondisi'] = $data['kondisi'];
-                $data_barang['foto_helm'] = $file_foto['name'];
-                if ($file_foto['status']) {
-                    return $data_barang;
+                if ($data['foto_helm'] == '0') {
+                    $file_foto = $this->upload_image($this->counter);
+                    if ($file_foto['status']) {
+                        // echo $data['foto_helm'].'jalan';
+                        $data_barang['foto_helm'] = $file_foto['name'];
+                        $this->counter++;
+                    } else {
+                        $this->msg('data', '400', '', $file_foto['error_msg']['img']);
+                    }
                 } else {
-                    $this->msg('data', '400', '', $file_foto['error_msg']['img']);
+                    // echo $data['foto_helm'].'else';
+                    $data_barang['foto_helm'] = $data['foto_helm'];
                 }
+                return $data_barang;
             } else {
 
                 return $data_barang;
@@ -220,7 +230,7 @@ class Api_Taking_Order extends CI_Controller
         $res = $this->Master->delete($this->tabel, array('tr_id' => $tr_id));
 
         if ($res['status']) {
-            $this->msg('data', '200', $res['data']);
+            return true;
         } else {
             $this->msg('data', '400', '', $res['data']['message']);
         };

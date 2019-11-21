@@ -48,11 +48,11 @@ class Api_Get extends CI_Controller
     public function get_data_barang()
     {
         $tr_id = $this->input->post('tr_id');
-        if (!empty($tr_id) ) {
+        if (!empty($tr_id)) {
 
             $to = $this->Master->get('taking_order', ['tr_id' => $tr_id], ['data_barang', 'qyt'], TRUE);
-            if(!$to['status']){
-                $this->msg('data', '400','', $to['data']['message']);
+            if (!$to['status']) {
+                $this->msg('data', '400', '', $to['data']['message']);
                 // $str_msg = 'query berhasil [TR ID tidak ada'
                 // $to = null;
             }
@@ -63,27 +63,39 @@ class Api_Get extends CI_Controller
         // var_dump($res);
         foreach ($res as $key => $value) {
             if ($value['kategori_id'] == '1') {
-                $data['cuci_helm'][] = array_merge($value, array('qyt' => $this->get_qyt($to, $value, $res)));
+                // var_dump( array_merge($value, $this->get_from_to($to, $value, $res, TRUE)));
+                $data['cuci_helm'][] = array_merge($value, $this->get_from_to($to, $value, $res, TRUE));
             } else if ($value['kategori_id'] == '2') {
-                $data['aksesoris'][] = array_merge($value, array('qyt' => $this->get_qyt($to, $value, $res)));
+                $data['aksesoris'][] = array_merge($value, $this->get_from_to($to, $value, $res, FALSE));
             }
         }
         $this->msg('data', '200', $data);
     }
 
-    function get_qyt($to, $barang, $barangAll)
+    function get_from_to($to, $barang, $barangAll, $ch = false)
     {
+        $tmp= array();
+        $tmp['kondisi']=0;
+        $tmp['foto_helm']=0;
+        // echo"hi";
         if ($to != NULL) {
             foreach ($to['data'] as $key => $ito) {
                 foreach ($barangAll as $key => $ibarang) {
                     $to_id_barang = json_decode($ito['data_barang'])->barang->produk_id;
                     if ($barang['produk_id'] == $to_id_barang) {
-                        return ($ito['qyt']);
+                        $tmp['qyt'] = $ito['qyt'];
+                        $dt_barang = json_decode($ito['data_barang'], TRUE);
+                        if ($ch) {
+                            $tmp['kondisi'] = $dt_barang['kondisi'];
+                            $tmp['foto_helm'] = $dt_barang['foto_helm'];
+                        }
+                        // var_dump($tmp);
+                        return ($tmp);
                     }
                 }
             }
         }
-        return 0;
+        return $tmp;
     }
     public function get_detail_barang()
     {
